@@ -1,0 +1,26 @@
+GET http://localhost:3000
+ 
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+"email": "new@fd",
+"password": "1"
+}
+
+###
+DELETE http://localhost:3000/login
+
+
+###
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+"email": "test2@fd",
+"userName": "test2",
+"password": "2",
+"password2": "2"
+}

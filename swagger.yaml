@@ -1,0 +1,85 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.0
+  title: TODO API baby steps
+  description: basic email/pass authorization part (TOR 1.3)
+
+schemes:
+  - http
+host: localhost
+basePath: /
+
+paths:
+  /:
+    get:
+      summary: greets you if authenticated or redirects to login
+      description: Returns a list containing all persons.
+      responses:
+        200:
+          description: Greeting
+        401:
+          description: Unauthorized.redirecting to login
+
+  /login:
+    post:
+      summary: login user by email
+      description: login user by email and password
+      parameters:
+        - name: user
+          in: body
+          description: The person to create.
+          schema:
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+
+      responses:
+        200:
+          description: user succesfully loginned.
+        401:
+          description: access denied
+        500:
+          description: server err
+    delete:
+      summary: logout user
+      description: logout user and redirect to "/login"
+      responses:
+        200:
+          description: Persons succesfully logedout.
+  /register:
+    post:
+      summary: register userr with email and password
+      description: register user with email and password
+      parameters:
+        - name: user
+          in: body
+          description: user data
+          schema:
+            required:
+              - email
+              - userName
+              - password
+              - password2
+            properties:
+              email:
+                type: string
+              usewrName:
+                type: string
+              password:
+                type: string
+              password2:
+                type: string
+
+      responses:
+        200:
+          description: user ${username} registered
+        400:
+          description: pass does not match || this email already registered, try anotherone
+        500:
+          description: server err
