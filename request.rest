@@ -1,13 +1,21 @@
-GET http://localhost:3000
  
+//GET https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu44.gitpod.io
+GET https://google.com
+
 ###
 
-POST http://localhost:3000/login
+POST https://google.com
+
+
+
+### 
+
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu45.gitpod.io/login
 Content-Type: application/json
 
 {
-"email": "new@fd",
-"password": "1"
+"email": "222222222@fd",
+"password": "2"
 }
 
 ###
@@ -15,12 +23,12 @@ DELETE http://localhost:3000/login
 
 
 ###
-POST http://localhost:3000/register
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu45.gitpod.io/register 
 Content-Type: application/json
 
 {
-"email": "test2@fd",
-"userName": "test2",
+"email": "otbr@fd",
+"userName": "otbr",
 "password": "2",
 "password2": "2"
 }

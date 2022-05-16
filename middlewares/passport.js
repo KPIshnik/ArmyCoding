@@ -8,6 +8,7 @@ const verifyPassword = require("../models/verifyPassword");
 const getUserById = require("../models/getUserrById");
 const checkIsRegistered = require("../models/checkIsRegistered");
 const registerNewUser = require("../models/registerNewUser");
+const url=require('../configs/url')
 
 const googID =
   "771188073637-9sabumd93ihn86b448689dcq0a35he2p.apps.googleusercontent.com";
@@ -40,7 +41,7 @@ passport.use(
     {
       clientID: googID,
       clientSecret: googSecret,
-      callbackURL: "http://localhost:3000/huita",
+      callbackURL: `${url}/huita`,
     },
 
     async (accessToken, refreshToken, profile, done) => {
@@ -53,7 +54,8 @@ passport.use(
           profile.displayName,
           null,
           profile.id,
-          null
+          null,
+          true
         );
         const user = await getUserByEmail(profile.emails[0].value);
         return done(null, user);
@@ -70,7 +72,7 @@ passport.use(
     {
       clientID: FACEBOOK_APP_ID,
       clientSecret: FACEBOOK_APP_SECRET,
-      callbackURL: "http://localhost:3000/huitaForFB",
+      callbackURL: `${url}/huitaForFB`,
       profileFields: ["id", "displayName", "photos", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -81,7 +83,8 @@ passport.use(
           profile._json.name,
           null,
           null,
-          profile._json.id
+          profile._json.id,
+          true
         );
         user = await getUserByEmail(profile._json.email);
         return done(null, user);

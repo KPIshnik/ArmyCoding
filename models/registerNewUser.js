@@ -5,13 +5,14 @@ const registerNewUser = async (
   username,
   hashedPass,
   googId,
-  facebookid
+  facebookid,
+  confirmed
 ) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
-      "INSERT INTO users( email, username, password, googleid, facebookid)  VALUES( $1,$2,$3,$4,$5)",
-      [email, username, hashedPass, googId, facebookid]
+      "INSERT INTO users( email, username, password, googleid, facebookid, confirmed)  VALUES( $1,$2,$3,$4,$5,$6)",
+      [email, username, hashedPass, googId, facebookid, confirmed]
     );
     return `user ${username} registered`;
   } catch (err) {

@@ -34,13 +34,14 @@ const registerUser = async (req, res) => {
 
     const subject = "Confirm email";
 
+    // продолжить позже
     //content = token (id)соответственно надо взять id
-    const userId = await getUserByEmail(email).id;
-    console.log(userId);
-    const hashedId = await bcript.hash(userId, 10);
-    const content = `localhost:3000/confirmEmail?id=${hashedId}`;
+    // const userId = await getUserByEmail(email).id;
+    // console.log(userId);
+    // const hashedId = await bcript.hash(userId, 10);
+    // const content = `localhost:3000/confirmEmail?id=${hashedId}`;
 
-    sendEmailThred(email, subject, content);
+    // sendEmailThred(email, subject, content);
 
     res.end(result);
   } catch (err) {
