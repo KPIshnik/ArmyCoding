@@ -11,11 +11,14 @@ const registerNewUser = require("../models/registerNewUser");
 const url=require('../configs/url')
 
 const googID =
-  "771188073637-9sabumd93ihn86b448689dcq0a35he2p.apps.googleusercontent.com";
-const googSecret = "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";
+  '892449788224-sujjjmuth9r16hf9e069o1vc9ap9ual6.apps.googleusercontent.com'
+  // "771188073637-9sabumd93ihn86b448689dcq0a35he2p.apps.googleusercontent.com";
+const googSecret = 
+  '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'
+  //"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";
 
-const FACEBOOK_APP_ID = "435318228339071";
-const FACEBOOK_APP_SECRET = "812e1d6790276fe6f48da8fe96f41c0f";
+const FACEBOOK_APP_ID = "1390653084786139";
+const FACEBOOK_APP_SECRET = "11120c4fb0a7a2f7088706071a2a62e8";
 
 passport.use(
   new LocalStrategy(
@@ -42,11 +45,12 @@ passport.use(
       clientID: googID,
       clientSecret: googSecret,
       callbackURL: `${url}/huita`,
+     // passReqToCallback: true
     },
 
     async (accessToken, refreshToken, profile, done) => {
       const user = await getUserByEmail(profile.emails[0].value);
-      console.log(profile.emails[0].value);
+      
       if (!user) {
         console.log(profile.emails[0].value);
         await registerNewUser(
@@ -57,7 +61,7 @@ passport.use(
           null,
           true
         );
-        const user = await getUserByEmail(profile.emails[0].value);
+        
         return done(null, user);
       }
 

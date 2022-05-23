@@ -10,8 +10,7 @@ router.get(
     failureRedirect: "/login",
   }),
   (req, res) => {
-    res.status(200);
-    res.end("Huita is in progress");
+    res.redirect('/')
   }
 );
 
