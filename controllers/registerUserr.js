@@ -3,7 +3,7 @@ const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const sendEmailThred = require("../helpers/sendMailThred");
 const getUserByEmail = require("../models/getUserByEmail");
-const url=require('../configs/url')
+const {url}=require('../configs/credentials.js')
 
 
 const registerUser = async (req, res) => {
