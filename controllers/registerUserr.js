@@ -3,12 +3,15 @@ const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const sendEmailThred = require("../helpers/sendMailThred");
 const getUserByEmail = require("../models/getUserByEmail");
+const url=require('../configs/url')
+
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
+  console.log(newUser)
+
   try {
     if (!newUser.password || newUser.password != newUser.password2) {
-      res.status(400).send("pass too short or does not match");
       res.status(400).send("pass too short or does not match");
       return;
     }
@@ -36,12 +39,12 @@ const registerUser = async (req, res) => {
 
     // продолжить позже
     //content = token (id)соответственно надо взять id
-    // const userId = await getUserByEmail(email).id;
-    // console.log(userId);
-    // const hashedId = await bcript.hash(userId, 10);
-    // const content = `localhost:3000/confirmEmail?id=${hashedId}`;
+    const user = await getUserByEmail(email);
+    console.log(user.id);
+    const hashedId = await bcript.hash(`${user.id}`, 10);
+    const content = `${url}/confirmEmail?id=${hashedId}`;
 
-    // sendEmailThred(email, subject, content);
+    sendEmailThred(email, subject, content);
 
     res.end(result);
   } catch (err) {

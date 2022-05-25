@@ -9,6 +9,6 @@ router
     res.status(200);
     res.end("register page");
   })
-  .post("/register", checkNOTAuth, registerUser);
+  .post("/register", registerUser);
 
 module.exports = router;

@@ -7,7 +7,7 @@ const router = require("./routes");
 const swaggerUi = require("swagger-ui-express");
 const swagger = require("./swagger.json");
 
-const session_config = require("./configs/session_config");
+const {session_config} = require("./configs/credentials");
 
 const app = express();
 

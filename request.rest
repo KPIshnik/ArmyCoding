@@ -1,6 +1,6 @@
  
-//GET https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu44.gitpod.io
-GET https://google.com
+GET https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu46.gitpod.io
+
 
 ###
 
@@ -10,12 +10,12 @@ POST https://google.com
 
 ### 
 
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu45.gitpod.io/login
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu46.gitpod.io/login
 Content-Type: application/json
 
 {
-"email": "222222222@fd",
-"password": "2"
+"email": "antaresstat@gmailcom",
+"password": "23"
 }
 
 ###
@@ -23,12 +23,12 @@ DELETE http://localhost:3000/login
 
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu45.gitpod.io/register 
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu46.gitpod.io/register 
 Content-Type: application/json
 
 {
-"email": "otbr@fd",
-"userName": "otbr",
-"password": "2",
-"password2": "2"
+"email": "antt@gmail.com",
+"userName": "as",
+"password": "5",
+"password2": "5"
 }

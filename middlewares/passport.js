@@ -8,17 +8,15 @@ const verifyPassword = require("../models/verifyPassword");
 const getUserById = require("../models/getUserrById");
 const checkIsRegistered = require("../models/checkIsRegistered");
 const registerNewUser = require("../models/registerNewUser");
-const url=require('../configs/url')
+const {url}=require('../configs/credentials')
+const {googleKeys}=require('../configs/credentials')
+const {facebookKeys}=require('../configs/credentials')
 
-const googID =
-  '892449788224-sujjjmuth9r16hf9e069o1vc9ap9ual6.apps.googleusercontent.com'
-  // "771188073637-9sabumd93ihn86b448689dcq0a35he2p.apps.googleusercontent.com";
-const googSecret = 
-  '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'
-  //"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";
+const googID = googleKeys.googID
+const googSecret = googleKeys.googSecret
 
-const FACEBOOK_APP_ID = "1390653084786139";
-const FACEBOOK_APP_SECRET = "11120c4fb0a7a2f7088706071a2a62e8";
+const FACEBOOK_APP_ID = facebookKeys.FACEBOOK_APP_ID
+const FACEBOOK_APP_SECRET = facebookKeys.FACEBOOK_APP_SECRET
 
 passport.use(
   new LocalStrategy(
@@ -29,6 +27,7 @@ passport.use(
 
         if (!pass) return done(null, false);
         if (!user) return done(null, false);
+        //if (!user.confirmed) return done(null, false);
         if (!(await verifyPassword(user, pass))) return done(null, false);
 
         return done(null, user);
