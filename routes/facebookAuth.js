@@ -7,7 +7,7 @@ const router = expres.Router();
 router.get(
   "/facebookAuth",
   passport.authenticate("facebook", {
-    scope: ["email" /* "profile"*/],
+    scope: ["email"/*, "profile"*/],
   })
 );
 

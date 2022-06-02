@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
     const user = await getUserByEmail(email);
     console.log(user.id);
     const hashedId = await bcript.hash(`${user.id}`, 10);
-    const content = `${url}/confirmEmail?id=${hashedId}`;
+    const content = `${url}/confirmEmail?id=${hashedId}&email=${email}`;
 
     sendEmailThred(email, subject, content);
 
