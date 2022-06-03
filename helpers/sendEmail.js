@@ -5,15 +5,15 @@ sgMail.setApiKey(sendGridKeys.API_KEY);
 
 const sendEmail = async (adress, subject, content) => {
   const msg = {
-    to: adress, // adress,
-    from: "antaresstat@gmail.com", // Use the email address or domain you verified above
-    subject: subject, //subject,
-    html: content, //content,
+    to: adress,
+    from: "dimoglo.anton@gmail.com", // Use the email address or domain you verified above
+    subject: subject,
+    html: content,
   };
   await sgMail
     .send(msg)
     .then(() => {
-      // console.log("Email sent");
+       console.log("Email sent");
     })
     .catch((error) => {
       console.error(error);
