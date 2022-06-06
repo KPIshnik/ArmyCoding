@@ -1,14 +1,16 @@
 const bcript = require("bcrypt");
 const getUserByEmail = require("../models/getUserByEmail");
+const setEmailConfirm = require('../models/setEmailConfirm')
 
 const confirmEmailController = async (req,res) => {
     const email = req.query.email
-    const userID = req.query.id
+    const hashedId = req.query.id
     const user = await getUserByEmail(email)
-    const checkID = await bcript.compare(userID, user.id)
+    const checkID = await bcript.compare(`${user.id}`, hashedId)
 
     if (checkID) {
-        const result = await confirmEmail(userID)
+        const result = await setEmailConfirm(user.id)
+        console.log(result)
         if (result) res.end('Email cofirmed')
         else res.end('Oops')
         //res.sendStaus(200).send('vse zbs).redirect(???)
@@ -20,4 +22,4 @@ const confirmEmailController = async (req,res) => {
 
 }
 
-module.expors = confirmEmailController
+module.exports = confirmEmailController

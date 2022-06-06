@@ -27,7 +27,7 @@ passport.use(
 
         if (!pass) return done(null, false);
         if (!user) return done(null, false);
-        //if (!user.confirmed) return done(null, false);
+        if (!user.confirmed) return done(null, false);
         if (!(await verifyPassword(user, pass))) return done(null, false);
 
         return done(null, user);
