@@ -1,11 +1,11 @@
 const pool = require("./DBconnection");
 
-const setEmailConfirm = async (userID) => {
+const seUserPass = async (userID, hashedPass) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
-      "UPDATE  users SET confirmed = $2 WHERE id=$1;",
-      [userID, true]
+      "UPDATE  users SET password = $2 WHERE id=$1;",
+      [userID, hashedPass]
     );
    return true;
   } catch (err) {
@@ -16,5 +16,4 @@ const setEmailConfirm = async (userID) => {
   }
 };
 
-
-module.exports = setEmailConfirm;
+module.exports = seUserPass;

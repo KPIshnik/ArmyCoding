@@ -1,4 +1,7 @@
 //Разнести на разные фалы может??
+
+//Доделать. Шо с токенами???
+
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -6,7 +9,7 @@ const FacebookStrategy = require("passport-facebook").Strategy;
 const getUserByEmail = require("../models/getUserByEmail");
 const verifyPassword = require("../models/verifyPassword");
 const getUserById = require("../models/getUserrById");
-const checkIsRegistered = require("../models/checkIsRegistered");
+const getUserByGoogleID = require("../models/getUserByGoogleId");
 const registerNewUser = require("../models/registerNewUser");
 const {url}=require('../configs/credentials')
 const {googleKeys}=require('../configs/credentials')
@@ -23,11 +26,11 @@ passport.use(
     { usernameField: "email", passwordField: "password" },
     async (email, pass, done) => {
       try {
-        const user = await getUserByEmail(email);
+        let user = await getUserByEmail(email);
 
         if (!pass) return done(null, false);
         if (!user) return done(null, false);
-        if (!user.confirmed) return done(null, false);
+       // if (!user.confirmed) return done(null, false);//make messages
         if (!(await verifyPassword(user, pass))) return done(null, false);
 
         return done(null, user);
@@ -48,10 +51,9 @@ passport.use(
     },
 
     async (accessToken, refreshToken, profile, done) => {
-      const user = await getUserByEmail(profile.emails[0].value);
-      
+      let user = await getUserByGoogleID(profile.id);
+      console.log(profile)
       if (!user) {
-        console.log(profile.emails[0].value);
         await registerNewUser(
           profile.emails[0].value,
           profile.displayName,
@@ -60,11 +62,11 @@ passport.use(
           null,
           true
         );
-        
-        return done(null, user);
+        user = await getUserByGoogleID(profile.id)
+        return done(null, user); //and message that its because new 
       }
+      //if (!user.username) return done(null, false)
 
-      // console.log(profile);
       return done(null, user);
     }
   )
@@ -89,6 +91,7 @@ passport.use(
           profile._json.id,
           true
         );
+
         user = await getUserByEmail(profile._json.email);
         return done(null, user);
       }

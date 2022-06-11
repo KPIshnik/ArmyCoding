@@ -7,18 +7,23 @@ const huitaForFB = require("./huitaForFB");
 const googleAuth = require("./googleAuth");
 const facebookAuth = require("./facebookAuth");
 const confirmEmail = require("./confirmEmail");
+const avatar = require('./avatar')
+const username = require('./user/username')
+
 const { request } = require("express");
 const router = express.Router();
 
 router.use(
   aloha,
+  avatar,
   login,
   register,
   huita,
   googleAuth,
   facebookAuth,
   huitaForFB,
-  confirmEmail
+  confirmEmail,
+  username
 );
 
 module.exports = router;

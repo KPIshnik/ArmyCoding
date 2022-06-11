@@ -1,34 +1,40 @@
  
-GET https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu46.gitpod.io
+GET https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io
 
 
 ###
 
 POST https://google.com
 
-
-
-### 
-
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu46.gitpod.io/login
-Content-Type: application/json
-
-{
-"email": "antaresstat@gmail.com",
-"password": "23"
-}
-
 ###
 DELETE http://localhost:3000/login
 
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu46.gitpod.io/register 
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/register 
 Content-Type: application/json
 
 {
-"email": "antaresstat@gmail.com",
-"userName": "ass",
-"password": "23",
-"password2": "23"
+"email": "q@q",
+"userName": "q",
+"password": "q",
+"password2": "q"
+}
+
+###
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/login
+Content-Type: application/json
+
+{
+"email": "q@q",
+"password": "q"
+}
+
+###
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/username
+Content-Type: application/json
+
+{
+"username": "Ukraine wins",
+"password": "q"
 }
