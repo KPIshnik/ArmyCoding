@@ -1,11 +1,12 @@
 const bcript = require("bcrypt");
 const verifyPassword = require("../models/verifyPassword");
-const setUserName = require('../models/setUserName');
-const checkUniqueUsername = require("../models/checkUniqueUsername");
+const setUserEmail = require('../models/setUserEmail');
+const checkUniqueUserEmail = require('../models/checkUniqueUserEmail')
 
-const setUsernameController = async (req,res) => {
+
+const setUserEmailController = async (req,res) => {
     const userPass = req.body.password;
-    const username = req.body.username;
+    const userEmail = req.body.email;
     const user = req.user
     
     if (!userPass) {
@@ -13,24 +14,25 @@ const setUsernameController = async (req,res) => {
         return;
       }
     
-    if (!username) {
-        res.status(400).send("username required");
+    if (!userEmail) {
+        res.status(400).send("email required");
         return;
       }
-    
 
+  
     try {
-        if(await checkUniqueUsername(username)) {
-          res.status(400).send("username should be unique");
-        return;
+       if(await checkUniqueUserEmail(userEmail)) {
+          res.status(400).send("email should be unique");
+          return;
         }
-      
+     
+
         if (!(await verifyPassword(user, userPass))) {
             res.status(400).send("wrong pass");
             return;
           }
         
-        const result = await setUserName(user.id, username)
+        const result = await setUserEmail(user.id, userEmail)
       
       res.end(`${result}`); // redirect to something norml later
 
@@ -40,4 +42,4 @@ const setUsernameController = async (req,res) => {
     }
   }
 
-module.exports = setUsernameController
+module.exports = setUserEmailController

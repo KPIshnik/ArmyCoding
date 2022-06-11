@@ -9,8 +9,9 @@ const facebookAuth = require("./facebookAuth");
 const confirmEmail = require("./confirmEmail");
 const avatar = require('./avatar')
 const username = require('./user/username')
+const userEmail = require('./user/userEmail')
+const password = require('./user/password')
 
-const { request } = require("express");
 const router = express.Router();
 
 router.use(
@@ -23,7 +24,9 @@ router.use(
   facebookAuth,
   huitaForFB,
   confirmEmail,
-  username
+  username,
+  userEmail,
+  password
 );
 
 module.exports = router;

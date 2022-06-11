@@ -26,9 +26,30 @@ POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/login
 Content-Type: application/json
 
 {
-"email": "q@q",
+"email": "Ukraine@wins",
+"password": "UW"
+}
+
+###
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/password
+Content-Type: application/json
+
+{
+"newPass": "UW",
+"newPass2": "UW",
 "password": "q"
 }
+
+
+###
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/email
+Content-Type: application/json
+
+{
+"email": "Ukraine@wins",
+"password": "q"
+}
+
 
 ###
 POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/username
