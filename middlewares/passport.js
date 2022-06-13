@@ -11,15 +11,15 @@ const verifyPassword = require("../models/verifyPassword");
 const getUserById = require("../models/getUserrById");
 const getUserByGoogleID = require("../models/getUserByGoogleId");
 const registerNewUser = require("../models/registerNewUser");
-const {url}=require('../configs/credentials')
-const {googleKeys}=require('../configs/credentials')
-const {facebookKeys}=require('../configs/credentials')
+const { url } = require("../configs/credentials");
+const { googleKeys } = require("../configs/credentials");
+const { facebookKeys } = require("../configs/credentials");
 
-const googID = googleKeys.googID
-const googSecret = googleKeys.googSecret
+const googID = googleKeys.googID;
+const googSecret = googleKeys.googSecret;
 
-const FACEBOOK_APP_ID = facebookKeys.FACEBOOK_APP_ID
-const FACEBOOK_APP_SECRET = facebookKeys.FACEBOOK_APP_SECRET
+const FACEBOOK_APP_ID = facebookKeys.FACEBOOK_APP_ID;
+const FACEBOOK_APP_SECRET = facebookKeys.FACEBOOK_APP_SECRET;
 
 passport.use(
   new LocalStrategy(
@@ -30,7 +30,7 @@ passport.use(
 
         if (!pass) return done(null, false);
         if (!user) return done(null, false);
-       // if (!user.confirmed) return done(null, false);//make messages
+        // if (!user.confirmed) return done(null, false);//make messages
         if (!(await verifyPassword(user, pass))) return done(null, false);
 
         return done(null, user);
@@ -47,25 +47,36 @@ passport.use(
       clientID: googID,
       clientSecret: googSecret,
       callbackURL: `${url}/huita`,
-     // passReqToCallback: true
+      // passReqToCallback: true
     },
 
     async (accessToken, refreshToken, profile, done) => {
       let user = await getUserByGoogleID(profile.id);
-      console.log(profile)
+
+      // !! REFAKTOR PART !!
+      // if (!user) {
+      //   const res = await googleRegisterUserController(profile);
+      // }
+
+      // const googleRegisterUserController = (profile) => {
+      //   isEmailunique(profile.email) ? caryOn : setGoogleID;
+      //   is;
+      // };
+
       if (!user) {
         await registerNewUser(
           profile.emails[0].value,
-          profile.displayName,
+          //profile.displayName,
+          null,
           null,
           profile.id,
           null,
-          true
+          true,
+          "google"
         );
-        user = await getUserByGoogleID(profile.id)
-        return done(null, user); //and message that its because new 
+        user = await getUserByGoogleID(profile.id);
+        return done(null, user); //and message that its because new
       }
-      //if (!user.username) return done(null, false)
 
       return done(null, user);
     }
@@ -85,11 +96,13 @@ passport.use(
       if (!user) {
         await registerNewUser(
           profile._json.email,
-          profile._json.name,
+          //profile._json.name,
+          null,
           null,
           null,
           profile._json.id,
-          true
+          true,
+          "fb"
         );
 
         user = await getUserByEmail(profile._json.email);

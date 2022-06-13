@@ -3,13 +3,12 @@ const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const sendEmailThred = require("../helpers/sendMailThred");
 const getUserByEmail = require("../models/getUserByEmail");
-const {url}=require('../configs/credentials.js')
-
+const { url } = require("../configs/credentials.js");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
-  console.log(newUser)
-
+  console.log(newUser);
+  // !! add isUnique and not null ckeks !!
   try {
     if (!newUser.password || newUser.password != newUser.password2) {
       res.status(400).send("pass too short or does not match");
@@ -32,7 +31,8 @@ const registerUser = async (req, res) => {
       hashedPass,
       null,
       null,
-      false
+      false,
+      "email"
     );
 
     const subject = "Confirm email";
@@ -44,7 +44,7 @@ const registerUser = async (req, res) => {
     const hashedId = await bcript.hash(`${user.id}`, 10);
     //Продумать как убрать мыло с доступа и надо ли это
     const content = `${url}/confirmEmail?id=${hashedId}&email=${email}`;
-    
+
     sendEmailThred(email, subject, content);
 
     res.end(result);

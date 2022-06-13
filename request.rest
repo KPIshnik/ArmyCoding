@@ -15,10 +15,10 @@ POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/register
 Content-Type: application/json
 
 {
-"email": "q@q",
-"userName": "q",
-"password": "q",
-"password2": "q"
+"email": "s@s",
+"userName": "s",
+"password": "s",
+"password2": "s"
 }
 
 ###

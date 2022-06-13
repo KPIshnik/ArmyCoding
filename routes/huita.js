@@ -2,7 +2,7 @@ const expres = require("express");
 const passport = require("passport");
 
 const router = expres.Router();
- //проверить есть ли тако, если нет то зарегить по данным. если есть ауситикате.
+//проверить есть ли тако, если нет то зарегить по данным. если есть ауситикате.
 router.get(
   "/huita",
   passport.authenticate("google", {
@@ -10,7 +10,7 @@ router.get(
     failureRedirect: "/login",
   }),
   (req, res) => {
-    res.redirect('/user/username')
+    res.redirect("/");
   }
 );
 

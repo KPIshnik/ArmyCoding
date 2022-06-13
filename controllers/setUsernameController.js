@@ -7,26 +7,25 @@ const setUsernameController = async (req,res) => {
     const userPass = req.body.password;
     const username = req.body.username;
     const user = req.user
-    
-    if (!userPass) {
-        res.status(400).send("password required");
-        return;
-      }
-    
-    if (!username) {
-        res.status(400).send("username required");
-        return;
-      }
-    
 
-    try {
+    if (!username) {
+      res.status(400).end("username required");
+      return;
+    }
+
+    if (!userPass & !(req.user.auth_type==='google' || req.user.auth_type==='fb')) {
+        res.status(400).end("password required");
+        return;
+      }
+
+      try {
         if(await checkUniqueUsername(username)) {
-          res.status(400).send("username should be unique");
+          res.status(400).end("username should be unique");
         return;
         }
       
-        if (!(await verifyPassword(user, userPass))) {
-            res.status(400).send("wrong pass");
+        if (userPass & !(await verifyPassword(user, userPass))) {
+            res.status(400).end("wrong pass");
             return;
           }
         
