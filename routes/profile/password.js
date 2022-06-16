@@ -5,11 +5,7 @@ const setUserPasswordController = require("../../models/setUserPasswordControlle
 const router = expres.Router();
 
 router
-  .get(
-    "/user/password", checkIsAuth, (req,res) => res.end('pass page')
-  )
-  .post(
-    "/user/password", checkIsAuth, setUserPasswordController
-  )
+  .get("/profile/password", checkIsAuth, (req, res) => res.end("pass page"))
+  .post("/profile/password", checkIsAuth, setUserPasswordController);
 
 module.exports = router;
