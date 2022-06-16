@@ -46,7 +46,7 @@ passport.use(
     {
       clientID: googID,
       clientSecret: googSecret,
-      callbackURL: `${url}/huita`,
+      callbackURL: `${url}/auth/google/cb`,
       // passReqToCallback: true
     },
 
@@ -88,7 +88,7 @@ passport.use(
     {
       clientID: FACEBOOK_APP_ID,
       clientSecret: FACEBOOK_APP_SECRET,
-      callbackURL: `${url}/huitaForFB`,
+      callbackURL: `${url}/auth/fb/cb`,
       profileFields: ["id", "displayName", "photos", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {

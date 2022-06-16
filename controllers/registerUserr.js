@@ -40,10 +40,9 @@ const registerUser = async (req, res) => {
     // продолжить позже
     //content = token (id)соответственно надо взять id
     const user = await getUserByEmail(email);
-    console.log(user.id);
+
     const hashedId = await bcript.hash(`${user.id}`, 10);
-    //Продумать как убрать мыло с доступа и надо ли это
-    const content = `${url}/confirmEmail?id=${hashedId}&email=${email}`;
+    const content = `${url}/auth/confirmEmail?id=${hashedId}&username=${userName}`;
 
     sendEmailThred(email, subject, content);
 

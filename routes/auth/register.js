@@ -1,6 +1,6 @@
 const expres = require("express");
-const checkNOTAuth = require("../middlewares/checkNOTAuth");
-const registerUser = require("../controllers/registerUserr");
+const checkNOTAuth = require("../../middlewares/checkNOTAuth");
+const registerUser = require("../../controllers/registerUserr");
 const router = expres.Router();
 router.use(expres.json());
 

@@ -11,51 +11,51 @@ DELETE http://localhost:3000/login
 
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/register 
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/auth/register 
 Content-Type: application/json
 
 {
-"email": "s@s",
-"userName": "s",
+"email": "antaresstat@gmail.com",
+"userName": "Testuser",
 "password": "s",
 "password2": "s"
 }
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/login
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/auth
 Content-Type: application/json
 
 {
-"email": "Ukraine@wins",
-"password": "UW"
+"email": "antaresstat@gmail.com",
+"password": "123"
 }
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/password
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/profile/password
 Content-Type: application/json
 
 {
-"newPass": "UW",
-"newPass2": "UW",
-"password": "q"
-}
-
-
-###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/email
-Content-Type: application/json
-
-{
-"email": "Ukraine@wins",
-"password": "q"
+"newPass": "1",
+"newPass2": "1",
+"password": "123"
 }
 
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/user/username
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/profile/email
 Content-Type: application/json
 
 {
-"username": "Ukraine wins",
-"password": "q"
+"email": "Ukreaine.power@gmail.com",
+"password": "123"
+}
+
+
+###
+POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/profile/username
+Content-Type: application/json
+
+{
+"username": "Ukrane power!",
+"password": "123"
 }

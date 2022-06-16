@@ -1,9 +1,5 @@
-const sendEmailThred = require("./helpers/sendMailThred");
-const bcript = require("bcrypt");
-const start = (async () => {
-  const hashedId = await bcript.hash("1", 10);
+let str = "asdf.ad.avc";
 
-  const content = `http://localhost:3000/confirmEmail?id=${hashedId}`;
+let x = str.slice(str.lastIndexOf("."));
 
-  sendEmailThred("antaresstat@gmail.com", "Huita in progress", content);
-})();
+console.log(x);
