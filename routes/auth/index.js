@@ -14,8 +14,7 @@ router
     res.redirect(200, "/");
   })
   .delete("/auth", checkIsAuth, (req, res) => {
-    req.logout();
-    res.redirect(200, "/auth");
+    req.logout().redirect(200, "/auth");
   });
 
 module.exports = router;

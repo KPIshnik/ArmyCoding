@@ -1,13 +1,13 @@
 const pool = require("./DBconnection");
 
-const setUserName = async (userID, username) => {
+const getUserByEmail = async (key) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
-      "UPDATE  users SET username = $2 WHERE id=$1;",
-      [userID, username]
+      "SELECT * FROM emailconfirm WHERE key = $1",
+      [key]
     );
-    return true;
+    return res.rows[0];
   } catch (err) {
     console.log(err);
     throw err;
@@ -16,4 +16,4 @@ const setUserName = async (userID, username) => {
   }
 };
 
-module.exports = setUserName;
+module.exports = getUserByEmail;

@@ -1,5 +1,5 @@
 const delAvatarConrtroller = (res, req) =>{
-    res.end('there is no avatar')
+    res.send('there is no avatar')
     
     }
     

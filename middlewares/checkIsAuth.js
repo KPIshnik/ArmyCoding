@@ -8,8 +8,9 @@ const checkIsAuth = (req, res, next) => {
 
   console.log(req.user);
 
-  if (!req.user.confirmed) {
-    res.end("confirm email");
+  // if not user.email
+  if (!req.user.emil) {
+    res.satus(403).send("confirm email");
     return;
   }
 

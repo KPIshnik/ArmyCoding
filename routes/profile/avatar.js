@@ -13,7 +13,7 @@ router.use(expres.json());
 router
   //.get("/user/avatar", getAvatarController)
   .post("/profile/avatar", checkIsAuth, uploadAvatar, (req, res) =>
-    res.end("zaebca")
+    res.send("zaebca")
   );
 //.patch("/user/avatar", chengeAvatarController)
 //.delete("/user/avatar", delAvatarConrtroller);

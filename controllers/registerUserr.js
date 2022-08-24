@@ -2,8 +2,10 @@ const checkIsRegistered = require("../models/checkIsRegistered");
 const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const sendEmailThred = require("../helpers/sendMailThred");
-const getUserByEmail = require("../models/getUserByEmail");
+
 const { url } = require("../configs/credentials.js");
+const generateKey = require("../helpers/generateKey");
+const createEmailConfirmRow = require("../models/createEmailConfirmRow");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
@@ -26,23 +28,23 @@ const registerUser = async (req, res) => {
 
     const hashedPass = await bcript.hash(password, 10);
     const result = await registerNewUser(
-      email,
+      null,
       userName,
       hashedPass,
       null,
       null,
-      false,
       "email"
     );
 
+    const key = generateKey();
+    await createEmailConfirmRow(userName, key, email);
+
     const subject = "Confirm email";
 
-    // продолжить позже
-    //content = token (id)соответственно надо взять id
-    const user = await getUserByEmail(email);
+    // here we send our genereted key from huita
+    // + we create new row in emailconfirm db(create helpesr for that)
 
-    const hashedId = await bcript.hash(`${user.id}`, 10);
-    const content = `${url}/auth/confirmEmail?id=${hashedId}&username=${userName}`;
+    const content = `${url}/auth/confirmEmail?key=${key}`;
 
     sendEmailThred(email, subject, content);
 

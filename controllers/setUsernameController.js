@@ -25,9 +25,6 @@ const setUsernameController = async (req, res) => {
     }
 
     const passMach = await verifyPassword(user, userPass);
-    console.log(passMach);
-    console.log(userPass);
-    console.log(userPass && !passMach);
 
     if (userPass && !(await verifyPassword(user, userPass))) {
       res.status(400).end("wrong pass");

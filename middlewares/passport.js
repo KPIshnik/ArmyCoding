@@ -71,7 +71,6 @@ passport.use(
           null,
           profile.id,
           null,
-          true,
           "google"
         );
         user = await getUserByGoogleID(profile.id);
@@ -101,7 +100,6 @@ passport.use(
           null,
           null,
           profile._json.id,
-          true,
           "fb"
         );
 

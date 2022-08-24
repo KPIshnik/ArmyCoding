@@ -6,8 +6,7 @@ router.use(expres.json());
 
 router
   .get("/auth/register", checkNOTAuth, (req, res) => {
-    res.status(200);
-    res.end("register page");
+    res.status(200).end("register page");
   })
   .post("/auth/register", registerUser);
 
