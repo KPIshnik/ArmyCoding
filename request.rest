@@ -48,12 +48,15 @@ Content-Type: application/json
 "password": "123"
 }
 
+###
+GET https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu62.gitpod.io/auth/google
+
 
 ###
-POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/profile/username
+POST https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu62.gitpod.io/profile/username
 Content-Type: application/json
 
 {
-"username": "Ukrane power!",
-"password": "123"
+"username": "Toha"
+//"password": "123"
 }

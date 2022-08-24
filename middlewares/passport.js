@@ -66,8 +66,8 @@ passport.use(
       if (!user) {
         await registerNewUser(
           profile.emails[0].value,
-          //profile.displayName,
-          null,
+          profile.displayName,
+          //null,
           null,
           profile.id,
           null,
