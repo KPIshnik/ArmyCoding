@@ -6,53 +6,44 @@ const sendEmailThred = require("../helpers/sendMailThred");
 const { url } = require("../configs/credentials.js");
 const generateKey = require("../helpers/generateKey");
 const createEmailConfirmRow = require("../models/createEmailConfirmRow");
+const sendConfirmEmailHelper = require("../helpers/sendConfirmEmailHelper");
 
 const registerUser = async (req, res) => {
-  const newUser = req.body;
-  console.log(newUser);
-  // !! add isUnique and not null ckeks !!
-  try {
-    if (!newUser.password || newUser.password != newUser.password2) {
-      res.status(400).send("pass too short or does not match");
-      return;
-    }
+	const newUser = req.body;
+	console.log(newUser);
+	// !! add isUnique and not null ckeks !!
+	try {
+		if (!newUser.password || newUser.password != newUser.password2) {
+			res.status(400).send("pass too short or does not match");
+			return;
+		}
 
-    const isRegistered = await checkIsRegistered(req.body.email);
+		const isRegistered = await checkIsRegistered(req.body.email);
 
-    if (isRegistered) {
-      res.status(400).send("this email already registered, try anotherone");
-      return;
-    }
+		if (isRegistered) {
+			res.status(400).send("this email already registered, try anotherone");
+			return;
+		}
 
-    const { userName, password, email } = newUser;
+		const { userName, password, email } = newUser;
 
-    const hashedPass = await bcript.hash(password, 10);
-    const result = await registerNewUser(
-      null,
-      userName,
-      hashedPass,
-      null,
-      null,
-      "email"
-    );
+		const hashedPass = await bcript.hash(password, 10);
+		const result = await registerNewUser(
+			null,
+			userName,
+			hashedPass,
+			null,
+			null,
+			"email"
+		);
 
-    const key = generateKey();
-    await createEmailConfirmRow(userName, key, email);
+		await sendConfirmEmailHelper(userName, email);
 
-    const subject = "Confirm email";
-
-    // here we send our genereted key from huita
-    // + we create new row in emailconfirm db(create helpesr for that)
-
-    const content = `${url}/auth/confirmEmail?key=${key}`;
-
-    sendEmailThred(email, subject, content);
-
-    res.end(result);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
+		res.end(result);
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
 };
 
 module.exports = registerUser;
