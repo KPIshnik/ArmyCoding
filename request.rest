@@ -9,22 +9,22 @@ DELETE http://localhost:3000/login
 
 
 ###
-POST https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu62.gitpod.io/auth/register
+POST https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu63.gitpod.io/auth/register
 Content-Type: application/json
 
 {
 "email": "antaresstat@gmail.com",
-"userName": "ioSussan",
+"userName": "Li",
 "password": "s",
 "password2": "s"
 }
 
 ###
-POST https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu62.gitpod.io/auth
+POST https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu63.gitpod.io/auth
 Content-Type: application/json
 
 {
-"email": "io@uio",
+"email": "antaresstat@gmail.com",
 "password": "s"
 }
 

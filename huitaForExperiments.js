@@ -1,9 +1,5 @@
-const crypto = require("crypto");
+const bycript = require("bcrypt");
 
-const createKeyStr = () => {
-  const radnomString = crypto.randomBytes(16).toString("hex");
-  const date = Date.now();
-  return date + "." + radnomString;
-};
+bycript.hash("q", 10).then(p=> console.log(p))
 
-console.log(createKeyStr().toString().length);
+

@@ -1,6 +1,17 @@
+const sharp = require("sharp");
+
 const setAvatarConrtroller = (req, res) => {
-  console.log(req.file);
-  res.send("there is no avatar");
+	const fileName = req.user.username + ".webp";
+	console.log(req.file);
+
+	sharp(req.file.buffer)
+		.webp()
+		.toFile(`public/avatars/${fileName}`)
+		.then(() => res.send("avatar uploaded"))
+		.catch((err) => {
+			console.log(err);
+			res.send("Oopsy");
+		});
 };
 
 module.exports = setAvatarConrtroller;
