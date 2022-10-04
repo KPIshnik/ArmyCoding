@@ -15,9 +15,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 app.use(session(session_config));
 app.use(
-	express.static("public", {
-		extensions: ["html", "ico", "gif", "jpg", "png"],
-	})
+  express.static("public", {
+    extensions: ["html", "ico", "gif", "jpg", "png"],
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -25,5 +25,5 @@ app.use(passport.session());
 app.use(router);
 
 app.listen(PORT, HOST, () => {
-	console.log(`server started at ${PORT}`);
+  console.log(`server started at ${PORT}`);
 });

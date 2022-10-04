@@ -7,43 +7,52 @@ const { url } = require("../configs/credentials.js");
 const generateKey = require("../helpers/generateKey");
 const createEmailConfirmRow = require("../models/createEmailConfirmRow");
 const sendConfirmEmailHelper = require("../helpers/sendConfirmEmailHelper");
+const checkUniqueUsername = require("../models/checkUniqueUsername");
 
 const registerUser = async (req, res) => {
-	const newUser = req.body;
-	console.log(newUser);
-	// !! add isUnique and not null ckeks !!
-	try {
-		if (!newUser.password || newUser.password != newUser.password2) {
-			res.status(400).send("pass too short or does not match");
-			return;
-		}
+  const newUser = req.body;
 
-		const isRegistered = await checkIsRegistered(req.body.email);
+  const { userName, password, email } = newUser;
 
-		if (isRegistered) {
-			res.status(400).send("this email already registered, try anotherone");
-			return;
-		}
+  console.log(newUser);
+  // !! add isUnique and not null ckeks !!
+  try {
+    if (!password || password != newUser.password2) {
+      res.status(400).send("pass too short or does not match");
+      return;
+    }
 
-		const { userName, password, email } = newUser;
+    const isRegistered = await checkIsRegistered(email);
 
-		const hashedPass = await bcript.hash(password, 10);
-		const result = await registerNewUser(
-			null,
-			userName,
-			hashedPass,
-			null,
-			null,
-			"email"
-		);
+    if (isRegistered) {
+      res.status(400).send("this email already registered, try anotherone");
+      return;
+    }
 
-		await sendConfirmEmailHelper(userName, email);
+    const isUsernameUnique = await checkUniqueUsername(userName);
 
-		res.end(result);
-	} catch (err) {
-		console.log(err);
-		res.sendStatus(500);
-	}
+    if (!isUsernameUnique) {
+      res.status(400).send("this username already registered, try anotherone");
+      return;
+    }
+
+    const hashedPass = await bcript.hash(password, 10);
+    const result = await registerNewUser(
+      null,
+      userName,
+      hashedPass,
+      null,
+      null,
+      "email"
+    );
+
+    await sendConfirmEmailHelper(userName, email);
+
+    res.end(result);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
 };
 
 module.exports = registerUser;
