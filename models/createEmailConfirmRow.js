@@ -1,11 +1,11 @@
 const pool = require("./DBconnection");
 
-const createEmailConfirmRow = async (username, key, email, date) => {
+const createEmailConfirmRow = async (id, key, email, date) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
-      "INSERT INTO emailconfirm(username, key, email, date)  VALUES( $1,$2,$3,$4)",
-      [username, key, email, date]
+      "INSERT INTO emailconfirm(key, email, date, id)  VALUES( $1,$2,$3,$4)",
+      [key, email, date, id]
     );
     return `new email/key entry created`;
   } catch (err) {

@@ -1,43 +1,45 @@
 const checkIsRegistered = require("../models/checkIsRegistered");
 const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
-const sendEmailThred = require("../helpers/sendMailThred");
-
-const { url } = require("../configs/credentials.js");
-const generateKey = require("../helpers/generateKey");
-const createEmailConfirmRow = require("../models/createEmailConfirmRow");
-const sendConfirmEmailHelper = require("../helpers/sendConfirmEmailHelper");
+const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
-
   const { userName, password, email } = newUser;
 
-  console.log(newUser);
-  // !! add isUnique and not null ckeks !!
   try {
+    if (!userName) {
+      res.status(400).json("username missing");
+      return;
+    }
+
+    if (!email) {
+      res.status(400).json("email missing");
+      return;
+    }
+
     if (!password || password != newUser.password2) {
-      res.status(400).send("pass too short or does not match");
+      res.status(400).json("pass too short or does not match");
       return;
     }
 
     const isRegistered = await checkIsRegistered(email);
 
     if (isRegistered) {
-      res.status(400).send("this email already registered, try anotherone");
+      res.status(400).json("this email already registered, try another one");
       return;
     }
 
     const isUsernameUnique = await checkUniqueUsername(userName);
 
     if (!isUsernameUnique) {
-      res.status(400).send("this username already registered, try anotherone");
+      res.status(400).json("this username already registered, try another one");
       return;
     }
-
+    //forein  key + createEmCinfRow
     const hashedPass = await bcript.hash(password, 10);
-    const result = await registerNewUser(
+    const userid = await registerNewUser(
       null,
       userName,
       hashedPass,
@@ -46,9 +48,9 @@ const registerUser = async (req, res) => {
       "email"
     );
 
-    await sendConfirmEmailHelper(userName, email);
+    await confirmEmailHelper(userid, email);
 
-    res.end(result);
+    res.status(200).json(`user ${userName} registered, please confirm email`);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

@@ -1,16 +1,18 @@
-const sendEmailThred = require("../helpers/sendMailThred");
+const sendEmailThred = require("./sendMailThred");
 
 const { url } = require("../configs/credentials.js");
-const generateKey = require("../helpers/generateKey");
+const generateKey = require("./generateKey");
 const createEmailConfirmRow = require("../models/createEmailConfirmRow");
 
-const sendConfirmEmailHelper = async (userName, email) => {
+const confirmEmailHelper = async (userid, email) => {
   const key = generateKey();
-  await createEmailConfirmRow(userName, key, email, Date.now());
+
+  await createEmailConfirmRow(userid, key, email, Date.now());
+
   const subject = "Confirm email";
   const content = `${url}/auth/confirmEmail?key=${key}`;
 
   sendEmailThred(email, subject, content);
 };
 
-module.exports = sendConfirmEmailHelper;
+module.exports = confirmEmailHelper;

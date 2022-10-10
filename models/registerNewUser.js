@@ -9,18 +9,14 @@ const registerNewUser = async (
   auth_type
 ) => {
   const client = await pool.connect();
-  try {
-    const res = await client.query(
-      "INSERT INTO users( email, username, password, googleid, facebookid, auth_type)  VALUES( $1,$2,$3,$4,$5,$6)",
-      [email, username, hashedPass, googId, facebookid, auth_type]
-    );
-    return `user ${username} registered`;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    client.release();
-  }
+  const res = await client.query(
+    "INSERT INTO users( email, username, password, googleid, facebookid, auth_type)  VALUES( $1,$2,$3,$4,$5,$6) returning id",
+    [email, username, hashedPass, googId, facebookid, auth_type]
+  );
+
+  client.release();
+  const id = res.rows[0].id;
+  return id;
 };
 
 module.exports = registerNewUser;
