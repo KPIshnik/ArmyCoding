@@ -36,8 +36,8 @@ describe("Register user controller test", () => {
     mockResponse.json.mockClear(); // сброс(очистка всех вызовов)
     сonfirmEmailHelper.mockClear(); // сброс(очистка всех вызовов)
     registerNewUser.mockClear(); // сброс(очистка всех вызовов)
-    checkIsRegistered.mockReset(); // сброс(очистка всех вызовов)
-    checkUniqueUsername.mockReset(); // сброс(очистка всех вызовов)
+    checkIsRegistered.mockReset(); // сброс(очистка всех заданых ответов)
+    checkUniqueUsername.mockReset(); // сброс(очистка всех ответов)
   });
 
   describe("testing with differen user data", () => {
