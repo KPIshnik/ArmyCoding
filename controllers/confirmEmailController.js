@@ -3,18 +3,28 @@ const getUserDataByKey = require("../models/getUserDataByKey");
 const { confirmEmailExpireTime } = require("../configs/settings");
 
 const confirmEmailController = async (req, res) => {
-  const key = req.query.key;
+  const key = req.query ? req.query.key : null;
 
   if (!key) {
-    res.status(400).json("key required");
+    res.status(400).json("valid key required");
     return;
   }
 
   try {
     const userData = await getUserDataByKey(key);
 
-    if (!userData || Date.now() - userData.date > confirmEmailExpireTime) {
-      res.status(400).json("time for email confirming has being expired ");
+    if (Date.now() - userData.date >= confirmEmailExpireTime) {
+      res.status(400).json("confirm key expired");
+      return;
+    }
+
+    if (!userData) {
+      res.status(400).json("confirm key not valid or expired");
+      return;
+    }
+
+    if (!userData.email || !userData.id) {
+      res.status(400).json("bad data, reregister");
       return;
     }
 
@@ -22,7 +32,7 @@ const confirmEmailController = async (req, res) => {
 
     res.status(200).json("Email confirmed");
   } catch (err) {
-    res.status(400).json("something went wrong");
+    res.status(500).json("something went wrong");
     throw err;
   }
 };
