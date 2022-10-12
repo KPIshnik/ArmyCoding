@@ -30,6 +30,7 @@ describe("Confirm email controller tests", () => {
   getUserDataByKey.mockResolvedValue(userData);
 
   beforeEach(() => {
+    //Validation???
     userData.id = 3;
     userData.email = "bob@gmail.com";
     userData.date = Date.now(); // - confirmEmailExpireTime - 10,
@@ -87,7 +88,7 @@ describe("Confirm email controller tests", () => {
     expect(mockResponse.json).toHaveBeenCalledWith("confirm key expired");
   });
 
-  test('shuold return code:  400 msg: "bad data, reregister", when no userd.email or user.id', async () => {
+  test('shuold return code:  400 msg: "bad data, reregister", when no user.email or user.id', async () => {
     //arrange
     userData.email = null;
     //act

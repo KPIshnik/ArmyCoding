@@ -1,20 +1,33 @@
 const registerUser = require("../../../controllers/registerUserr");
+const bcript = require("bcrypt");
+const checkIsRegistered = require("../../../models/checkIsRegistered");
+const registerNewUser = require("../../../models/registerNewUser");
+const сonfirmEmailHelper = require("../../../helpers/confirmEmailHelper");
+const checkUniqueUsername = require("../../../models/checkUniqueUsername");
 
 // *******
 // Мокаю все импорты в registerUser
 jest.mock("../../../models/checkIsRegistered");
 jest.mock("../../../models/registerNewUser");
-jest.mock("../../../helpers/сonfirmEmailHelper");
+jest.mock("../../../helpers/confirmEmailHelper");
 jest.mock("../../../models/checkUniqueUsername");
-
-const checkIsRegistered = require("../../../models/checkIsRegistered");
-const registerNewUser = require("../../../models/registerNewUser");
-const сonfirmEmailHelper = require("../../../helpers/сonfirmEmailHelper");
-const checkUniqueUsername = require("../../../models/checkUniqueUsername");
-//***** */
+jest.mock("bcrypt", () => {
+  const originalBcript = jest.requireActual("bcrypt");
+  return {
+    ...originalBcript,
+    hash: (pass) => {
+      return `hashed ${pass}`;
+    },
+  };
+});
 
 describe("Register user controller test", () => {
   // ********************
+
+  // bcript = jest.fn(async (pass) => {
+  //   return `hashed ${pass} `;
+  // });
+
   // мокаю Responce
   const mockResponse = {
     status: jest.fn(() => {
@@ -48,6 +61,7 @@ describe("Register user controller test", () => {
 
     test("should register useer with correct data", async () => {
       //arrange
+
       const testUser = {
         userName: "Bob",
         password: "123",
@@ -75,7 +89,7 @@ describe("Register user controller test", () => {
       expect(registerNewUser).toHaveBeenCalledWith(
         null,
         testUser.userName,
-        expect.any(String), // тут хз надо ли проверять что пароль хэшнут и как это делать
+        `hashed ${testUser.password}`, // тут хз надо ли проверять что пароль хэшнут и как это делать
         null,
         null,
         "email"
@@ -83,7 +97,7 @@ describe("Register user controller test", () => {
 
       // проверяю что  сonfirmEmailHelper вызван с праильными аргументами
       expect(сonfirmEmailHelper).toHaveBeenCalledWith(
-        testUser.userName,
+        testUser.id,
         testUser.email
       );
     });
@@ -207,8 +221,26 @@ describe("Register user controller test", () => {
   });
 
   test(" when throws unhandled exception, should response with 500", async () => {
-    // ???
-  });
+    // arrange
 
-  // when register new user throws unhandled exception, should response with 500
+    checkIsRegistered.mockImplementationOnce(() => {
+      throw new Error();
+    }); // один раз вернуть фалс
+
+    const testUser = {
+      userName: "Bob",
+      password: "123",
+      password2: "123",
+      email: "bob@gmail.com",
+    };
+
+    const mockRequest = { body: testUser };
+
+    //act
+    await registerUser(mockRequest, mockResponse, mockNextFunction);
+
+    //assert
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith("Oops, server error((");
+  });
 });
