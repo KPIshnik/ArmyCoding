@@ -1,13 +1,3 @@
-const res = {
-  status: (code) => {
-    console.log(code);
-    return res;
-  },
-
-  json: (string) => {
-    console.log(string);
-    return res;
-  },
-};
-
-res.status(200).json("Aloha");
+console.log(process.argv[0]);
+console.log(process.argv[3]);
+console.log(process.argv[4]);

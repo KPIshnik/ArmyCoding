@@ -1,6 +1,8 @@
 const { Pool } = require("pg");
-const { pgConfig } = require("../configs/credentials")
+const { pgConfig } = require("../configs/credentials");
 
-const pool = new Pool(pgConfig);
+const environment = process.argv[1];
+
+const pool = new Pool(pgConfig[environment]);
 
 module.exports = pool;

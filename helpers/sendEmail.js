@@ -1,5 +1,5 @@
 const sgMail = require("@sendgrid/mail");
-const {sendGridKeys} = require('../configs/credentials')  
+const { sendGridKeys } = require("../configs/credentials");
 
 sgMail.setApiKey(sendGridKeys.API_KEY);
 
@@ -10,10 +10,11 @@ const sendEmail = async (adress, subject, content) => {
     subject: subject,
     html: content,
   };
-  await sgMail
+  //??? await & then?? fix this
+  sgMail
     .send(msg)
     .then(() => {
-       console.log("Email sent");
+      console.log("Email sent");
     })
     .catch((error) => {
       console.error(error);
