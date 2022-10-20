@@ -4,8 +4,10 @@ const passport = require("./middlewares/passport");
 const router = require("./routes");
 const swaggerUi = require("swagger-ui-express");
 const swagger = require("./swagger.json");
-
 const { session_config } = require("./configs/credentials");
+const migrateUP = require("./DB/migrateUP");
+
+//migrateUP();
 
 const app = express();
 

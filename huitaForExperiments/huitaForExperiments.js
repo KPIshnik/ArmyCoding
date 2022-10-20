@@ -1,3 +1,3 @@
-console.log(process.argv[0]);
-console.log(process.argv[3]);
-console.log(process.argv[4]);
+const h = require("./poeben");
+
+console.log(h);

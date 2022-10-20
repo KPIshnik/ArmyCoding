@@ -1,5 +1,5 @@
-const sum = (a, b) => {
-  return a + b;
-};
+console.log("asd");
 
-module.exports = sum;
+const h = 5;
+
+module.exports = h;

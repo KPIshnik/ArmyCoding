@@ -1,19 +1,17 @@
-jest.mock("./poeben");
+// const request = require("supertest");
+// const huita = require("./huitaForExperiments");
 
-const sum = require("./poeben");
-describe("", () => {
-  describe("testing hueta", () => {
-    beforeEach(() => {
-      sum.mockReturnValueOnce(5);
-    });
-    test("testing hueta", () => {
-      expect(sum(100)).toBe(5);
-    });
-    test("testing hueta", () => {
-      expect(sum(0)).toBe(5);
+(async () => {
+  describe("Aloha from huita", () => {
+    // afterAll(() => {
+    //   huita.close();
+    // });
+
+    test("expect test", async () => {
+      //  const res = await request(huita).get("/");
+
+      expect(200).toBe(200);
+      //expect(res.body).toBe("Aloha");
     });
   });
-  test("testing hueta", () => {
-    expect(sum(10)).toBe(5);
-  });
-});
+})();

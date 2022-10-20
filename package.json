@@ -2,10 +2,12 @@
   "name": "todo_api_express_first_steps",
   "version": "0.0.0",
   "description": "",
-  "main": "huitdddda.js",
+  "main": "app.js",
   "scripts": {
-    "test": "jest",
-    "start": "nodemon server.js"
+    "test": "jest --silent",
+    "start": "NODE_ENV=dev nodemon server.js",
+    "migrate": "node-pg-migrate",
+    "play": "node huitaForExperiments/huitaForExperiments.js"
   },
   "author": "Anton",
   "license": "MIT",
@@ -15,13 +17,14 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "multer": "^1.4.5-lts.1",
+    "node-pg-migrate": "^6.2.2",
     "passport": "^0.6.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.6.1",
-    "pg": "^8.5.1",
+    "pg": "^8.8.0",
     "save": "^2.4.0",
     "sharp": "^0.30.7",
     "swagger-ui-express": "^4.1.6"

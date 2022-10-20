@@ -52,6 +52,7 @@ const registerUser = async (req, res) => {
 
     res.status(200).json(`user ${userName} registered, please confirm email`);
   } catch (err) {
+    console.log(err);
     res.status(500).json("Oops, server error((");
   }
 };
