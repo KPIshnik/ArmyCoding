@@ -1,5 +1,5 @@
 const app = require("./app");
-const db = require("./DB/db");
+const db = require("./models/DBconnection");
 const migrateUp = require("./DB/migrateUP");
 const { PORT, HOST } = require("./configs/connectionConfig");
 

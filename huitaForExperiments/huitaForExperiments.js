@@ -1,3 +1,3 @@
-const h = require("./poeben");
+const { x } = require("./poeben");
 
-console.log(h);
+console.log(x);

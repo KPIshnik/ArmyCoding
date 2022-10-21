@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest --silent",
+    "test": "jest --detectOpenHandles",
     "start": "NODE_ENV=dev nodemon server.js",
     "migrate": "node-pg-migrate",
     "play": "node huitaForExperiments/huitaForExperiments.js"

@@ -1,5 +1,3 @@
-console.log("asd");
+console.log(require.main === module);
 
-const h = 5;
-
-module.exports = h;
+exports.x = 5;

@@ -1,4 +1,11 @@
 const startServer = require("./server");
 
-console.log("Aloha");
-const server = startServer();
+/*
+what i need:
+
+1. Started server && sever instatnce!
+2. Migratin up before started server.
+
+
+
+*/
