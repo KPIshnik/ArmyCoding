@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
 "email": "antaresstat@gmail.com",
-"userName": "Io",
+"userName": "Kris",
 "password": "s",
 "password2": "s"
 }

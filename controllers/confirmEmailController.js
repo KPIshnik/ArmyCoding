@@ -12,14 +12,13 @@ const confirmEmailController = async (req, res) => {
 
   try {
     const userData = await getUserDataByKey(key);
-
-    if (Date.now() - userData.date >= confirmEmailExpireTime) {
-      res.status(400).json("confirm key expired");
+    if (!userData) {
+      res.status(400).json("confirm key not valid or expired");
       return;
     }
 
-    if (!userData) {
-      res.status(400).json("confirm key not valid or expired");
+    if (Date.now() - userData.date >= confirmEmailExpireTime) {
+      res.status(400).json("confirm key expired");
       return;
     }
 

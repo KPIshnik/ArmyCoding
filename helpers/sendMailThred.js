@@ -7,14 +7,16 @@ const {
 const path = require("path");
 
 const sendEmailThred = (adress, subject, content) => {
-  const workerScript = path.join(__dirname, "./sendEmailWorker.js");
+  return new Promise((resolve, reject) => {
+    const workerScript = path.join(__dirname, "./sendEmailWorker.js");
 
-  const worker = new Worker(workerScript, {
-    workerData: { adress, subject, content },
+    const worker = new Worker(workerScript, {
+      workerData: { adress, subject, content },
+    });
+
+    worker.on("message", (message) => resolve(message));
+    worker.on("error", (err) => reject(err));
   });
-
-  worker.on("message", (message) => console.log(message));
-  worker.on("error", (err) => console.log(err));
 };
 
 module.exports = sendEmailThred;

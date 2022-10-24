@@ -12,7 +12,8 @@ const confirmEmailHelper = async (userid, email) => {
   const subject = "Confirm email";
   const content = `${url}/auth/confirmEmail?key=${key}`;
 
-  sendEmailThred(email, subject, content);
+  await sendEmailThred(email, subject, content);
+  return;
 };
 
 module.exports = confirmEmailHelper;
