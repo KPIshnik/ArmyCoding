@@ -1,19 +1,33 @@
-const { testmail } = require("../configs/credentials");
+const { testmail, url } = require("../configs/credentials");
 const sendEmailThred = require("../helpers/sendMailThred");
 const superagent = require("superagent");
+const request = require("supertest");
 
-(async () => {
-  const res = await superagent.get(
-    `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${testmail.namespace}&tag=testuser`
-  );
+const express = require("express");
 
-  const emails = res.body.emails;
-  console.log(emails[0].text);
+//migrateUP();
 
-  //   emails.forEach((e) => {
-  //     console.log(e.text);
-  //   });
+const app = express();
 
-  console.log(emails[emails.length - 1].text);
-})();
-//const recivedMail = res.emails[res.emails.length - 1];
+app.get("/", (req, res) => {
+  res.json("asdaf").redirect("/lola");
+});
+app.get("/lola", (req, res) => {
+  res.status(200).json({ l: "lola" });
+});
+app.listen(8000, () => {
+  console.log("go go go");
+});
+
+request(app).get("/");
+
+// test("huita test", () => {
+//   request(app).get("/").expect(200);
+// });
+// (async () => {
+//     resp = await superagent.get("http://localhost:8000");
+
+//     //const lastRecivedEmail = testmailResponse.emails[0];
+//     console.log(resp.status);
+//     console.log(resp.text);
+//   })();

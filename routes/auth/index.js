@@ -11,7 +11,7 @@ router
     res.end("auth page");
   })
   .post("/auth", checkNOTAuth, passport.authenticate("local"), (req, res) => {
-    res.redirect(200, "/");
+    res.redirect("/");
   })
   .delete("/auth", checkIsAuth, (req, res) => {
     req.logout().redirect(200, "/auth");

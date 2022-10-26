@@ -1,3 +1,16 @@
-console.log(require.main === module);
+const express = require("express");
 
-exports.x = 5;
+//migrateUP();
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.redirect("/lola");
+});
+app.get("/lola", (req, res) => {
+  res.status(200).json("lola");
+});
+
+app.listen(8000, () => {
+  console.log("go go go");
+});
