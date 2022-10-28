@@ -1,6 +1,6 @@
 const expres = require("express");
 const checkIsAuth = require("../../middlewares/checkIsAuth");
-const setUserPasswordController = require("../../models/setUserPasswordController");
+const setUserPasswordController = require("../../controllers/setUserPasswordController");
 
 const router = expres.Router();
 

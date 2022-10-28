@@ -8,15 +8,21 @@ const express = require("express");
 //migrateUP();
 
 const app = express();
+let k;
 
 app.get("/", (req, res) => {
-  res.json("asdaf").redirect("/lola");
+  k = 8;
+  res.redirect("/lola");
 });
+
 app.get("/lola", (req, res) => {
+  k = 10;
   res.status(200).json({ l: "lola" });
 });
+
 app.listen(8000, () => {
   console.log("go go go");
+  console.log(k);
 });
 
 request(app).get("/");

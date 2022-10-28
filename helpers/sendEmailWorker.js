@@ -5,7 +5,7 @@ const { adress, subject, content } = workerData;
 
 sendEmail(adress, subject, content)
   .then((res) => {
-    parentPort.postMessage("mail send");
+    parentPort.postMessage(`mail send to ${adress}`);
   })
   .catch((err) => {
     throw err;

@@ -31,7 +31,7 @@ const setUserEmailController = async (req, res) => {
 
     await confirmEmailHelper(user.id, userEmail);
 
-    res.send(`cofirm email`); // redirect to something norml later
+    res.status(200).json("confirm new email");
   } catch (err) {
     console.log(err);
     res.send("server error");

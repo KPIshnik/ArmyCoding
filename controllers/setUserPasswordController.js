@@ -4,11 +4,11 @@ const bcrypt = require("bcrypt");
 
 const setUserPasswordController = async (req, res) => {
   const user = req.user;
-  const oldPass = req.body.password;
+  const password = req.body.password;
   const newPass = req.body.newPass;
   const newPass2 = req.body.newPass2;
 
-  if (!oldPass) {
+  if (!password) {
     res.status(400).send("password required");
     return;
   }
@@ -19,7 +19,7 @@ const setUserPasswordController = async (req, res) => {
   }
 
   try {
-    if (!(await verifyPassword(user, oldPass))) {
+    if (!(await verifyPassword(user, password))) {
       res.status(400).send("wrong pass");
       return;
     }
@@ -28,7 +28,7 @@ const setUserPasswordController = async (req, res) => {
 
     const result = await setUserPassword(user.id, hashedPass);
 
-    res.end(`${result}`); // redirect to something norml later
+    res.status(200).json("password chenged"); // redirect to something norml later
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

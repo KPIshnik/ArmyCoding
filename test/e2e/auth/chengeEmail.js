@@ -8,7 +8,7 @@ jest.setTimeout(20000);
 
 let server;
 
-describe("e2e testing register user", () => {
+describe("e2e testing chenging email", () => {
   beforeAll(async () => {
     server = await serverPromise;
   });
@@ -18,10 +18,8 @@ describe("e2e testing register user", () => {
     await server.teardown();
   });
 
-  test(`should register user with correct data,
-          send confirm email and
-          return code: 200,
-          msg: "user username registered, please confirm email"`, async () => {
+  test(`should register user with correct data, then chage  email,
+  response with code: 200, json: "confirm new email"`, async () => {
     //arrange
     const testUser = {
       userName: "testuser",
@@ -30,11 +28,10 @@ describe("e2e testing register user", () => {
       email: "a2f9p.testuser@inbox.testmail.app",
     };
 
+    const newEmail = "a2f9p.newEmail@inbox.testmail.app";
     //act
 
-    const registerResponse = await request(url)
-      .post("/auth/register")
-      .send(testUser);
+    await request(url).post("/auth/register").send(testUser);
 
     const testmailResponse = await superagent.get(
       `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${
@@ -47,12 +44,15 @@ describe("e2e testing register user", () => {
 
     const confirmEmailResponse = await request(confirmEmailURL).get("");
 
-    const loginResponse = await request
-      .agent(url)
-      .post(`/auth`)
-      .send({ email: testUser.email, password: testUser.password })
-      .redirects();
+    const agent = request.agent(url);
 
+    await agent(url)
+      .post(`/auth`)
+      .send({ email: testUser.email, password: testUser.password });
+
+    await agent(url)
+      .post(`/auth`)
+      .send({ email: newEmail, password: testUser.password });
     // asssert;
 
     expect(registerResponse.status).toBe(200);
