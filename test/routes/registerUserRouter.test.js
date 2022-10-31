@@ -1,20 +1,15 @@
-//Не протестирована отправка мыла!!!
-//две проблемы:
-//  -Джест не умеет в паралельные потоки
-//  -Не нашел тет апи у Сенд Грида
-
-/// проверять через эндпоинты
-
-/// !!NOT Finished!!
 const request = require("supertest");
-const { url } = require("../../configs/credentials");
+const { url, testmail } = require("../../configs/credentials");
 const clearDB = require("../../DB/clearDB");
-const sendEmailThred = require("../../helpers/sendMailThred");
+const generateKey = require("../../helpers/generateKey");
 const getEmailConfirmDataById = require("../../models/getEmailConfirmDataById");
 const getUserByUserName = require("../../models/getUserByUsename");
 const serverPromise = require("../../server");
+const superagent = require("superagent");
 
-jest.mock("../../helpers/sendMailThred");
+jest.setTimeout(60000);
+
+jest.mock("../../helpers/generateKey");
 jest.mock("bcrypt", () => {
   const originalBcript = jest.requireActual("bcrypt");
   return {
@@ -25,16 +20,21 @@ jest.mock("bcrypt", () => {
   };
 });
 
+const RealDate = Date.now;
+
 let server;
 
 describe("e2e testing register user", () => {
   beforeAll(async () => {
     server = await serverPromise;
+    generateKey.mockImplementation(() => "key");
+    global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
   });
 
   afterAll(async () => {
     await clearDB();
     await server.teardown();
+    global.Date.now = RealDate;
   });
 
   test(`should return code: 200, msg: "register page"
@@ -45,29 +45,27 @@ describe("e2e testing register user", () => {
     expect(response.body).toBe("register page");
   });
 
-  test(`should , msg: "register page"
-      on get request when not authorithed`, async () => {
-    const response = await request(server).get("/auth/register");
-
-    expect(response.status).toBe(200);
-    expect(response.body).toBe("register page");
-  });
-
-  test(`should register user with correct data,
+  test(`should register user with correct data on post request,
         send confirm email and
         return code: 200,
         msg: "user username registered, please confirm email"`, async () => {
     const testUser = {
-      userName: "Test user",
+      userName: "testuser",
       password: "123",
       password2: "123",
-      email: "antaresstat@gmail.com",
+      email: "a2f9p.testuser@inbox.testmail.app",
     };
 
     //act
     const response = await request(server)
       .post("/auth/register")
       .send(testUser);
+
+    const testmailResponse = await superagent.get(
+      `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${
+        testmail.namespace
+      }&tag=${testUser.userName}&timestamp_from=${Date.now()}&livequery=true`
+    );
 
     const user = await getUserByUserName(testUser.userName);
     const emailConfirmData = await getEmailConfirmDataById(user.id);
@@ -89,15 +87,16 @@ describe("e2e testing register user", () => {
       auth_type: "email",
     });
 
-    const subject = "Confirm email";
-    const content = `${url}/auth/confirmEmail?key=${emailConfirmData.key}`;
-
-    //
-    expect(sendEmailThred).toHaveBeenCalledTimes(1);
-    expect(sendEmailThred).toHaveBeenCalledWith(
-      testUser.email,
-      subject,
-      content
+    expect(testmailResponse.body.emails[0].subject).toBe("Confirm email");
+    expect(testmailResponse.body.emails[0].text).toBe(
+      `${url}/auth/confirmEmail?key=key`
     );
+
+    expect(emailConfirmData).toEqual({
+      id: user.id,
+      email: testUser.email,
+      key: "key",
+      date: Date.now().toString(),
+    });
   });
 });
