@@ -3,7 +3,7 @@ const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
-const pool = require("../models/DBconnection");
+const emailValidator = require("deep-email-validator");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
@@ -17,6 +17,13 @@ const registerUser = async (req, res) => {
 
     if (!email) {
       res.status(400).json("email missing");
+      return;
+    }
+
+    const isEmailValod = await emailValidator.validate(email);
+
+    if (!isEmailValod.valid) {
+      res.status(400).json("email not valid");
       return;
     }
 
@@ -50,9 +57,7 @@ const registerUser = async (req, res) => {
     );
 
     await confirmEmailHelper(userid, email);
-    //HUITA
-    //  await pool.end();
-    //END of HUITA
+
     res.status(200).json(`user ${userName} registered, please confirm email`);
   } catch (err) {
     console.log(err);

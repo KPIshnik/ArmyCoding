@@ -1,10 +1,8 @@
-const a = {
-  a: 4,
-  b: 5,
+const emailValidator = require("deep-email-validator");
+
+const s = async () => {
+  const res = await emailValidator.validate("abc-@mail.com");
+  console.log(res.valid);
 };
 
-const x = a;
-
-x.a = 1;
-
-console.log(a.a);
+s();
