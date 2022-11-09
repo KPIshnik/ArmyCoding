@@ -23,11 +23,6 @@ jest.mock("bcrypt", () => {
 
 describe("Register user controller test", () => {
   // ********************
-
-  // bcript = jest.fn(async (pass) => {
-  //   return `hashed ${pass} `;
-  // });
-
   // мокаю Responce
   const mockResponse = {
     status: jest.fn(() => {
@@ -66,7 +61,7 @@ describe("Register user controller test", () => {
         userName: "Bob",
         password: "123",
         password2: "123",
-        email: "bob@gmail.com",
+        email: "validemail@gmail.com",
       };
 
       const mockRequest = { body: testUser }; // мокаю запрос
@@ -108,7 +103,7 @@ describe("Register user controller test", () => {
         userName: "Bob",
         password: "123",
         password2: "1234",
-        email: "bob@gmail.com",
+        email: "validemail@gmail.com",
       };
       const mockRequest = { body: testUser };
 
@@ -131,7 +126,7 @@ describe("Register user controller test", () => {
         userName: "",
         password: "123",
         password2: "123",
-        email: "bob@gmail.com",
+        email: "validemail@gmail.com",
       };
       const mockRequest = { body: testUser };
 
@@ -177,7 +172,7 @@ describe("Register user controller test", () => {
       userName: "Bob",
       password: "123",
       password2: "123",
-      email: "bob@gmail.com",
+      email: "validemail@gmail.com",
     };
     const mockRequest = { body: testUser };
 
@@ -204,7 +199,7 @@ describe("Register user controller test", () => {
       userName: "Bob",
       password: "123",
       password2: "123",
-      email: "bob@gmail.com",
+      email: "validemail@gmail.com",
     };
     const mockRequest = { body: testUser };
 
@@ -231,7 +226,7 @@ describe("Register user controller test", () => {
       userName: "Bob",
       password: "123",
       password2: "123",
-      email: "bob@gmail.com",
+      email: "validemail@gmail.com",
     };
 
     const mockRequest = { body: testUser };

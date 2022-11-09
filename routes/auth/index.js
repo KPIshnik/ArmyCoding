@@ -8,7 +8,8 @@ router.use(expres.json());
 
 router
   .get("/auth", checkNOTAuth, (req, res) => {
-    res.end("auth page");
+    const msg = "register page";
+    res.status(200).json(msg);
   })
   .post("/auth", checkNOTAuth, passport.authenticate("local"), (req, res) => {
     res.redirect("/");

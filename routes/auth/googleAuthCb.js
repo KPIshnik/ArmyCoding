@@ -2,12 +2,12 @@ const expres = require("express");
 const passport = require("passport");
 
 const router = expres.Router();
-//проверить есть ли тако, если нет то зарегить по данным. если есть ауситикате.
+
 router.get(
   "/auth/google/cb",
   passport.authenticate("google", {
-    //пошаманить тут. получить профиль, зарегать, редиректнуть.
-    failureRedirect: "/login",
+    failureRedirect: "/auth/fail",
+    failureMessage: true,
   }),
   (req, res) => {
     res.redirect("/");
@@ -15,3 +15,24 @@ router.get(
 );
 
 module.exports = router;
+
+// (req, res, next) => {
+//   passport.authenticate(
+//     "google",
+
+//     (err, user, info) => {
+//       if (err) {
+//         return next(err);
+//       }
+//       if (!user) {
+//         return res.status(401).json(info);
+//       }
+// req.login(user, function(err){
+//   if(err){
+//     return next(err);
+//   }
+
+//       return res.redirect("/");
+//     }
+//   )(req, res, next);
+// }

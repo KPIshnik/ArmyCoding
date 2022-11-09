@@ -7,7 +7,7 @@ exports.up = (pgm) => {
     `CREATE TABLE IF NOT EXISTS users( 
      id         uuid         DEFAULT      gen_random_uuid() PRIMARY KEY,
      email      varchar(30)               UNIQUE,
-     username   varchar(30)  NOT NUll     UNIQUE,
+     username   varchar(30)               UNIQUE,
      password   varchar(30),
      googleid   varchar(50)               UNIQUE,
      facebookid varchar(50)               UNIQUE,

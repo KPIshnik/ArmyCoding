@@ -1,3 +1,16 @@
+jest.mock("../../helpers/generateKey", () => {
+  return () => "key";
+});
+jest.mock("bcrypt", () => {
+  const originalBcript = jest.requireActual("bcrypt");
+  return {
+    ...originalBcript,
+    hash: (pass) => {
+      return `hashed ${pass}`;
+    },
+  };
+});
+
 const request = require("supertest");
 const { url, testmail } = require("../../configs/credentials");
 const clearDB = require("../../DB/clearDB");
@@ -12,17 +25,6 @@ const registerNewUser = require("../../models/registerNewUser");
 
 jest.setTimeout(60000);
 
-jest.mock("../../helpers/generateKey");
-jest.mock("bcrypt", () => {
-  const originalBcript = jest.requireActual("bcrypt");
-  return {
-    ...originalBcript,
-    hash: (pass) => {
-      return `hashed ${pass}`;
-    },
-  };
-});
-
 const RealDate = Date.now;
 
 let server;
@@ -30,7 +32,6 @@ let server;
 describe("/auth/register ", () => {
   beforeAll(async () => {
     server = await serverPromise;
-    generateKey.mockImplementation(() => "key");
     global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
   });
 

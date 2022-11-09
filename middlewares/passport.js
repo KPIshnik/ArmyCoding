@@ -14,6 +14,7 @@ const registerNewUser = require("../models/registerNewUser");
 const { url } = require("../configs/credentials");
 const { googleKeys } = require("../configs/credentials");
 const { facebookKeys } = require("../configs/credentials");
+const checkIsRegistered = require("../models/checkIsRegistered");
 
 const googID = googleKeys.googID;
 const googSecret = googleKeys.googSecret;
@@ -64,6 +65,11 @@ passport.use(
       // };
 
       if (!user) {
+        if (await checkIsRegistered(profile.emails[0].value)) {
+          return done(null, false, {
+            message: "this email is already registered",
+          });
+        }
         await registerNewUser(
           profile.emails[0].value,
           //profile.displayName,
@@ -92,6 +98,13 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       let user = await getUserByEmail(profile._json.email);
+
+      if (await checkIsRegistered(profile._json.email)) {
+        return done(null, false, {
+          message: "this email is already registered",
+        });
+      }
+
       if (!user) {
         await registerNewUser(
           profile._json.email,

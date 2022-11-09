@@ -11,6 +11,7 @@ const avatar = require("./profile/avatar");
 const username = require("./profile/username");
 const userEmail = require("./profile/userEmail");
 const password = require("./profile/password");
+const fail = require("./auth/fail");
 
 const router = express.Router();
 
@@ -27,7 +28,8 @@ router.use(
   confirmEmail,
   username,
   userEmail,
-  password
+  password,
+  fail
 );
 
 module.exports = router;
