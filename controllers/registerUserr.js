@@ -7,30 +7,34 @@ const emailValidator = require("deep-email-validator");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
+
   const { userName, password, email } = newUser;
 
   try {
-    if (!userName) {
-      res.status(400).json("username missing");
-      return;
+    if (!newUser.valid) {
+      throw new Error("not valid user data");
     }
+    // if (!userName) {
+    //   res.status(400).json("username missing");
+    //   return;
+    // }
 
-    if (!email) {
-      res.status(400).json("email missing");
-      return;
-    }
+    // if (!email) {
+    //   res.status(400).json("email missing");
+    //   return;
+    // }
 
     const isEmailValod = await emailValidator.validate(email);
 
-    if (!isEmailValod.valid) {
-      res.status(400).json("email not valid");
-      return;
-    }
+    // if (!isEmailValod.valid) {
+    //   res.status(400).json("email not valid");
+    //   return;
+    // }
 
-    if (!password || password != newUser.password2) {
-      res.status(400).json("pass too short or does not match");
-      return;
-    }
+    // if (!password || password != newUser.password2) {
+    //   res.status(400).json("pass too short or does not match");
+    //   return;
+    // }
 
     const isRegistered = await checkIsRegistered(email);
 

@@ -1,24 +1,21 @@
-const getUserByEmail = require("../models/getUserByEmail");
-
 const checkIsAuth = (req, res, next) => {
-	if (!req.isAuthenticated()) {
-		res.redirect("/auth");
-		return;
-	}
+  if (!req.isAuthenticated()) {
+    res.redirect("/auth");
+    return;
+  }
 
-	console.log(req.user);
+  console.log(req.user);
 
-	// if not user.email
-	if (!req.user.email) {
-		res.send("confirm email");
-		return;
-	}
+  if (!req.user.email) {
+    res.status(200).json("confirm email");
+    return;
+  }
 
-	if (!req.user.username & (req.url != "/profile/username")) {
-		res.redirect("/profile/username"); //или типа того
-		return;
-	}
-	next();
+  if (!req.user.username & (req.url != "/profile/username")) {
+    res.redirect("/profile/username"); //или типа того
+    return;
+  }
+  next();
 };
 
 module.exports = checkIsAuth;

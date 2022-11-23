@@ -1,21 +1,6 @@
-const generateKey = require("../helpers/generateKey");
-const sendEmail = require("../helpers/sendEmail");
-const poeben = require("./poeben");
-const superagent = require("superagent");
-const { mailsacKey } = require("../configs/credentials");
-const fs = require("fs");
+const generateKey = require("../../helpers/generateKey");
 
-// const asc = "todolisr@mailsac.com"; //"a2f9p.testuser@inbox.testmail.app";
-// sendEmail(asc, asc, asc);
-
-superagent
-  .get("https://mailsac.com/api/inbox")
-  .set("Mailsac-Key", mailsacKey)
-  .then((data) => {
-    console.log(data.body);
-    fs.writeFileSync("body.json", JSON.stringify(data, null, 4));
-  })
-  .catch((err) => fs.writeFileSync("err.txt", err.toString()));
+module.exports = () => generateKey();
 
 // function justify(text, width) {
 //   const words = text.split(" ");

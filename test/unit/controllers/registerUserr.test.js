@@ -23,6 +23,11 @@ jest.mock("bcrypt", () => {
 
 describe("Register user controller test", () => {
   // ********************
+
+  // bcript = jest.fn(async (pass) => {
+  //   return `hashed ${pass} `;
+  // });
+
   // мокаю Responce
   const mockResponse = {
     status: jest.fn(() => {
@@ -49,19 +54,17 @@ describe("Register user controller test", () => {
   });
 
   describe("testing with differen user data", () => {
-    beforeEach(() => {
-      checkIsRegistered.mockResolvedValueOnce(false); // Один раз выдать фалс
-      checkUniqueUsername.mockResolvedValueOnce(true); // Один раз выдать тру
-    });
-
     test("should register useer with correct data", async () => {
       //arrange
+      checkIsRegistered.mockResolvedValueOnce(false); // Один раз выдать фалс
+      checkUniqueUsername.mockResolvedValueOnce(true);
 
       const testUser = {
         userName: "Bob",
         password: "123",
         password2: "123",
-        email: "validemail@gmail.com",
+        email: "validmail@gmail.com",
+        valid: true,
       };
 
       const mockRequest = { body: testUser }; // мокаю запрос
@@ -97,13 +100,17 @@ describe("Register user controller test", () => {
       );
     });
 
-    test("should not register user with not matching pass", async () => {
+    test("should not register user with not unique email", async () => {
       //arrange
+      checkIsRegistered.mockResolvedValueOnce(true); // один раз вернуть тру
+      checkUniqueUsername.mockReturnValueOnce(true); // один раз вернуть тру
+
       const testUser = {
         userName: "Bob",
         password: "123",
-        password2: "1234",
-        email: "validemail@gmail.com",
+        password2: "123",
+        email: "validmail@gmail.com",
+        valid: true,
       };
       const mockRequest = { body: testUser };
 
@@ -113,41 +120,25 @@ describe("Register user controller test", () => {
       //assert
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith(
-        `pass too short or does not match`
+        `this email already registered, try another one`
       );
 
-      expect(сonfirmEmailHelper).toHaveBeenCalledTimes(0); // проверяю чтоб не был вызван
-      expect(registerNewUser).toHaveBeenCalledTimes(0); // проверяю чтоб не был вызван
-    });
-
-    test("should not register user with empty username", async () => {
-      //arrange
-      const testUser = {
-        userName: "",
-        password: "123",
-        password2: "123",
-        email: "validemail@gmail.com",
-      };
-      const mockRequest = { body: testUser };
-
-      //act
-      await registerUser(mockRequest, mockResponse, mockNextFunction);
-
-      //assert
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(mockResponse.json).toHaveBeenCalledWith(`username missing`);
-
+      expect(checkUniqueUsername).toHaveBeenCalledTimes(0);
       expect(сonfirmEmailHelper).toHaveBeenCalledTimes(0);
       expect(registerNewUser).toHaveBeenCalledTimes(0);
     });
 
-    test("should not register user with empty email", async () => {
+    test("should not register user with not unique username", async () => {
       //arrange
+      checkIsRegistered.mockReturnValueOnce(false); // один раз вернуть фалс
+      checkUniqueUsername.mockReturnValueOnce(false); // один раз вернуть фалс
+
       const testUser = {
         userName: "Bob",
         password: "123",
         password2: "123",
-        email: "",
+        email: "validmail@gmail.com",
+        valid: true,
       };
       const mockRequest = { body: testUser };
 
@@ -156,86 +147,30 @@ describe("Register user controller test", () => {
 
       //assert
       expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(mockResponse.json).toHaveBeenCalledWith(`email missing`);
-
+      expect(mockResponse.json).toHaveBeenCalledWith(
+        `this username already registered, try another one`
+      );
       expect(сonfirmEmailHelper).toHaveBeenCalledTimes(0);
       expect(registerNewUser).toHaveBeenCalledTimes(0);
     });
-  });
 
-  test("should not register user with not unique email", async () => {
-    //arrange
-    checkIsRegistered.mockReturnValueOnce(true); // один раз вернуть тру
-    checkUniqueUsername.mockReturnValueOnce(true); // один раз вернуть тру
+    test(" when throws unhandled exception, should response with 500", async () => {
+      // arrange
+      const testUser = {
+        userName: "Bob",
+        password: "123",
+        password2: "123",
+        email: "validmail@gmail.com",
+      };
 
-    const testUser = {
-      userName: "Bob",
-      password: "123",
-      password2: "123",
-      email: "validemail@gmail.com",
-    };
-    const mockRequest = { body: testUser };
+      const mockRequest = { body: testUser };
 
-    //act
-    await registerUser(mockRequest, mockResponse, mockNextFunction);
+      //act
+      await registerUser(mockRequest, mockResponse, mockNextFunction);
 
-    //assert
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith(
-      `this email already registered, try another one`
-    );
-
-    expect(checkUniqueUsername).toHaveBeenCalledTimes(0);
-    expect(сonfirmEmailHelper).toHaveBeenCalledTimes(0);
-    expect(registerNewUser).toHaveBeenCalledTimes(0);
-  });
-
-  test("should not register user with not unique usename", async () => {
-    //arrange
-    checkIsRegistered.mockReturnValueOnce(false); // один раз вернуть фалс
-    checkUniqueUsername.mockReturnValueOnce(false); // один раз вернуть фалс
-
-    const testUser = {
-      userName: "Bob",
-      password: "123",
-      password2: "123",
-      email: "validemail@gmail.com",
-    };
-    const mockRequest = { body: testUser };
-
-    //act
-    await registerUser(mockRequest, mockResponse, mockNextFunction);
-
-    //assert
-    expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.json).toHaveBeenCalledWith(
-      `this username already registered, try another one`
-    );
-    expect(сonfirmEmailHelper).toHaveBeenCalledTimes(0);
-    expect(registerNewUser).toHaveBeenCalledTimes(0);
-  });
-
-  test(" when throws unhandled exception, should response with 500", async () => {
-    // arrange
-
-    checkIsRegistered.mockImplementationOnce(() => {
-      throw new Error();
-    }); // один раз вернуть фалс
-
-    const testUser = {
-      userName: "Bob",
-      password: "123",
-      password2: "123",
-      email: "validemail@gmail.com",
-    };
-
-    const mockRequest = { body: testUser };
-
-    //act
-    await registerUser(mockRequest, mockResponse, mockNextFunction);
-
-    //assert
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.json).toHaveBeenCalledWith("Oops, server error((");
+      //assert
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(mockResponse.json).toHaveBeenCalledWith("Oops, server error((");
+    });
   });
 });

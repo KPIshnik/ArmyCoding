@@ -8,7 +8,7 @@
     "start": "NODE_ENV=dev nodemon server.js",
     "denug": "node --inspect server.js",
     "migrate": "node-pg-migrate",
-    "play": "node --inspect huitaForExperiments/huitaForExperiments.js"
+    "play": "node huitaForExperiments/huitaForExperiments.js"
   },
   "author": "Anton",
   "license": "MIT",

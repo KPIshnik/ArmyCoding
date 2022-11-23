@@ -1,0 +1,32 @@
+{
+    "req": {
+        "method": "GET",
+        "url": "https://mailsac.com/api/inbox",
+        "headers": {
+            "mailsac-key": "k_CZaFz54k52nIaDPPp4NyO6bQj0pM2skg5308"
+        }
+    },
+    "header": {
+        "date": "Wed, 23 Nov 2022 08:39:49 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "46",
+        "connection": "close",
+        "x-frame-options": "SAMEORIGIN",
+        "access-control-allow-origin": "*",
+        "access-control-allow-methods": "GET, POST, OPTIONS, DELETE, PUT, PATCH",
+        "x-request-id": "msfe_a7q16XcZ5dA33",
+        "content-security-policy": "default-src https: wss: data: blob: 'self' 'unsafe-inline' 'unsafe-eval';",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "x-xss-protection": "1; mode=block",
+        "x-user": "kpishnik",
+        "etag": "W/\"2e-ERCCbqcPlmWs/pc2BWVr21km94k\"",
+        "vary": "Accept-Encoding",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=ALmP%2FozYzmkmHE8HR7Vprwi2TqPw795xLGhMeHHHYsdccEpxwhlQT4dsGYjEJF8p5YzSLLs%2B9qmO%2B0CUsGDauBwtjgJFIDBjqEMONGb4aaGlmW80mfjrnyE3pjss\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+        "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+        "server": "cloudflare",
+        "cf-ray": "76e898784ee522f5-KBP"
+    },
+    "status": 200,
+    "text": "{\"messages\":[],\"unread\":0,\"limit\":30,\"skip\":0}"
+}

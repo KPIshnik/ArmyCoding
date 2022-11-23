@@ -2,6 +2,7 @@ const emailValidator = require("deep-email-validator");
 
 const registerUserValidator = async (req, res, next) => {
   const { userName, email, password, password2 } = req.body;
+  req.body.valid = false;
 
   if (!userName) {
     res.status(400).json("username missing");
@@ -25,6 +26,7 @@ const registerUserValidator = async (req, res, next) => {
     return;
   }
 
+  req.body.valid = true;
   next();
 };
 

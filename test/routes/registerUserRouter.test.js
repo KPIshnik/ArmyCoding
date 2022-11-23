@@ -1,6 +1,18 @@
+const request = require("supertest");
+const { url, testmail } = require("../../configs/credentials");
+const clearDB = require("../../DB/clearDB");
+const getEmailConfirmDataById = require("../../models/getEmailConfirmDataById");
+const getUserByUserName = require("../../models/getUserByUsename");
+const serverPromise = require("../../server");
+const superagent = require("superagent");
+const clearDbTables = require("../../DB/clearDbTables");
+const { response } = require("../../app");
+const registerNewUser = require("../../models/registerNewUser");
+
 jest.mock("../../helpers/generateKey", () => {
   return () => "key";
 });
+
 jest.mock("bcrypt", () => {
   const originalBcript = jest.requireActual("bcrypt");
   return {
@@ -11,28 +23,15 @@ jest.mock("bcrypt", () => {
   };
 });
 
-const request = require("supertest");
-const { url, testmail } = require("../../configs/credentials");
-const clearDB = require("../../DB/clearDB");
-const generateKey = require("../../helpers/generateKey");
-const getEmailConfirmDataById = require("../../models/getEmailConfirmDataById");
-const getUserByUserName = require("../../models/getUserByUsename");
-const serverPromise = require("../../server");
-const superagent = require("superagent");
-const clearDbTables = require("../../DB/clearDbTables");
-const { response } = require("../../app");
-const registerNewUser = require("../../models/registerNewUser");
-
 jest.setTimeout(60000);
-
-const RealDate = Date.now;
 
 let server;
 
 describe("/auth/register ", () => {
   beforeAll(async () => {
     server = await serverPromise;
-    global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
+    //jest.useFakeTimers({ advanceTimers: true });
+    //  global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
   });
 
   beforeEach(async () => {
@@ -42,7 +41,8 @@ describe("/auth/register ", () => {
   afterAll(async () => {
     await clearDB();
     await server.teardown();
-    global.Date.now = RealDate;
+    // global.Date.now = RealDate;
+    //jest.useRealTimers();
   });
 
   test(`should return code: 200, msg: "register page"
@@ -104,7 +104,7 @@ describe("/auth/register ", () => {
       id: user.id,
       email: testUser.email,
       key: "key",
-      date: Date.now().toString(),
+      date: expect.anything(), //Date.now().toString(),
     });
   });
 

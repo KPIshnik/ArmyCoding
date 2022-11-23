@@ -1,3 +1,1 @@
-s = 9;
---s;
-console.log(s);
+module.exports = (a, b) => a + b;
