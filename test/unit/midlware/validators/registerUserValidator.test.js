@@ -1,5 +1,6 @@
 const registerUserValidator = require("../../../../middlewares/validators/registerUserValidator");
 
+jest.setTimeout(30000);
 describe("Register user  VALIDATOR test", () => {
   // ********************
   // мокаю Responce

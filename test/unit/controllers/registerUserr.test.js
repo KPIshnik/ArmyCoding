@@ -5,6 +5,8 @@ const registerNewUser = require("../../../models/registerNewUser");
 const сonfirmEmailHelper = require("../../../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../../../models/checkUniqueUsername");
 
+jest.setTimeout(30000);
+
 // *******
 // Мокаю все импорты в registerUser
 jest.mock("../../../models/checkIsRegistered");

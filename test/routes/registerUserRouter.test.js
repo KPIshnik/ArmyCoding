@@ -30,8 +30,8 @@ let server;
 describe("/auth/register ", () => {
   beforeAll(async () => {
     server = await serverPromise;
-    //jest.useFakeTimers({ advanceTimers: true });
-    //  global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
+    jest.useFakeTimers({ advanceTimers: true });
+    global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
   });
 
   beforeEach(async () => {
@@ -42,7 +42,7 @@ describe("/auth/register ", () => {
     await clearDB();
     await server.teardown();
     // global.Date.now = RealDate;
-    //jest.useRealTimers();
+    jest.useRealTimers();
   });
 
   test(`should return code: 200, msg: "register page"
@@ -104,7 +104,7 @@ describe("/auth/register ", () => {
       id: user.id,
       email: testUser.email,
       key: "key",
-      date: expect.anything(), //Date.now().toString(),
+      date: Date.now().toString(),
     });
   });
 

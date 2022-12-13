@@ -1,0 +1,51 @@
+1. Rolls
+    -singl
+    -4+4
+    -7+7
+    -(r+r+r+l+l+l ) + (r+r+r+l+l+l )
+
+2. Paradidles + dynamika (L,R - accent)
+    - Rlrr Lrll
+    - Rlrlrr Lrlrll
+    - Rlrlrlrr Lrlrlrll
+
+    -Rlrrll Rlrrll
+     Lrllrr Lrllrr
+
+3. Flam ((rL), (lR) - flam)
+    -R L  
+    -(lR)lrr (rL)rll
+    -(lR)rlr (rL)lrl
+    -(lR)lr (rL)rl
+    
+    -(lR)rl (lR)rl 
+     (rL)lr (rL)lr
+
+    -(lR)l(rL)r (lR)r(rL)l
+    -(lR)r(rL)l (lR)r(rL)l
+    -(lR)llr (lR)rrl
+
+    -(lR)lr(rL) (lR)lr(rL)
+     (lL)rl(rR) (lL)rl(rR)
+
+    -(lR)lrrll (rL)rllrr
+
+    -(lR)lrl (lR)
+     (rL)rlr (rl)
+
+4 DRAG ((rrL), (llR) - Drag)
+
+    -(rrL) (llR)
+    -(rrL)R (llR)L
+    -(rrL)(rrL)R (llR)(llR)L
+    -(rrL)rL (rrL)rL
+     (llR)lR (llR)lR
+
+    - (llR)lrr (rrL)rll
+    - r(llR)lrr l(rrl)rll
+    - r(llR)(llR)lrr l(rrl)(rrl)rll
+
+    -(llR)lrl (rrl)rlr
+    -(llR)(llR)lrl (rrl)(rrl)rlr
+    -(llR)(llR)(llR)lrl (rrl)(rrl)(rrl)rlr
+

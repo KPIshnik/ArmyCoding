@@ -8,3 +8,6 @@ describe("testing chengeAvatarController", () => {
   //
   // when no username passed  status 400 msg"username required"
 });
+
+//arrange
+// ?
