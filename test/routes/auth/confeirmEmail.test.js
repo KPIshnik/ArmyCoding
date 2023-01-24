@@ -1,12 +1,12 @@
 const request = require("supertest");
-const { url } = require("../../configs/credentials");
-const clearDB = require("../../DB/clearDB");
-const serverPromise = require("../../server");
-const clearDbTables = require("../../DB/clearDbTables");
-const registerNewUser = require("../../models/registerNewUser");
-const createEmailConfirmRow = require("../../models/createEmailConfirmRow");
-const getUserById = require("../../models/getUserrById");
-const { confirmEmailExpireTime } = require("../../configs/settings");
+const { url } = require("../../../configs/credentials");
+const clearDB = require("../../../DB/clearDB");
+const serverPromise = require("../../../server");
+const clearDbTables = require("../../../DB/clearDbTables");
+const registerNewUser = require("../../../models/registerNewUser");
+const createEmailConfirmRow = require("../../../models/createEmailConfirmRow");
+const getUserById = require("../../../models/getUserrById");
+const { confirmEmailExpireTime } = require("../../../configs/settings");
 
 jest.setTimeout(60000);
 

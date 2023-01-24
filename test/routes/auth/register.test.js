@@ -1,15 +1,15 @@
 const request = require("supertest");
-const { url, testmail } = require("../../configs/credentials");
-const clearDB = require("../../DB/clearDB");
-const getEmailConfirmDataById = require("../../models/getEmailConfirmDataById");
-const getUserByUserName = require("../../models/getUserByUsename");
-const serverPromise = require("../../server");
+const { url, testmail } = require("../../../configs/credentials");
+const clearDB = require("../../../DB/clearDB");
+const getEmailConfirmDataById = require("../../../models/getEmailConfirmDataById");
+const getUserByUserName = require("../../../models/getUserByUsename");
+const serverPromise = require("../../../server");
 const superagent = require("superagent");
-const clearDbTables = require("../../DB/clearDbTables");
-const { response } = require("../../app");
-const registerNewUser = require("../../models/registerNewUser");
+const clearDbTables = require("../../../DB/clearDbTables");
+const { response } = require("../../../app");
+const registerNewUser = require("../../../models/registerNewUser");
 
-jest.mock("../../helpers/generateKey", () => {
+jest.mock("../../../helpers/generateKey", () => {
   return () => "key";
 });
 

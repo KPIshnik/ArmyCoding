@@ -1,8 +1,8 @@
 const request = require("supertest");
-const { url } = require("../../configs/credentials");
-const clearDB = require("../../DB/clearDB");
-const serverPromise = require("../../server");
-const registerNewUser = require("../../models/registerNewUser");
+const { url } = require("../../../configs/credentials");
+const clearDB = require("../../../DB/clearDB");
+const serverPromise = require("../../../server");
+const registerNewUser = require("../../../models/registerNewUser");
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
@@ -46,7 +46,7 @@ describe("/profile/avatar", () => {
     fs.unlink(
       path.join(
         __dirname,
-        "../..",
+        "../../..",
         `/public/avatars/${testUser.userName}.webp`
       ),
       () => {}
@@ -98,7 +98,7 @@ describe("/profile/avatar", () => {
     let avatar;
     beforeAll(async () => {
       avatar = await fs.promises.readFile(
-        path.join(__dirname, "..", "/img/testuserAvatarBlack.png")
+        path.join(__dirname, "../..", "/img/testuserAvatarBlack.png")
       );
       await agent
         .post(`/auth`)
@@ -137,7 +137,7 @@ describe("/profile/avatar", () => {
     test("put request", async () => {
       //arrange
       const newAvatar = await fs.promises.readFile(
-        path.join(__dirname, "..", "/img/testuserAvatarWhite.png")
+        path.join(__dirname, "../..", "/img/testuserAvatarWhite.png")
       );
       //act
 
