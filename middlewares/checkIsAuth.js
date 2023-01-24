@@ -1,10 +1,14 @@
 const checkIsAuth = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    res.redirect("/auth");
+    if (req.method === "GET") {
+      res.redirect("/auth");
+      return;
+    }
+
+    res.status(401).json("not authorized");
+
     return;
   }
-
-  console.log(req.user);
 
   if (!req.user.email) {
     res.status(200).json("confirm email");

@@ -1,5 +1,5 @@
  
-GET http://localhost:3000
+GET http://localhost:3000/profile/avatar?username=AntonD
 
 POST https://google.com
 
@@ -47,7 +47,7 @@ Content-Type: application/json
 }
 
 ###
-GET https://3000-kpishnik-atmycoding-we1vm2u2nmq.ws-eu62.gitpod.io/auth/google
+GET https://localhost:3000/
 
 
 ###

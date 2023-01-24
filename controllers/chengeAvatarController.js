@@ -1,12 +1,13 @@
 const fs = require("fs");
 const sharp = require("sharp");
 
-const chengeAvatarConrtroller = (res, req) => {
-  const fileName = req.user.username + ".webp";
-
+const chengeAvatarConrtroller = (req, res) => {
   if (!req.user.username) {
     res.status(400).json("username required");
+    return;
   }
+
+  const fileName = req.user.username + ".webp";
 
   fs.promises
     .unlink(`public/avatars/${fileName}`)

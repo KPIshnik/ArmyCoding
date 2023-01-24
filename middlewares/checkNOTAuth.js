@@ -1,5 +1,7 @@
 const checkNOTAuth = (req, res, next) => {
-  if (req.isAuthenticated()) res.redirect("/");
+  const x = req.isAuthenticated();
+  if (x) res.redirect("/");
+
   return next();
 };
 

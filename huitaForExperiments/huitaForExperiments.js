@@ -2,22 +2,26 @@ const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
 
-const file = fs.readFileSync(
-  path.join(__dirname, "..", "/test/img/testuserAvatarBlack.png")
-);
-// const writableStream = fs.createWriteStream(
-//   path.join(__dirname, "..", "/test/img/bingo.png")
-// );
+(async () => {
+  const avatar = await fs.promises.readFile(path.join(__dirname, "/123.png"));
 
-// readbleStream.pipe(writableStream);
+  sharp(avatar)
+    .webp()
+    .toFile(path.join(__dirname, "/123.webp"))
+    .then(async () => {
+      const avatarWebp = await fs.promises.readFile(
+        path.join(__dirname, "/123.webp")
+      );
 
-sharp(file)
-  .webp()
-  .toFile(path.join(__dirname, "..", "/test/img/testuserAvatarBlack.webp"))
-  .then(() => console.log("done"))
-  .catch((err) => {
-    console.log(err);
-    res.send("Oopsy");
-  });
+      sharp(avatar)
+        .webp()
+        .toBuffer()
+        .then((file) => {
+          console.log(Buffer.compare(file, avatarWebp));
+        });
+    })
 
-//"./../test/img/testuserAvatarBlack.png"
+    .catch((err) => {
+      console.log(err);
+    });
+})();

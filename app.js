@@ -16,7 +16,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 app.use(session(session_config));
 app.use(
   express.static("public", {
-    extensions: ["html", "ico", "gif", "jpg", "png"],
+    extensions: ["webp"],
   })
 );
 app.use(passport.initialize());

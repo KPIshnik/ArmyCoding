@@ -1,90 +1,179 @@
 const request = require("supertest");
-const { url, testmail } = require("../../configs/credentials");
+const { url } = require("../../configs/credentials");
 const clearDB = require("../../DB/clearDB");
-const getEmailConfirmDataById = require("../../models/getEmailConfirmDataById");
-const getUserByUserName = require("../../models/getUserByUsename");
 const serverPromise = require("../../server");
-const superagent = require("superagent");
-const clearDbTables = require("../../DB/clearDbTables");
-const { response } = require("../../app");
 const registerNewUser = require("../../models/registerNewUser");
 const fs = require("fs");
 const path = require("path");
-const { hasUncaughtExceptionCaptureCallback } = require("process");
+const sharp = require("sharp");
 
-//imitate registered userr???
+jest.mock("bcrypt", () => {
+  const originalBcript = jest.requireActual("bcrypt");
+  return {
+    ...originalBcript,
+    compare: (pass1, pass2) => {
+      return pass1 === pass2;
+    },
+  };
+});
 
 let server;
 let agent;
 
-describe("/profile/avatar ", () => {
+describe("/profile/avatar", () => {
   const testUser = {
     userName: "testuser",
     password: "123",
-    password2: "123",
-    email: "a2f9p.testuser@inbox.testmail.app",
+    email: "testuser@test.app",
   };
 
   beforeAll(async () => {
     server = await serverPromise;
     agent = request.agent(url);
-  });
-
-  beforeEach(async () => {
-    await clearDbTables();
+    const id = await registerNewUser(
+      testUser.email,
+      testUser.userName,
+      testUser.password,
+      null,
+      null,
+      "email"
+    );
   });
 
   afterAll(async () => {
     await clearDB();
     await server.teardown();
+    fs.unlink(
+      path.join(
+        __dirname,
+        "../..",
+        `/public/avatars/${testUser.userName}.webp`
+      ),
+      () => {}
+    );
   });
-  describe("get request", () => {
-    // should responce with 200 buffer with avatar pictuire for usrname in query
-    // or 404 not found if there is no avatar for that name
 
-    test("should responce with 200 buffer with avatar picture for username", () => {});
-  });
-
-  describe("tests for there is NO avatar case", () => {
-    describe("get request", () => {
-      test("should responce with 404 not found if there is no avatar for that name", async () => {
+  describe("tests with user not authirized", () => {
+    describe("post request", () => {
+      test("should response with 401 status and 'not authorized' msg", async () => {
         //act
-        const request = await agent
-          .get("/profile/avatar?username=some_fake_username")
-          .redirects();
+        const response = await agent
+          .post("/profile/avatar")
+          .send({ file: "{ buffer: Buffer.alloc(1) }" });
 
         //assert
-        expect(request.status).toBe(404);
+        expect(response.status).toBe(401);
+        expect(response.body).toBe("not authorized");
       });
     });
 
-    describe("post request", () => {
-      test("should responce with 201 status and 'avatar is set' msg", async () => {});
-    });
-    describe("put request", () => {});
+    describe("put request", () => {
+      test("should responce with 401 status and 'not authorized' msg", async () => {
+        //act
+        const responce = await agent
+          .put("/profile/avatar")
+          .send({ file: "{ buffer: Buffer.alloc(1) }" });
 
-    describe("delete request", () => {});
+        //assert
+        expect(responce.status).toBe(401);
+        expect(responce.body).toBe("not authorized");
+      });
+    });
+
+    describe("delete request", () => {
+      test("should responce with 401 status and 'not authorized' msg", async () => {
+        //act
+        const responce = await agent
+          .delete("/profile/avatar")
+          .send({ file: "{ buffer: Buffer.alloc(1) }" });
+
+        //assert
+        expect(responce.status).toBe(401);
+        expect(responce.body).toBe("not authorized");
+      });
+    });
   });
 
-  describe("tests for there is avatar case", () => {
+  describe("tests for authorized user", () => {
+    let avatar;
     beforeAll(async () => {
-      const readbleStream = fs.createReadStream(
-        path.join(__dirname, "..", "/img/testuserAvatarBlack.webp")
+      avatar = await fs.promises.readFile(
+        path.join(__dirname, "..", "/img/testuserAvatarBlack.png")
       );
-      const writableStream = fs.createWriteStream(
-        path.join(__dirname, "../..", "/public/avatars/testuser.webp")
-      );
-
-      readbleStream.pipe(writableStream);
+      await agent
+        .post(`/auth`)
+        .send({ email: testUser.email, password: testUser.password });
     });
 
-    describe("get request", () => {
-      // should responce with 200 buffer with avatar pictuire for usrname in query
-      test("should responce with 200 buffer with avatar picture for username", () => {});
+    test("should responce with 404 not found", async () => {
+      //act
+      const response = await agent
+        .get(`/profile/avatar?username=${testUser.userName}`)
+        .redirects();
+
+      //assert
+      expect(response.status).toBe(404);
     });
 
-    describe("post request", () => {});
-    describe("put request", () => {});
-    describe("delete request", () => {});
+    test("post request", async () => {
+      //act
+
+      const response = await agent
+        .post("/profile/avatar")
+        .attach("avatar", avatar, "testuserAvatarBlack.png");
+
+      const getAvatarRes = await agent
+        .get(`/profile/avatar?username=${testUser.userName}`)
+        .redirects();
+
+      const avatarWebp = await sharp(avatar).webp().toBuffer();
+      //assert
+      expect(response.status).toBe(201);
+      expect(response.body).toBe("avatar is set");
+      expect(getAvatarRes.status).toBe(200);
+      expect(Buffer.compare(getAvatarRes.body, avatarWebp)).toBe(0);
+    });
+
+    test("put request", async () => {
+      //arrange
+      const newAvatar = await fs.promises.readFile(
+        path.join(__dirname, "..", "/img/testuserAvatarWhite.png")
+      );
+      //act
+
+      const response = await agent
+        .put("/profile/avatar")
+        .attach("avatar", newAvatar, "testuserAvatarWhite.png");
+
+      const getAvatarRes = await agent
+        .get(`/profile/avatar?username=${testUser.userName}`)
+        .redirects();
+
+      const newAvatarWebp = await sharp(newAvatar).webp().toBuffer();
+      //assert
+      expect(response.status).toBe(200);
+      expect(response.body).toBe(`avatar for ${testUser.userName} updated`);
+      expect(getAvatarRes.status).toBe(200);
+      expect(Buffer.compare(getAvatarRes.body, newAvatarWebp)).toBe(0);
+    });
+
+    test("delete request", async () => {
+      //act
+
+      const response = await agent.delete("/profile/avatar");
+
+      const getAvatarRes = await agent
+        .get(`/profile/avatar?username=${testUser.userName}`)
+        .redirects();
+
+      //assert
+      expect(response.status).toBe(200);
+      expect(response.body).toBe(
+        `${testUser.userName} avatar has been deleted`
+      );
+      expect(getAvatarRes.status).toBe(404);
+    });
   });
 });
+
+//ERROR HANDLE!!
