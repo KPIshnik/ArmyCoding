@@ -9,18 +9,18 @@ const setUserPasswordController = async (req, res) => {
   const newPass2 = req.body.newPass2;
 
   if (!password) {
-    res.status(400).send("password required");
+    res.status(400).json("password required");
     return;
   }
 
   if (!newPass || !(newPass === newPass2)) {
-    res.status(400).send("pass to short or doesn't match");
+    res.status(400).json("pass to short or doesn't match");
     return;
   }
 
   try {
     if (!(await verifyPassword(user, password))) {
-      res.status(400).send("wrong pass");
+      res.status(400).json("wrong pass");
       return;
     }
 
