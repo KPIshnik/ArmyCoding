@@ -149,7 +149,6 @@ describe("/profile/avatar", () => {
 
   test(`POST request, should NOT change password, 
     and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
-    const notValidPasses = ["", null, undefined];
     //act
 
     const response = await agent.post("/profile/password").send({
@@ -166,7 +165,6 @@ describe("/profile/avatar", () => {
 
   test(`POST request, should NOT change password, 
   and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
-    const notValidPasses = ["", null, undefined];
     //act
 
     const response = await agent.post("/profile/password").send({
