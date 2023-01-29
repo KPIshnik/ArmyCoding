@@ -3,9 +3,11 @@ const { url } = require("../../../configs/credentials");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const registerNewUser = require("../../../models/registerNewUser");
-const fs = require("fs");
-const path = require("path");
-const sharp = require("sharp");
+const setUserPassword = require("../../../models/setUserPassword");
+
+jest.mock("../../../models/setUserPassword", () =>
+  jest.fn(jest.requireActual("../../../models/setUserPassword"))
+);
 
 jest.mock("bcrypt", () => {
   const originalBcript = jest.requireActual("bcrypt");
@@ -46,6 +48,10 @@ describe("/profile/avatar", () => {
   afterAll(async () => {
     await clearDB();
     await server.teardown();
+  });
+
+  afterEach(() => {
+    setUserPassword.mockClear();
   });
 
   describe("tests with user not authirized", () => {
@@ -118,7 +124,61 @@ describe("/profile/avatar", () => {
 
       expect(loginResp.status).toBe(200);
       expect(loginResp.body).toBe(`Aloha ${testUser.userName}!`);
+
+      expect(setUserPassword).toHaveBeenCalled();
     });
+  });
+
+  test(`POST request, should NOT change password, 
+    and response with 400 code and 'password required' msg`, async () => {
+    const notValidPasses = ["", null, undefined];
+    //act
+    for (pass of notValidPasses) {
+      const response = await agent.post("/profile/password").send({
+        password: "",
+        newPass: testUser.newPassword,
+        newPass2: testUser.newPassword,
+      });
+
+      //assert
+      expect(response.status).toBe(400);
+      expect(response.body).toBe("password required");
+      expect(setUserPassword).not.toHaveBeenCalled();
+    }
+  });
+
+  test(`POST request, should NOT change password, 
+    and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
+    const notValidPasses = ["", null, undefined];
+    //act
+
+    const response = await agent.post("/profile/password").send({
+      password: testUser.password,
+      newPass: 123,
+      newPass2: 1234,
+    });
+
+    //assert
+    expect(response.status).toBe(400);
+    expect(response.body).toBe("pass to short or doesn't match");
+    expect(setUserPassword).not.toHaveBeenCalled();
+  });
+
+  test(`POST request, should NOT change password, 
+  and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
+    const notValidPasses = ["", null, undefined];
+    //act
+
+    const response = await agent.post("/profile/password").send({
+      password: "fakepassword",
+      newPass: testUser.newPassword,
+      newPass2: testUser.newPassword,
+    });
+
+    //assert
+    expect(response.status).toBe(400);
+    expect(response.body).toBe("wrong pass");
+    expect(setUserPassword).not.toHaveBeenCalled();
   });
 });
 

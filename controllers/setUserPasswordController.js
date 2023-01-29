@@ -6,16 +6,9 @@ const setUserPasswordController = async (req, res) => {
   const user = req.user;
   const password = req.body.password;
   const newPass = req.body.newPass;
-  const newPass2 = req.body.newPass2;
 
-  if (!password) {
-    res.status(400).json("password required");
-    return;
-  }
-
-  if (!newPass || !(newPass === newPass2)) {
-    res.status(400).json("pass to short or doesn't match");
-    return;
+  if (!req.body.valid) {
+    res.status(400).json("request not valid");
   }
 
   try {
@@ -26,7 +19,7 @@ const setUserPasswordController = async (req, res) => {
 
     const hashedPass = await bcrypt.hash(newPass, 10);
 
-    const result = await setUserPassword(user.id, hashedPass);
+    await setUserPassword(user.id, hashedPass);
 
     res.status(200).json("password chenged"); // redirect to something norml later
   } catch (err) {

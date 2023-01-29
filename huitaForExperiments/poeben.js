@@ -1,4 +1,4 @@
-module.exports = (a, b) => {
-  a = b;
-  return a;
+module.exports = () => {
+  console.log("PEchal");
+  return 3;
 };
