@@ -9,12 +9,12 @@ const setUsernameController = async (req, res) => {
   const user = req.user;
 
   if (!username) {
-    res.send("username required");
+    res.status(400).json("username required");
     return;
   }
 
   if (!userPass & (req.user.auth_type === "email")) {
-    res.send("password required");
+    res.status(400).json("password required");
     return;
   }
 
@@ -25,13 +25,13 @@ const setUsernameController = async (req, res) => {
     }
 
     if (userPass && !(await verifyPassword(user, userPass))) {
-      res.status(400).json("wrong pass");
+      res.status(401).json("wrong pass");
       return;
     }
 
     await setUserName(user.id, username);
 
-    res.redirect("/"); // redirect to something norml later
+    res.status(200).json("username changed");
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

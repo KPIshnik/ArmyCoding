@@ -5,10 +5,10 @@ const serverPromise = require("../../../server");
 const registerNewUser = require("../../../models/registerNewUser");
 const setUserPassword = require("../../../models/setUserPassword");
 const superagent = require("superagent");
-const confirmEmailHelper = require("../../../helpers/confirmEmailHelper");
+const setUserName = require("../../../models/setUserName");
 
-jest.mock("../../../helpers/confirmEmailHelper", () =>
-  jest.fn(jest.requireActual("../../../helpers/confirmEmailHelper"))
+jest.mock("../../../models/setUserName", () =>
+  jest.fn(jest.requireActual("../../../models/setUserName"))
 );
 
 jest.mock("bcrypt", () => {
@@ -33,8 +33,8 @@ describe("/profile/avatar", () => {
     password: "123",
     email: "testuser@test.app",
 
-    newEmail: "a2f9p.testuser@inbox.testmail.app",
-    doubleEmail: "double@email",
+    newUsername: "newName",
+    doubleName: "doubleName",
   };
 
   beforeAll(async () => {
@@ -49,9 +49,9 @@ describe("/profile/avatar", () => {
       "email"
     );
     await registerNewUser(
-      testUser.doubleEmail,
-      "doubleuser",
-      "doublrpass",
+      "double@mail",
+      testUser.doubleName,
+      "doublepass",
       null,
       null,
       "email"
@@ -64,14 +64,14 @@ describe("/profile/avatar", () => {
   });
 
   afterEach(() => {
-    confirmEmailHelper.mockClear();
+    setUserName.mockClear();
   });
 
   describe("tests with user not authirized", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/profile/email").redirects();
+        const response = await agent.get("/profile/username").redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -82,10 +82,9 @@ describe("/profile/avatar", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/profile/email").send({
+        const responce = await agent.post("/profile/username").send({
           password: testUser.password,
-          newPass: testUser.newPassword,
-          newPass2: testUser.newPassword,
+          username: testUser.newUsername,
         });
 
         //assert
@@ -102,117 +101,101 @@ describe("/profile/avatar", () => {
         .send({ email: testUser.email, password: testUser.password });
     });
 
-    test("GET requst. Should response with 200 code and 'useremail page' msg", async () => {
+    test("GET requst. Should response with 200 code and 'username page' msg", async () => {
       //act
-      const response = await agent.get(`/profile/email`);
+      const response = await agent.get(`/profile/username`);
 
       //assert
       expect(response.status).toBe(200);
-      expect(response.body).toBe("useremail page");
+      expect(response.body).toBe("username page");
     });
 
     test(`POST request, should change email,
-        and response with 200 code and 'email chenged' msg`, async () => {
+          and response with 200 code and 'username chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/email").send({
+      const response = await agent.post("/profile/username").send({
         password: testUser.password,
-        email: testUser.newEmail,
+        username: testUser.newUsername,
       });
-
-      const testmailResponse = await superagent.get(
-        `https://api.testmail.app/api/json?apikey=${
-          testmail.api_key
-        }&namespace=${testmail.namespace}&tag=${
-          testUser.userName
-        }&timestamp_from=${Date.now()}&livequery=true`
-      );
-
-      const lastRecivedEmail = testmailResponse.body.emails[0];
-      const confirmEmailURL = `${lastRecivedEmail.text}`;
-
-      const confirmEmailResponse = await request(confirmEmailURL).get("");
 
       await agent.delete("/auth");
 
       const loginResp = await agent
         .post("/auth")
-        .send({ email: testUser.newEmail, password: testUser.password })
+        .send({ email: testUser.email, password: testUser.password })
         .redirects();
 
       //assert
       expect(response.status).toBe(200);
-      expect(response.body).toBe("confirm new email");
-
-      expect(confirmEmailResponse.body).toBe("Email confirmed");
-      expect(confirmEmailResponse.status).toBe(200);
+      expect(response.body).toBe("username changed");
 
       expect(loginResp.status).toBe(200);
-      expect(loginResp.body).toBe(`Aloha ${testUser.userName}!`);
+      expect(loginResp.body).toBe(`Aloha ${testUser.newUsername}!`);
     });
 
-    test(`POST request, should NOT change email,
-      and response with 400 code and 'password required' msg`, async () => {
+    test(`POST request, should NOT change username,
+            and response with 400 code and 'password required' msg`, async () => {
       const notValidPasses = ["", null, undefined];
       //act
       for (pass of notValidPasses) {
-        const response = await agent.post("/profile/email").send({
-          email: testUser.email,
+        const response = await agent.post("/profile/username").send({
+          username: testUser.userName,
           password: pass,
         });
 
         //assert
         expect(response.status).toBe(400);
         expect(response.body).toBe("password required");
-        expect(confirmEmailHelper).not.toHaveBeenCalled();
+        expect(setUserName).not.toHaveBeenCalled();
       }
     });
 
-    test(`POST request, should NOT change email,
-        and response with 400 code and "email required" msg`, async () => {
-      const notValidEmails = ["", null, undefined];
+    test(`POST request, should NOT change username,
+              and response with 400 code and "username required" msg`, async () => {
+      const notValidUsernames = ["", null, undefined];
       //act
-      for (email of notValidEmails) {
-        const response = await agent.post("/profile/email").send({
-          email,
+      for (username of notValidUsernames) {
+        const response = await agent.post("/profile/username").send({
+          username,
           password: testUser.password,
         });
 
         //assert
         expect(response.status).toBe(400);
-        expect(response.body).toBe("email required");
-        expect(confirmEmailHelper).not.toHaveBeenCalled();
+        expect(response.body).toBe("username required");
+        expect(setUserName).not.toHaveBeenCalled();
       }
     });
 
-    test(`POST request, should NOT change email,
-      and response with 400 code and "wrong pass" msg`, async () => {
+    test(`POST request, should NOT change username,
+            and response with 400 code and "wrong pass" msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/email").send({
+      const response = await agent.post("/profile/username").send({
         password: "fakepassword",
-        email: "uniqueEmail@mail",
+        username: "uniqueusername@mail",
       });
 
       //assert
       expect(response.status).toBe(401);
       expect(response.body).toBe("wrong pass");
-      expect(confirmEmailHelper).not.toHaveBeenCalled();
+      expect(setUserName).not.toHaveBeenCalled();
     });
 
-    test(`POST request, should NOT change email,
-      and response with 400 code and "email should be unique" msg`, async () => {
+    test(`POST request, should NOT change username,
+            and response with 400 code and "username should be unique" msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/email").send({
+      const response = await agent.post("/profile/username").send({
         password: testUser.password,
-        email: testUser.doubleEmail,
+        username: testUser.doubleName,
       });
 
       //assert
       expect(response.status).toBe(400);
-      expect(response.body).toBe("email should be unique");
-      expect(confirmEmailHelper).not.toHaveBeenCalled();
+      expect(response.body).toBe("username should be unique");
+      expect(setUserName).not.toHaveBeenCalled();
     });
   });
 });

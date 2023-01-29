@@ -56,7 +56,7 @@ describe("/profile/avatar", () => {
 
   describe("tests with user not authirized", () => {
     describe("get request", () => {
-      test("should response with 401 status and 'not authorized' msg", async () => {
+      test("should response with  200 status and 'register page' msg", async () => {
         //act
         const response = await agent.get("/profile/password").redirects();
 
