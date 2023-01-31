@@ -8,14 +8,8 @@ const setUsernameController = async (req, res) => {
   const username = req.body.username;
   const user = req.user;
 
-  if (!username) {
-    res.status(400).json("username required");
-    return;
-  }
-
-  if (!userPass & (req.user.auth_type === "email")) {
-    res.status(400).json("password required");
-    return;
+  if (!req.body.valid) {
+    res.status(400).json("request not valid");
   }
 
   try {

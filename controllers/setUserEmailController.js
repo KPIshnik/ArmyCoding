@@ -8,16 +8,6 @@ const setUserEmailController = async (req, res) => {
   const userEmail = req.body.email;
   const user = req.user;
 
-  if (!userPass) {
-    res.status(400).json("password required");
-    return;
-  }
-
-  if (!userEmail) {
-    res.status(400).json("email required");
-    return;
-  }
-
   try {
     if (await checkUniqueUserEmail(userEmail)) {
       res.status(400).json("email should be unique");
