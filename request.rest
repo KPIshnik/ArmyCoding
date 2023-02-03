@@ -1,18 +1,27 @@
  
-GET http://localhost:3000/profile/avatar?username=AntonD
+GET http://localhost:3000/todolists/
 
 POST https://google.com
 
 ###
-DELETE http://localhost:3000/login
+POST http://localhost:3000/todolists/
+Content-Type: application/json
 
+{
+"listname": "ASF",
+"todos": [{
+    "text": 2,
+    "priority": "2",
+    "done": false
+}]
+}
 ###
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
 "email": "antaresstat@gmail.com",
-"userName": "Kris",
+"userName": "Owl",
 "password": "s",
 "password2": "s"
 }

@@ -1,41 +1,18 @@
-const checkIsRegistered = require("../models/checkIsRegistered");
 const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
-const emailValidator = require("deep-email-validator");
+const checkIsRegistered = require("../models/checkIsRegistered");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
-
   const { userName, password, email } = newUser;
 
+  if (!newUser.valid) {
+    throw new Error("not valid user data");
+  }
+
   try {
-    if (!newUser.valid) {
-      throw new Error("not valid user data");
-    }
-    // if (!userName) {
-    //   res.status(400).json("username missing");
-    //   return;
-    // }
-
-    // if (!email) {
-    //   res.status(400).json("email missing");
-    //   return;
-    // }
-
-    const isEmailValod = await emailValidator.validate(email);
-
-    // if (!isEmailValod.valid) {
-    //   res.status(400).json("email not valid");
-    //   return;
-    // }
-
-    // if (!password || password != newUser.password2) {
-    //   res.status(400).json("pass too short or does not match");
-    //   return;
-    // }
-
     const isRegistered = await checkIsRegistered(email);
 
     if (isRegistered) {
@@ -49,7 +26,7 @@ const registerUser = async (req, res) => {
       res.status(400).json("this username already registered, try another one");
       return;
     }
-    //forein  key + createEmCinfRow
+
     const hashedPass = await bcript.hash(password, 10);
     const userid = await registerNewUser(
       null,

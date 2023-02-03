@@ -1,8 +1,5 @@
-const fs = require("fs");
-const path = require("path");
-const sharp = require("sharp");
-const poeben = require("./poeben");
+const emailValidator = require("deep-email-validator");
 
-module.exports = () => {
-  poeben();
-};
+emailValidator.validate("goodEmail@gmail.com").then((res) => {
+  console.log(res);
+});

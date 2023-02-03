@@ -1,8 +1,22 @@
 3. Сделать е2е
-3.1 Научиться отлаживать.
 4. Сделать валидаторы
 5. Сделать глобальный обработчик ошибок.
 6. заменить pool на db 
 7. Продолжить юнит тесты
 8. Рефакторинг.
 
+
+/todotilst/:id? todonote & priority & done 
+    get -- get todolist  or lists
+    post -- create todolist 
+    put -- change todolist 
+    delete -- delete todolist
+
+/todotilst/permitted/:id
+    get -- get todolist  or lists
+
+/todotilst/share/:id?useremail
+    get -- users shared with
+    post -- share with user or users
+    put -- share and unshare
+    delete --  anshare with user/users

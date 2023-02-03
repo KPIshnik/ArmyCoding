@@ -54,9 +54,9 @@ describe("/auth/register ", () => {
   });
 
   test(`should register user with correct data on post request,
-        send confirm email and
-        return code: 200,
-        msg: "user username registered, please confirm email"`, async () => {
+          send confirm email and
+          return code: 200,
+          msg: "user username registered, please confirm email"`, async () => {
     const testUser = {
       userName: "testuser",
       password: "123",
@@ -176,17 +176,25 @@ describe("/auth/register ", () => {
       userName: "testuser",
       password: "123",
       password2: "123",
-      email: "a2f9p.testuser@inbox.testmail.app",
+      email: "testuser@google.com",
     };
 
     const notUniqueUser = {
       userName: "testuser",
       password: "1234",
       password2: "1234",
-      email: "a2f9p.sommail@inbox.testmail.app",
+      email: "sommail@google.com",
     };
+
+    await registerNewUser(
+      testUser.email,
+      testUser.userName,
+      "pass",
+      null,
+      null,
+      "email"
+    );
     //act
-    await request(server).post("/auth/register").send(testUser);
 
     const response = await request(server)
       .post("/auth/register")
@@ -265,16 +273,16 @@ describe("/auth/register ", () => {
       userName: "testuser",
       password: "123",
       password2: "123",
-      email: "a2f9p.testuser@inbox.testmail.app",
+      email: "a2f9p.testuser@google.com",
     };
 
     const notUniqueUser = {
       userName: "testuser2",
       password: "1234",
       password2: "1234",
-      email: "a2f9p.testuser@inbox.testmail.app",
+      email: "a2f9p.testuser@google.com",
     };
-    //act
+
     await registerNewUser(
       testUser.email,
       testUser.userName,
@@ -283,7 +291,7 @@ describe("/auth/register ", () => {
       null,
       "email"
     );
-
+    //act
     const response = await request(server)
       .post("/auth/register")
       .send(notUniqueUser);

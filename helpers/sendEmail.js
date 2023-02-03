@@ -10,7 +10,7 @@ const sendEmail = async (adress, subject, content) => {
     subject: subject,
     html: content,
   };
-  //??? await & then?? fix this
+
   sgMail
     .send(msg)
     .then(() => {})

@@ -1,5 +1,4 @@
 const logoutController = (req, res) => {
-  let x = req.user;
   req.logOut((err) => {
     if (err) {
       return next(err);

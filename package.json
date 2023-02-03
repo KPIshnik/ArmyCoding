@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --detectOpenHandles",
     "start": "NODE_ENV=dev nodemon server.js",
-    "denug": "node --inspect server.js",
+    "debug": "node --inspect server.js",
     "migrate": "node-pg-migrate",
     "play": "node huitaForExperiments/huitaForExperiments.js"
   },
