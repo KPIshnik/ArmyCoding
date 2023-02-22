@@ -125,6 +125,15 @@ describe("/todolists", () => {
         expect(responce.body).toBe("not authorized");
       });
     });
+
+    test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
+      //arrange
+      //act
+      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      //assert
+      expect(res.status).toBe(401);
+      expect(res.body).toBe("not authorized");
+    });
   });
 
   describe("tests for authorized user", () => {
@@ -134,18 +143,14 @@ describe("/todolists", () => {
         .send({ email: testUser.email, password: testUser.password });
     });
 
-    // afterEach(async () => {
-    //   await clearDbTables();
-    // });
     test(`create and get singl todolist,
             and response with 200 code and "todolist listname created" and return todolist with todos msg`, async () => {
       //act
 
       const response = await agent.post("/todolists").send(todolist);
 
-      const getResp = response.body.data
-        ? await agent.get(`/todolists?id=${response.body.data.id}`)
-        : undefined;
+      todolist.id = response.body.data ? response.body.data.id : undefined;
+      const getResp = await agent.get(`/todolists?id=${todolist.id}`);
 
       //assert
       expect(response.status).toBe(200);
@@ -230,6 +235,17 @@ describe("/todolists", () => {
           owner_id: expect.anything(),
         });
       });
+    });
+
+    test("DELETE request, should delete todolist, response with 200 code", async () => {
+      //arrange
+      //act
+      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const getRes = await agent.get(`/todolists?id=${todolist.id}`);
+      //assert
+      expect(res.status).toBe(200);
+      expect(res.body).toBe(`todolist ${todolist.listname} deleted`);
+      expect(getRes.status).toBe(404);
     });
 
     test(`POST request, should NOT create todolist with no listname,

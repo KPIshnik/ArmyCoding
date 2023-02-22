@@ -1,6 +1,7 @@
 const expres = require("express");
 const changeTodoListController = require("../../controllers/todolists/changeTodoListController");
 const createTodoListController = require("../../controllers/todolists/createTodoListController");
+const deleteTodolistController = require("../../controllers/todolists/deleteTodolistController");
 const getTodoListsController = require("../../controllers/todolists/getTodoListsController");
 const router = expres.Router();
 const checkIsAuth = require("../../middlewares/checkIsAuth");
@@ -16,7 +17,7 @@ router
     createTodoListValidator,
     createTodoListController
   )
-  .put("/todolists", checkIsAuth, changeTodoListController);
-//   .delete("/todolists", checkIsAuth);
+  .put("/todolists", checkIsAuth, changeTodoListController)
+  .delete("/todolists", checkIsAuth, deleteTodolistController);
 
 module.exports = router;

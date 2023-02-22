@@ -1,13 +1,8 @@
-const todos = [{ priority: 1 }, { priority: 1 }];
+const uuidValidaor = require("../helpers/uuidValidator");
+const pool = require("../models/DBconnection");
 
-let prioritySet = new Set();
+// /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89AB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/i
 
-for (let todo of todos) {
-  prioritySet.add(todo.priority);
-}
+// createTodoList("d3aa88e2-c754-41e0-8ba6-4198a34aa0a2")
 
-console.log(prioritySet.size);
-
-if (!(prioritySet.size === todos.length)) {
-  console.log("lol");
-}
+console.log(uuidValidaor("d3aa8-c754-41e0-8ba6-4198a34aa0a2"));
