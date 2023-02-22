@@ -26,11 +26,13 @@ jest.mock("bcrypt", () => {
 jest.setTimeout(60000);
 
 let server;
+const RealDate = global.Date.now; //added
 
 describe("/auth/register ", () => {
   beforeAll(async () => {
     server = await serverPromise;
     jest.useFakeTimers({ advanceTimers: true });
+
     global.Date.now = jest.fn(() => new Date("2019-04-07T10:20:30Z").getTime());
   });
 
@@ -41,7 +43,7 @@ describe("/auth/register ", () => {
   afterAll(async () => {
     await clearDB();
     await server.teardown();
-    // global.Date.now = RealDate;
+    global.Date.now = RealDate; //added
     jest.useRealTimers();
   });
 

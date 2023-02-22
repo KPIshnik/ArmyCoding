@@ -1,13 +1,13 @@
 const pool = require("../DBconnection");
 
-const getTodoListS = async (userId, todoId) => {
+const getListLastUpdateTimestamp = async (listId) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
-      "SELECT * FROM lists WHERE (owner_id = $1 AND id=$2);",
-      [userId, todoId]
+      "SELECT updated_at FROM lists WHERE id = $1",
+      [listId]
     );
-    return res.rows;
+    return res.rows[0];
   } catch (err) {
     console.log(err);
     throw err;
@@ -16,4 +16,4 @@ const getTodoListS = async (userId, todoId) => {
   }
 };
 
-module.exports = getTodoListS;
+module.exports = getListLastUpdateTimestamp;

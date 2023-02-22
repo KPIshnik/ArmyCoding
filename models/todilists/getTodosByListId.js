@@ -1,11 +1,12 @@
 const pool = require("../DBconnection");
 
-const getTodoListS = async (id) => {
+const getTodosByListId = async (listId) => {
   const client = await pool.connect();
   try {
-    const res = await client.query("SELECT * FROM lists WHERE owner_id = $1", [
-      id,
-    ]);
+    const res = await client.query(
+      "SELECT * FROM todos WHERE (list_id = $1) ORDER by rank;",
+      [listId]
+    );
     return res.rows;
   } catch (err) {
     console.log(err);
@@ -15,4 +16,4 @@ const getTodoListS = async (id) => {
   }
 };
 
-module.exports = getTodoListS;
+module.exports = getTodosByListId;

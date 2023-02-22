@@ -6,13 +6,23 @@
 8. Рефакторинг.
 
 
-/todotilst/:id? todonote & priority & done 
+/todolist/:id?                         
     get -- get todolist  or lists
-    post -- create todolist 
+    post -- create todolist    
+    !!!! build one query fol all todos instead of  one for each totdo!!!\+
+    !! limit todos
+    !fix date
     put -- change todolist 
     delete -- delete todolist
 
-/todotilst/permitted/:id
+/todolist/todonote/:id   //todonote & priority & done 
+    get -- get todonote
+    post -- create todonote
+    put -- change todonote  
+    delete -- delete todonote
+
+
+/todolist/permitted/:id
     get -- get todolist  or lists
 
 /todotilst/share/:id?useremail

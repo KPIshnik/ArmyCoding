@@ -1,19 +1,29 @@
  
 GET http://localhost:3000/todolists/
 
-POST https://google.com
 
 ###
 POST http://localhost:3000/todolists/
 Content-Type: application/json
 
 {
-"listname": "ASF",
+"listname": "Owesome list",
 "todos": [{
-    "text": 2,
-    "priority": "2",
+    "text": "one",
+    "priority": 1,
     "done": false
-}]
+},
+{
+    "text": "teo",
+    "priority": 2,
+    "done": false
+},
+{
+    "text": "tryuj",
+    "priority": 3,
+    "done": false
+}
+]
 }
 ###
 POST http://localhost:3000/auth/register

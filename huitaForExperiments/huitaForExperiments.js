@@ -1,5 +1,13 @@
-const emailValidator = require("deep-email-validator");
+const todos = [{ priority: 1 }, { priority: 1 }];
 
-emailValidator.validate("goodEmail@gmail.com").then((res) => {
-  console.log(res);
-});
+let prioritySet = new Set();
+
+for (let todo of todos) {
+  prioritySet.add(todo.priority);
+}
+
+console.log(prioritySet.size);
+
+if (!(prioritySet.size === todos.length)) {
+  console.log("lol");
+}
