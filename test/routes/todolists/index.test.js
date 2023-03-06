@@ -14,7 +14,7 @@ jest.mock("bcrypt", () => {
   };
 });
 
-jest.setTimeout(300000);
+jest.setTimeout(30000);
 
 let server;
 let agent;
@@ -32,7 +32,7 @@ describe("/todolists", () => {
     listname: "test list",
     todos: [
       {
-        text: "halo",
+        text: "hlo",
         done: false,
         priority: 6,
       },
@@ -129,7 +129,7 @@ describe("/todolists", () => {
     test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const res = await agent.delete(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");
@@ -145,6 +145,10 @@ describe("/todolists", () => {
 
     test(`create and get singl todolist,
             and response with 200 code and "todolist listname created" and return todolist with todos msg`, async () => {
+      const sortedTodos = [...todolist.todos].sort(
+        (todo1, todo2) => todo1.priority - todo2.priority
+      );
+
       //act
 
       const response = await agent.post("/todolists").send(todolist);
@@ -159,27 +163,34 @@ describe("/todolists", () => {
       );
 
       expect(getResp.status).toBe(200);
-      expect(getResp.body.listData.listname).toBe(todolist.listname);
-      expect(getResp.body.listData.updated_at).toBe(date.toJSON());
+      expect(getResp.body.listname).toBe(todolist.listname);
+      expect(getResp.body.updated_at).toBe(date.toJSON());
 
-      const sortedTodos = [...todolist.todos].sort(
-        (todo1, todo2) => todo1.priority - todo2.priority
-      );
+      expect(getResp.body.todos.length).toBe(todolist.todos.length);
 
       getResp.body.todos.forEach((todo, i) => {
         expect(todo).toEqual({
           id: expect.anything(),
-          list_id: response.body.data.id,
           text: sortedTodos[i].text,
           done: sortedTodos[i].done,
           priority: i + 1,
-          rank: expect.anything(),
         });
       });
     });
 
+    test("DELETE request, should delete todolist, response with 200 code", async () => {
+      //arrange
+      //act
+      const res = await agent.delete(`/todolists/${todolist.id}`);
+      const getRes = await agent.get(`/todolists?id=${todolist.id}`);
+      //assert
+      expect(res.status).toBe(200);
+      expect(res.body).toBe(`todolist ${todolist.listname} deleted`);
+      expect(getRes.status).toBe(404);
+    });
+
     test(`create and get miltiple todolists,
-            and response with 200 code and return todolists `, async () => {
+                and response with 200 code and return todolists `, async () => {
       //arrange
       const todolist2 = {
         listname: "list2",
@@ -213,12 +224,12 @@ describe("/todolists", () => {
 
       //act
 
-      // !!FIX when testing delete todolist
-      // const resp = await agent.post("/todolists").send(todolist);
+      const resp = await agent.post("/todolists").send(todolist);
       await agent.post("/todolists").send(todolist2);
       await agent.post("/todolists").send(todolist3);
       await agent.post("/todolists").send(todolist4);
 
+      todolist.id = resp.body.data ? resp.body.data.id : undefined;
       const getResp = await agent.get(`/todolists`);
 
       const userTodoLists = getResp.body;
@@ -226,6 +237,7 @@ describe("/todolists", () => {
       //assert
 
       expect(getResp.status).toBe(200);
+      expect(userTodoLists.length).toBe(userTodolistsArr.length);
 
       userTodoLists.forEach((todolist, i) => {
         expect(todolist).toEqual({
@@ -237,145 +249,468 @@ describe("/todolists", () => {
       });
     });
 
-    test("DELETE request, should delete todolist, response with 200 code", async () => {
+    test('PUT request, should update todolist, response with 200 code, "list listId updated"', async () => {
       //arrange
+      const getOldLst = await agent.get(`/todolists?id=${todolist.id}`);
+      const oldTodolist = getOldLst.body;
+
+      const newTodos = oldTodolist.todos.filter(
+        (todo) => !(todo.priority == 2 || todo.priority == 5)
+      );
+
+      newTodos[0].text = "new text";
+      newTodos[0].done = true;
+      newTodos[2].done = true;
+      newTodos[3].priority = 17;
+      newTodos[3].text = "17";
+
+      const newTodo1 = {
+        text: "newTodo1",
+        priority: 2,
+        done: false,
+      };
+
+      const newTodo2 = {
+        text: "newTodo2",
+        priority: 5,
+        done: false,
+      };
+
+      const newTodo3 = {
+        text: "newTodo3",
+        priority: 13,
+        done: false,
+      };
+
+      // newTodos.push(newTodo1, newTodo2, newTodo3);
+
+      const newTodolist = {
+        id: oldTodolist.id,
+        updated_at: oldTodolist.updated_at,
+        listname: "Aloha Mahalo",
+        todos: newTodos,
+      };
       //act
-      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const res = await agent.put("/todolists").send(newTodolist);
       const getRes = await agent.get(`/todolists?id=${todolist.id}`);
       //assert
       expect(res.status).toBe(200);
-      expect(res.body).toBe(`todolist ${todolist.listname} deleted`);
-      expect(getRes.status).toBe(404);
+      expect(res.body).toBe(`list ${oldTodolist.id} updated`);
+
+      expect(getRes.status).toBe(200);
+      expect(getRes.body.id).toBe(todolist.id);
+      expect(getRes.body.listname).toBe(newTodolist.listname);
+
+      newTodolist.todos.sort((todo1, todo2) => todo1.priority - todo2.priority);
+
+      expect(getRes.body.todos.length).toBe(newTodolist.todos.length);
+      getRes.body.todos.forEach((todo, i) => {
+        expect(todo).toEqual({
+          id: expect.anything(),
+          text: newTodolist.todos[i].text,
+          done: newTodolist.todos[i].done,
+          priority: i + 1,
+        });
+      });
     });
 
-    test(`POST request, should NOT create todolist with no listname,
-     response with 400 code and "listname required" msg`, async () => {
-      //arrange
-      const todolistWithNoListname = {
-        listnam: "listname",
-      };
+    describe("failure tests", () => {
+      describe("post failure tests", () => {
+        test(`POST request, should NOT create todolist with no listname,
+         response with 400 code and "listname required" msg`, async () => {
+          //arrange
+          const todolistWithNoListname = {
+            listnam: "listname",
+          };
 
-      //act
-      const response = await agent
-        .post("/todolists")
-        .send(todolistWithNoListname);
+          //act
+          const response = await agent
+            .post("/todolists")
+            .send(todolistWithNoListname);
 
-      //assert
-      expect(response.status).toBe(400);
-      expect(response.body).toBe("listname required");
-    });
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("listname required");
+        });
 
-    test(`POST request, should NOT create todolist,
-     with todos with same priority   `, async () => {
-      //arrange
-      const todolistWithBrokenPriority = {
-        listname: "listname",
-        todos: [
-          {
-            text: "do",
-            priority: 1,
-            done: false,
-          },
-          {
-            text: "dodo",
-            priority: 1,
-            done: false,
-          },
-        ],
-      };
+        test(`POST request, should NOT create todolist,
+         with todos with same priority   `, async () => {
+          //arrange
+          const todolistWithBrokenPriority = {
+            listname: "listname",
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 1,
+                done: false,
+              },
+            ],
+          };
 
-      //act
-      const response = await agent
-        .post("/todolists")
-        .send(todolistWithBrokenPriority);
+          //act
+          const response = await agent
+            .post("/todolists")
+            .send(todolistWithBrokenPriority);
 
-      //assert
-      expect(response.status).toBe(400);
-      expect(response.body).toBe("request not valid");
-    });
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
 
-    test(`POST request, should NOT create todolist,
-     with todos with wrong done type  `, async () => {
-      //arrange
-      const todolistWithDoneType = {
-        listname: "listname",
-        todos: [
-          {
-            text: "do",
-            priority: 1,
-            done: false,
-          },
-          {
-            text: "dodo",
-            priority: 2,
-            done: 4,
-          },
-        ],
-      };
+        test(`POST request, should NOT create todolist,
+         with todos with wrong done type  `, async () => {
+          //arrange
+          const todolistWithDoneType = {
+            listname: "listname",
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 2,
+                done: 4,
+              },
+            ],
+          };
 
-      //act
-      const response = await agent
-        .post("/todolists")
-        .send(todolistWithDoneType);
+          //act
+          const response = await agent
+            .post("/todolists")
+            .send(todolistWithDoneType);
 
-      //assert
-      expect(response.status).toBe(400);
-      expect(response.body).toBe("request not valid");
-    });
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
 
-    test(`POST request, should NOT create todolist,
-     with no text in todo`, async () => {
-      //arrange
-      const todolistWithNoText = {
-        listname: "listname",
-        todos: [
-          {
-            text: "do",
-            priority: 1,
-            done: false,
-          },
-          {
-            priority: 2,
-            done: false,
-          },
-        ],
-      };
+        test(`POST request, should NOT create todolist,
+         with no text in todo`, async () => {
+          //arrange
+          const todolistWithNoText = {
+            listname: "listname",
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                priority: 2,
+                done: false,
+              },
+            ],
+          };
 
-      //act
-      const response = await agent.post("/todolists").send(todolistWithNoText);
+          //act
+          const response = await agent
+            .post("/todolists")
+            .send(todolistWithNoText);
 
-      //assert
-      expect(response.status).toBe(400);
-      expect(response.body).toBe("request not valid");
-    });
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
 
-    test(`POST request, should NOT create todolist,
-    with todos wrong same priority type`, async () => {
-      //arrange
-      const todolistWithBrokenPriority = {
-        listname: "listname",
-        todos: [
-          {
-            text: "do",
-            priority: 1,
-            done: false,
-          },
-          {
-            text: "dodo",
-            priority: "x",
-            done: false,
-          },
-        ],
-      };
+        test(`POST request, should NOT create todolist,
+        with todos wrong same priority type`, async () => {
+          //arrange
+          const todolistWithBrokenPriority = {
+            listname: "listname",
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: "x",
+                done: false,
+              },
+            ],
+          };
 
-      //act
-      const response = await agent
-        .post("/todolists")
-        .send(todolistWithBrokenPriority);
+          //act
+          const response = await agent
+            .post("/todolists")
+            .send(todolistWithBrokenPriority);
 
-      //assert
-      expect(response.status).toBe(400);
-      expect(response.body).toBe("request not valid");
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
+      });
+      describe("PUT request failure tests", () => {
+        beforeAll(async () => {
+          const res = await agent.get(`/todolists?id=${todolist.id}`);
+          todolist.updated_at = res.body.updated_at;
+        });
+
+        test(`PUT request, should NOT update todolist with no listname,
+      response with 400 code and "listname required" msg`, async () => {
+          //arrange
+          const todolistWithNoListname = {
+            listname: "",
+            id: todolist.id,
+            updated_at: todolist.updated_at,
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithNoListname);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("listname required");
+        });
+
+        test(`PUT request, should NOT update todolist,
+         with todos with same priority   `, async () => {
+          //arrange
+          const todolistWithBrokenPriority = {
+            listname: "listname",
+            id: todolist.id,
+            updated_at: todolist.updated_at,
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 1,
+                done: false,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithBrokenPriority);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
+
+        test(`put request, should NOT update todolist,
+      with todos with wrong done type  `, async () => {
+          //arrange
+          const todolistWithDoneType = {
+            listname: "listname",
+            id: todolist.id,
+            updated_at: todolist.updated_at,
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 2,
+                done: 4,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithDoneType);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
+
+        test(`put request, should NOT update todolist,
+      with no text in todo`, async () => {
+          //arrange
+          const todolistWithNoText = {
+            listname: "listname",
+            id: todolist.id,
+            updated_at: todolist.updated_at,
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                priority: 2,
+                done: false,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithNoText);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
+
+        test(`put request, should NOT update todolist,
+     with todos wrong  priority type`, async () => {
+          //arrange
+          const todolistWithBrokenPriority = {
+            listname: "listname",
+            id: todolist.id,
+            updated_at: todolist.updated_at,
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: "x",
+                done: false,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithBrokenPriority);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("request not valid");
+        });
+
+        test(`put request, should NOT update todolist,
+        with wrong listID type`, async () => {
+          //arrange
+          const todolistWithBrokenPriority = {
+            listname: "listname",
+            id: 1,
+            updated_at: todolist.updated_at,
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 2,
+                done: false,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithBrokenPriority);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("valid id required");
+        });
+
+        test(`put request, should NOT update todolist,
+        with no updated_at `, async () => {
+          //arrange
+          const todolistWithoutTimestamp = {
+            listname: "listname",
+            id: todolist.id,
+            updated_at: "",
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 2,
+                done: false,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWithoutTimestamp);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("last update timestamp required");
+        });
+
+        test(`put request, should NOT update todolist,
+        with autdated update_at`, async () => {
+          //arrange
+          const todolistWrongTimestamp = {
+            listname: "listname",
+            id: todolist.id,
+            updated_at: new Date("2022"),
+            todos: [
+              {
+                text: "do",
+                priority: 1,
+                done: false,
+              },
+              {
+                text: "dodo",
+                priority: 2,
+                done: false,
+              },
+            ],
+          };
+
+          //act
+          const response = await agent
+            .put("/todolists")
+            .send(todolistWrongTimestamp);
+
+          //assert
+          expect(response.status).toBe(400);
+          expect(response.body).toBe("list changed before request");
+        });
+      });
+
+      test(`GET request, should NOT get todolist,
+        with bad id`, async () => {
+        const badId = "id123";
+        //act
+        const response = await agent.get(`/todolists?id=${badId}`);
+
+        //assert
+        expect(response.status).toBe(400);
+        expect(response.body).toBe("valid id required");
+      });
+
+      test(`DELETE request, should NOT get todolist,
+        with bad id`, async () => {
+        const badId = "id123";
+        //act
+        const response = await agent.delete(`/todolists/${badId}`);
+
+        //assert
+        expect(response.status).toBe(400);
+        expect(response.body).toBe("valid id required");
+      });
     });
   });
 });

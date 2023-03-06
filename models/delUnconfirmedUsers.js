@@ -13,7 +13,7 @@ const deleteUnconfirmedUsers = async (expiredDate) => {
       usersToDelete = expiredUsers.rows.map((u) => u.id);
 
       await client.query("DELETE FROM users WHERE id = any ($1)", [
-        usersToDelete,
+        [usersToDelete],
       ]);
       return usersToDelete;
     }

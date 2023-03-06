@@ -22,5 +22,6 @@ if (require.main === module) {
 }
 
 module.exports = async () => {
+  console.log(module.parent);
   await migrate(options);
 };

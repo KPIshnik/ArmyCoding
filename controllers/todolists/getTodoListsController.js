@@ -1,7 +1,7 @@
 const getUserTodoListsByUserid = require("../../models/todilists/getUserTodoListsByUserid");
 const getTodosByListId = require("../../models/todilists/getTodosByListId");
 const getUserTodoListDataById = require("../../models/todilists/getTodoLIstDataById");
-const uuidValidator = require("../../helpers/uuidValidator");
+const isUUIDvalid = require("../../helpers/isUUIDvalid");
 
 const getTodoListsController = async (req, res) => {
   const user = req.user;
@@ -14,8 +14,8 @@ const getTodoListsController = async (req, res) => {
     return;
   }
 
-  if (!uuidValidator(listId)) {
-    res.status(400).json("id not valid");
+  if (!isUUIDvalid(listId)) {
+    res.status(400).json("valid id required");
     return;
   }
 
@@ -27,11 +27,18 @@ const getTodoListsController = async (req, res) => {
   }
 
   const todos = await getTodosByListId(listId);
-  todos.forEach((todo, i) => (todo.priority = i + 1));
+  const preparedTodos = todos.map((todo, i) => {
+    return {
+      id: todo.id,
+      text: todo.text,
+      done: todo.done,
+      priority: i + 1,
+    };
+  });
 
   const response = {
-    listData,
-    todos,
+    ...listData,
+    todos: preparedTodos,
   };
   res.status(200).json(response);
 };

@@ -13,6 +13,7 @@ const userEmail = require("./profile/userEmail");
 const password = require("./profile/password");
 const fail = require("./auth/fail");
 const todolists = require("./todolists");
+const todonote = require("./todolists/todonote");
 
 const router = express.Router();
 
@@ -31,7 +32,8 @@ router.use(
   userEmail,
   password,
   fail,
-  todolists
+  todolists,
+  todonote
 );
 
 module.exports = router;

@@ -1,8 +1,40 @@
-const uuidValidaor = require("../helpers/uuidValidator");
 const pool = require("../models/DBconnection");
 
-// /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89AB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/i
+const createHuinya = async () => {
+  await pool.query("CREATE  table if not exists test(name varchar);");
+};
 
-// createTodoList("d3aa88e2-c754-41e0-8ba6-4198a34aa0a2")
+const clearHuinya = async () => {
+  await pool.query("DROP table test;");
+};
 
-console.log(uuidValidaor("d3aa8-c754-41e0-8ba6-4198a34aa0a2"));
+const insertHuita = async (name) => {
+  await pool.query("INSERT INTO test(name)  VALUES( $1 )", [name]);
+};
+
+const getHuita = async (n = "4") => {
+  const res = await pool.query("SELECT name FROM test WHERE name = $1", [n]);
+
+  return res.rows[0].name;
+};
+
+const insertMultipleHuita = async () => {
+  const arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+  const queryArr = [];
+  arr.forEach(async (name) => {
+    //queryArr.push(insertHuita(name));
+    await insertHuita(name);
+  });
+  //await Promise.all(queryArr);
+};
+
+pool
+  .query("DELETE FROM test where  name = any ($1)", [["1", "2"]])
+  .then((d) => {
+    pool.query("SELECT * FROM test").then((x) => console.log(x));
+  });
+
+exports.clearHuinya = clearHuinya;
+exports.insertMultipleHuita = insertMultipleHuita;
+exports.getHuita = getHuita;
+exports.createHuinya = createHuinya;

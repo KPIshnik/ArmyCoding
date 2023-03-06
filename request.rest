@@ -1,5 +1,39 @@
  
-GET http://localhost:3000/todolists/
+GET http://localhost:3000/todolists?id=9485c150-b219-4745-98ae-7ac81f344f93
+
+
+
+###
+PUT http://localhost:3000/todolists/
+Content-Type: application/json
+
+{
+"listname": "fuck this Crazy list",
+"id":"9485c150-b219-4745-98ae-7ac81f344f93",
+"updated_at": "2023-02-24T17:53:08.396Z",
+"todos": [
+    {
+      "id": "30c3edf7-bbf1-4d9d-9e3d-fe599df52c3c",
+      "text": "AAAAAAAA",
+      "done": false,
+      "priority": 1
+    },
+    {
+      "id": "c32ee148-d9e9-47d9-b2a1-27b4429926c2",
+      "text": "teo",
+      "done": true,
+      "priority": 3
+    },
+    {
+      "id": "33a0a6e8-a68a-4c2a-a07d-309be72822d5",
+      "text": "try",
+      "done": true,
+      "priority": 2
+    }
+
+  ]
+
+}
 
 
 ###
@@ -7,7 +41,7 @@ POST http://localhost:3000/todolists/
 Content-Type: application/json
 
 {
-"listname": "Owesome list",
+"listname": "Crazy list",
 "todos": [{
     "text": "one",
     "priority": 1,
@@ -19,8 +53,13 @@ Content-Type: application/json
     "done": false
 },
 {
-    "text": "tryuj",
+    "text": "try",
     "priority": 3,
+    "done": false
+},
+{
+    "text": "for",
+    "priority": 4,
     "done": false
 }
 ]

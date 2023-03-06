@@ -7,7 +7,7 @@ const getListLastUpdateTimestamp = async (listId) => {
       "SELECT updated_at FROM lists WHERE id = $1",
       [listId]
     );
-    return res.rows[0];
+    return res.rows[0].updated_at;
   } catch (err) {
     console.log(err);
     throw err;

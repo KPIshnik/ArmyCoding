@@ -1,21 +1,23 @@
-3. Сделать е2е
+3. Сделать е2е 
 4. Сделать валидаторы
 5. Сделать глобальный обработчик ошибок.
 6. заменить pool на db 
-7. Продолжить юнит тесты
 8. Рефакторинг.
+0. test for fb and google
 
 
 /todolists?id             
     get -- get todolist  or lists
     post -- create todolist    
-    !!!! build one query fol all todos instead of  one for each totdo!!!\+
+      !!! build one query fol all todos instead of  one for each totdo!!!\+
    
    
     put -- change todolist 
+      !!! regfactor validator 
+      !! refactor multiple await
 
     delete -- delete todolist 
-    !! validate id
+   
 
 /todolist/todonote/:id   //todonote & priority & done 
     get -- get todonote

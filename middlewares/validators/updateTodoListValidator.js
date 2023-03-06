@@ -1,14 +1,25 @@
-const createTodoListValidator = async (req, res, next) => {
+const isUUIDvalid = require("../../helpers/isUUIDvalid");
+
+const updateTodoListValidator = async (req, res, next) => {
   req.body.valid = false;
-  const { listname, todos } = req.body;
+  const { id, updated_at, listname, todos } = req.body;
+
+  if (!isUUIDvalid(id)) {
+    res.status(400).json("valid id required");
+    return;
+  }
+
+  if (!updated_at) {
+    res.status(400).json("last update timestamp required");
+    return;
+  }
 
   if (!listname) {
     res.status(400).json("listname required");
     return;
   }
 
-  let prioritySet = new Set();
-
+  const prioritySet = new Set();
   if (todos) {
     for (let todo of todos) {
       if (
@@ -32,9 +43,8 @@ const createTodoListValidator = async (req, res, next) => {
       return;
     }
   }
-
   req.body.valid = true;
   next();
 };
 
-module.exports = createTodoListValidator;
+module.exports = updateTodoListValidator;

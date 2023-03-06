@@ -1,12 +1,19 @@
+const pool = require("../models/DBconnection");
 const huita = require("./huitaForExperiments");
 const poeben = require("./poeben");
 
-jest.mock("./poeben", () => {
-  return jest.fn(jest.requireActual("./poeben")); //);
-});
+describe("Al", () => {
+  beforeAll(async () => {
+    await huita.createHuinya();
+  });
 
-test("bla", () => {
-  huita();
-
-  expect(poeben).toHaveBeenCalled();
+  afterAll(async () => {
+    await huita.clearHuinya();
+    pool.end();
+  });
+  test("bla", async () => {
+    await huita.insertMultipleHuita();
+    const name = await huita.getHuita("faza");
+    expect(name).toBe("faza");
+  });
 });
