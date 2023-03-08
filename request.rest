@@ -85,6 +85,16 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3000/todonote
+Content-Type: application/json
+
+{
+"text": "antaresstat@gmail.com",
+"priority": 4,
+"done": true
+}
+
+###
 POST https://3000-kpishnik-atmycoding-fd4hu0rua1y.ws-eu47.gitpod.io/profile/password
 Content-Type: application/json
 

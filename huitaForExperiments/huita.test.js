@@ -1,6 +1,5 @@
 const pool = require("../models/DBconnection");
 const huita = require("./huitaForExperiments");
-const poeben = require("./poeben");
 
 describe("Al", () => {
   beforeAll(async () => {
@@ -12,8 +11,35 @@ describe("Al", () => {
     pool.end();
   });
   test("bla", async () => {
-    await huita.insertMultipleHuita();
-    const name = await huita.getHuita("faza");
-    expect(name).toBe("faza");
+    const arr = [
+      "a",
+      "b",
+      "c",
+      "c",
+      "c",
+      "c",
+      "c",
+      "c",
+      "b",
+      "b",
+      "b",
+      "a",
+      "b",
+      "c",
+      "c",
+      "c",
+      "c",
+      "c",
+      "c",
+      "b",
+      "b",
+      "b",
+    ];
+
+    await huita.insertMultipleHuita(arr);
+
+    const name = await huita.getHuita(arr[1]);
+
+    expect(name).toBe(arr[1]);
   });
 });

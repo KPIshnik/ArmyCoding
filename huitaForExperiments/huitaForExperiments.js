@@ -1,40 +1,55 @@
-const pool = require("../models/DBconnection");
+const todos = [{ rank: 100 }, { rank: 200 }, { rank: 300 }];
 
-const createHuinya = async () => {
-  await pool.query("CREATE  table if not exists test(name varchar);");
-};
+const priority = 2;
 
-const clearHuinya = async () => {
-  await pool.query("DROP table test;");
-};
+const rank =
+  priority === 1
+    ? todos[0].rank / 2
+    : priority > todos.length
+    ? todos[todos.length - 1].rank + 100
+    : (todos[priority - 1].rank + todos[priority - 2].rank) / 2;
 
-const insertHuita = async (name) => {
-  await pool.query("INSERT INTO test(name)  VALUES( $1 )", [name]);
-};
+console.log(rank);
 
-const getHuita = async (n = "4") => {
-  const res = await pool.query("SELECT name FROM test WHERE name = $1", [n]);
+// const pool = require("../models/DBconnection");
 
-  return res.rows[0].name;
-};
+// const createHuinya = async () => {
+//   await pool.query("CREATE  table if not exists test(name varchar);");
+// };
 
-const insertMultipleHuita = async () => {
-  const arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-  const queryArr = [];
-  arr.forEach(async (name) => {
-    //queryArr.push(insertHuita(name));
-    await insertHuita(name);
-  });
-  //await Promise.all(queryArr);
-};
+// const clearHuinya = async () => {
+//   await pool.query("DROP TABLE test;");
+// };
 
-pool
-  .query("DELETE FROM test where  name = any ($1)", [["1", "2"]])
-  .then((d) => {
-    pool.query("SELECT * FROM test").then((x) => console.log(x));
-  });
+// const insertHuita = async (x, y) => {
+//   return await pool.query(
+//     "INSERT INTO test(name)  VALUES( $1 ), ($2) returning name",
+//     [x, y]
+//   );
+// };
 
-exports.clearHuinya = clearHuinya;
-exports.insertMultipleHuita = insertMultipleHuita;
-exports.getHuita = getHuita;
-exports.createHuinya = createHuinya;
+// createHuinya().then(() => {
+//   insertHuita("a", "b").then((res) => {
+//     console.log(res);
+//   });
+// });
+
+// const getHuita = async (n) => {
+//   const res = await pool.query("SELECT name FROM test WHERE name = $1", [n]);
+
+//   return res.rows[0].name;
+// };
+
+// const insertMultipleHuita = async (arr) => {
+//   const queryArr = [];
+//   arr.forEach(async (name) => {
+//     queryArr.push(insertHuita(name));
+//   });
+
+//   await Promise.all(queryArr);
+// };
+
+// exports.clearHuinya = clearHuinya;
+// exports.insertMultipleHuita = insertMultipleHuita;
+// exports.getHuita = getHuita;
+// exports.createHuinya = createHuinya;

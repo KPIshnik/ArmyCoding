@@ -20,16 +20,10 @@ const updateTodos = async (todos) => {
     } ),\n`;
 
     paramArr.push(id, text, rank, done);
-    // await pool.query(
-    //   "UPDATE todos SET text = $2, rank= $3, done = $4 WHERE id=$1;",
-    //   [id, text, rank, done]
-    // );
   });
 
   let queryStr = queryHead.slice(0, -2);
   queryStr += queryEnd;
-  console.log(queryStr);
-  console.log(paramArr);
 
   await pool.query(queryStr, paramArr);
 };

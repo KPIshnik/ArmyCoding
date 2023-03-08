@@ -3,8 +3,10 @@ const pool = require("../DBconnection");
 const createTodos = async (listId, todos) => {
   if (!todos.length) return;
 
-  let query = "INSERT INTO todos(list_id, text, rank, done )  VALUES  ";
+  let query = "INSERT INTO todos(listId, text, rank, done )  VALUES  ";
+
   const paramArr = [];
+
   todos.forEach((todo, i) => {
     const { text, rank, done } = todo;
     query +=
@@ -13,9 +15,11 @@ const createTodos = async (listId, todos) => {
       "),\n";
     paramArr.push(listId, text, rank, done);
   });
-  const queryStr = query.slice(0, -2);
 
-  await pool.query(queryStr, paramArr);
+  const queryStr = query.slice(0, -2) + "RETURNING id";
+
+  const res = await pool.query(queryStr, paramArr);
+  return res.rows;
 };
 
 module.exports = createTodos;

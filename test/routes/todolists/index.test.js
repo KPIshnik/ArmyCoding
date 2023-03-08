@@ -14,7 +14,7 @@ jest.mock("bcrypt", () => {
   };
 });
 
-jest.setTimeout(30000);
+jest.setTimeout(300000);
 
 let server;
 let agent;
@@ -102,7 +102,7 @@ describe("/todolists", () => {
     await server.teardown();
     jest.useRealTimers();
   });
-
+  test("", () => {});
   describe("tests with user not authirized", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
@@ -144,7 +144,7 @@ describe("/todolists", () => {
     });
 
     test(`create and get singl todolist,
-            and response with 200 code and "todolist listname created" and return todolist with todos msg`, async () => {
+              and response with 200 code and "todolist listname created" and return todolist with todos msg`, async () => {
       const sortedTodos = [...todolist.todos].sort(
         (todo1, todo2) => todo1.priority - todo2.priority
       );
@@ -190,7 +190,7 @@ describe("/todolists", () => {
     });
 
     test(`create and get miltiple todolists,
-                and response with 200 code and return todolists `, async () => {
+                  and response with 200 code and return todolists `, async () => {
       //arrange
       const todolist2 = {
         listname: "list2",
@@ -317,7 +317,7 @@ describe("/todolists", () => {
     describe("failure tests", () => {
       describe("post failure tests", () => {
         test(`POST request, should NOT create todolist with no listname,
-         response with 400 code and "listname required" msg`, async () => {
+           response with 400 code and "listname required" msg`, async () => {
           //arrange
           const todolistWithNoListname = {
             listnam: "listname",
@@ -334,7 +334,7 @@ describe("/todolists", () => {
         });
 
         test(`POST request, should NOT create todolist,
-         with todos with same priority   `, async () => {
+           with todos with same priority   `, async () => {
           //arrange
           const todolistWithBrokenPriority = {
             listname: "listname",
@@ -363,7 +363,7 @@ describe("/todolists", () => {
         });
 
         test(`POST request, should NOT create todolist,
-         with todos with wrong done type  `, async () => {
+           with todos with wrong done type  `, async () => {
           //arrange
           const todolistWithDoneType = {
             listname: "listname",
@@ -392,7 +392,7 @@ describe("/todolists", () => {
         });
 
         test(`POST request, should NOT create todolist,
-         with no text in todo`, async () => {
+           with no text in todo`, async () => {
           //arrange
           const todolistWithNoText = {
             listname: "listname",
@@ -420,7 +420,7 @@ describe("/todolists", () => {
         });
 
         test(`POST request, should NOT create todolist,
-        with todos wrong same priority type`, async () => {
+          with todos wrong same priority type`, async () => {
           //arrange
           const todolistWithBrokenPriority = {
             listname: "listname",
@@ -455,7 +455,7 @@ describe("/todolists", () => {
         });
 
         test(`PUT request, should NOT update todolist with no listname,
-      response with 400 code and "listname required" msg`, async () => {
+        response with 400 code and "listname required" msg`, async () => {
           //arrange
           const todolistWithNoListname = {
             listname: "",
@@ -474,7 +474,7 @@ describe("/todolists", () => {
         });
 
         test(`PUT request, should NOT update todolist,
-         with todos with same priority   `, async () => {
+           with todos with same priority   `, async () => {
           //arrange
           const todolistWithBrokenPriority = {
             listname: "listname",
@@ -505,7 +505,7 @@ describe("/todolists", () => {
         });
 
         test(`put request, should NOT update todolist,
-      with todos with wrong done type  `, async () => {
+        with todos with wrong done type  `, async () => {
           //arrange
           const todolistWithDoneType = {
             listname: "listname",
@@ -536,7 +536,7 @@ describe("/todolists", () => {
         });
 
         test(`put request, should NOT update todolist,
-      with no text in todo`, async () => {
+        with no text in todo`, async () => {
           //arrange
           const todolistWithNoText = {
             listname: "listname",
@@ -566,7 +566,7 @@ describe("/todolists", () => {
         });
 
         test(`put request, should NOT update todolist,
-     with todos wrong  priority type`, async () => {
+       with todos wrong  priority type`, async () => {
           //arrange
           const todolistWithBrokenPriority = {
             listname: "listname",
@@ -597,7 +597,7 @@ describe("/todolists", () => {
         });
 
         test(`put request, should NOT update todolist,
-        with wrong listID type`, async () => {
+          with wrong listID type`, async () => {
           //arrange
           const todolistWithBrokenPriority = {
             listname: "listname",
@@ -628,7 +628,7 @@ describe("/todolists", () => {
         });
 
         test(`put request, should NOT update todolist,
-        with no updated_at `, async () => {
+          with no updated_at `, async () => {
           //arrange
           const todolistWithoutTimestamp = {
             listname: "listname",
@@ -659,7 +659,7 @@ describe("/todolists", () => {
         });
 
         test(`put request, should NOT update todolist,
-        with autdated update_at`, async () => {
+          with autdated update_at`, async () => {
           //arrange
           const todolistWrongTimestamp = {
             listname: "listname",
@@ -691,7 +691,7 @@ describe("/todolists", () => {
       });
 
       test(`GET request, should NOT get todolist,
-        with bad id`, async () => {
+          with bad id`, async () => {
         const badId = "id123";
         //act
         const response = await agent.get(`/todolists?id=${badId}`);
@@ -702,7 +702,7 @@ describe("/todolists", () => {
       });
 
       test(`DELETE request, should NOT get todolist,
-        with bad id`, async () => {
+          with bad id`, async () => {
         const badId = "id123";
         //act
         const response = await agent.delete(`/todolists/${badId}`);
@@ -715,4 +715,4 @@ describe("/todolists", () => {
   });
 });
 
-//ERROR HANDLE!!
+// //ERROR HANDLE!!

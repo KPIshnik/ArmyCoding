@@ -52,7 +52,7 @@ done = t2.done::boolean
 from (values
 ( $1, $2, $3, $4 ),
 ( $5, $6, $7, $8 ),
-( $9, $10, $11, $12 )) as t2(list_id, text, rank, done ) where t2.list_id = t.list_id::text`,
+( $9, $10, $11, $12 )) as t2(listId, text, rank, done ) where t2.listId = t.listId::text`,
     [
       "30c3edf7-bbf1-4d9d-9e3d-fe599df52c3c",
       "AAAAAAAA",

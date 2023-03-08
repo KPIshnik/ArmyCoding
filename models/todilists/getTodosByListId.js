@@ -4,7 +4,7 @@ const getTodosByListId = async (listId) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
-      "SELECT * FROM todos WHERE (list_id = $1) ORDER by rank;",
+      "SELECT * FROM todos WHERE (listId = $1) ORDER by rank;",
       [listId]
     );
     return res.rows;

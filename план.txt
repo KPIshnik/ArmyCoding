@@ -5,21 +5,21 @@
 8. Рефакторинг.
 0. test for fb and google
 
+1. Read rest again
 
 /todolists?id             
     get -- get todolist  or lists
     post -- create todolist    
-      !!! build one query fol all todos instead of  one for each totdo!!!\+
    
    
     put -- change todolist 
       !!! regfactor validator 
-      !! refactor multiple await
+     !!solve Promiss.all+jest problem
 
     delete -- delete todolist 
    
 
-/todolist/todonote/:id   //todonote & priority & done 
+/todonote/:id   //todonote & priority & done 
     get -- get todonote
     post -- create todonote
     put -- change todonote  

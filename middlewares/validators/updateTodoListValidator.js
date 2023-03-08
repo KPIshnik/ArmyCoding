@@ -1,4 +1,5 @@
 const isUUIDvalid = require("../../helpers/isUUIDvalid");
+const validateTodos = require("../../helpers/validateTodos");
 
 const updateTodoListValidator = async (req, res, next) => {
   req.body.valid = false;
@@ -19,30 +20,14 @@ const updateTodoListValidator = async (req, res, next) => {
     return;
   }
 
-  const prioritySet = new Set();
   if (todos) {
-    for (let todo of todos) {
-      if (
-        !todo.text ||
-        !(typeof todo.priority === "number") ||
-        !(typeof todo.done === "boolean")
-      ) {
-        res.status(400).json("request not valid");
-        return;
-      }
-
-      prioritySet.add(todo.priority);
-    }
-    if (!(prioritySet.size === todos.length)) {
-      res.status(400).json("request not valid");
-      return;
-    }
-
-    if (todos.lenth > 2000) {
-      res.status(400).json("list to long. limit = 2000");
+    const msg = validateTodos(todos);
+    if (msg) {
+      res.status(400).json(msg);
       return;
     }
   }
+
   req.body.valid = true;
   next();
 };

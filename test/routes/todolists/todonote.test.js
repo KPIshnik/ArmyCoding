@@ -107,9 +107,7 @@ describe("/todolists", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent
-          .get("/todolist/todonote/someid")
-          .redirects();
+        const response = await agent.get("/todonote/someid").redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -120,7 +118,7 @@ describe("/todolists", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/todolist/todonote").send(todolist);
+        const responce = await agent.post("/todonote").send(todolist.todos[0]);
 
         //assert
         expect(responce.status).toBe(401);
@@ -131,21 +129,48 @@ describe("/todolists", () => {
     test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolist/todonote/someid"`);
+      const res = await agent.delete(`/todonote/someid"`);
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");
     });
   });
 
-  //   describe("tests for authorized user", () => {
-  //     beforeAll(async () => {
-  //       await agent
-  //         .post(`/auth`)
-  //         .send({ email: testUser.email, password: testUser.password });
-  //     });
+  describe("tests for authorized user", () => {
+    const todonote = {
+      listid: "",
+      text: "test note",
+      priority: 2,
+      done: false,
+    };
 
-  //   });
+    beforeAll(async () => {
+      await agent
+        .post(`/auth`)
+        .send({ email: testUser.email, password: testUser.password });
+      const res = await agent.post("/todolists").send(todolist);
+
+      todonote.listid = res.body.data.id;
+    });
+
+    test(`POST request should create todonote response with code 200, 
+  msg(todonote created) `, async () => {
+      //act
+      const res = await agent.post("/todonote").send(todonote);
+      const id = res.body.id;
+      const getRes = await agent.get(`/todonote/${id}`);
+
+      //assert
+      expect(res.status).toBe(200);
+      expect(res.body.msg).toBe("todonote created");
+
+      expect(getRes.status).toBe(200);
+      expect(getRes.body).toEqual({
+        ...todonote,
+        id,
+      });
+    });
+  });
 });
 
 //ERROR HANDLE!!
