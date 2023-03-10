@@ -15,7 +15,7 @@ const createTodoListController = async (req, res) => {
 
   if (todos) {
     todos.sort((todo1, todo2) => todo1.priority - todo2.priority);
-    todos.map((todo, i) => (todo.rank = i * 1000000));
+    todos.map((todo, i) => (todo.rank = (i + 1) * 1000000));
     await createTodos(id, todos);
   }
 

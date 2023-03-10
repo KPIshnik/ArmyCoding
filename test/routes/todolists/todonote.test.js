@@ -170,6 +170,27 @@ describe("/todolists", () => {
       });
     });
 
+    test(`PUT request should update todonote response with code 200, 
+    msg(todonote id updated) `, async () => {
+      //arrange
+      todonote.text = "new awesome text";
+      todonote.done = true;
+      todonote.priority = 5;
+
+      //act
+      const res = await agent.put("/todonote").send(todonote);
+      const getRes = await agent.get(`/todonote/${todonote.id}`);
+
+      //assert
+      expect(res.status).toBe(200);
+      expect(res.body).toBe(`todonote ${todonote.id} updated`);
+
+      expect(getRes.status).toBe(200);
+      expect(getRes.body).toEqual({
+        ...todonote,
+      });
+    });
+
     test('DELETE, should delete todonote, respose with code 200, "deleted" msg', async () => {
       //act
       const res = await agent.delete(`/todonote/${todonote.id}`);
@@ -219,7 +240,7 @@ describe("/todolists", () => {
         expect(res.status).toBe(400);
         expect(res.body).toBe("todo text reuired");
       });
-      test("GET should not get todonote with not valid list id", async () => {
+      test("GET should not get todonote with not valid  id", async () => {
         //act
         const res = await agent.get("/todonote/123454");
         //assert
@@ -240,6 +261,58 @@ describe("/todolists", () => {
         );
         //assert
         expect(res.status).toBe(404);
+      });
+
+      test("PUT should not update todonote with not valid  id", async () => {
+        //act
+        const res = await agent
+          .put("/todonote")
+          .send({ ...todonote, id: "not valid" });
+        //assert
+        expect(res.status).toBe(400);
+        expect(res.body).toBe("valid id required");
+      });
+
+      test("PUT should not create todonote with not valid list ID", async () => {
+        //act
+        const res = await agent.put("/todonote").send({
+          ...todonote,
+          listid: "false",
+        });
+        //assert
+        expect(res.status).toBe(400);
+        expect(res.body).toBe("valid list id required");
+      });
+
+      test("put should not create todonote with wrong done type", async () => {
+        //act
+        const res = await agent.put("/todonote").send({
+          ...todonote,
+          done: "false",
+        });
+        //assert
+        expect(res.status).toBe(400);
+        expect(res.body).toBe("done should be boolean type");
+      });
+      test("put should not create todonote with wrong priority type", async () => {
+        //act
+        const res = await agent.put("/todonote").send({
+          ...todonote,
+          priority: "1",
+        });
+        //assert
+        expect(res.status).toBe(400);
+        expect(res.body).toBe("priority should be integer type");
+      });
+      test("put should not create todonote without text", async () => {
+        //act
+        const res = await agent.put("/todonote").send({
+          ...todonote,
+          text: "",
+        });
+        //assert
+        expect(res.status).toBe(400);
+        expect(res.body).toBe("todo text reuired");
       });
     });
   });

@@ -1,6 +1,6 @@
 const isUUIDvalid = require("../../helpers/isUUIDvalid");
 
-const setTodonoteValidator = async (req, res, next) => {
+const todonoteValidator = async (req, res, next) => {
   const { listid, text, priority, done } = req.body;
   req.body.valid = false;
 
@@ -27,4 +27,4 @@ const setTodonoteValidator = async (req, res, next) => {
   next();
 };
 
-module.exports = setTodonoteValidator;
+module.exports = todonoteValidator;

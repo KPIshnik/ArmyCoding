@@ -1,15 +1,7 @@
-const todos = [{ rank: 100 }, { rank: 200 }, { rank: 300 }];
+const todos = [{ rank: 100 }, { rank: 200 }, { rank: 300 }, { raaank: 300 }];
+const newTodo = { priority: 3 };
 
-const priority = 2;
-
-const rank =
-  priority === 1
-    ? todos[0].rank / 2
-    : priority > todos.length
-    ? todos[todos.length - 1].rank + 100
-    : (todos[priority - 1].rank + todos[priority - 2].rank) / 2;
-
-console.log(rank);
+console.log(todos.filter((t) => t.rank));
 
 // const pool = require("../models/DBconnection");
 
