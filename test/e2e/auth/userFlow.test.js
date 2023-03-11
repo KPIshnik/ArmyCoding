@@ -97,11 +97,10 @@ describe("user register via email and chenging userdata", () => {
     test("should seccesfuly change logged in user's username", async () => {
       const response = await agent
         .post(`/profile/username`)
-        .send({ username: testUser.newUsername, password: testUser.password })
-        .redirects();
+        .send({ username: testUser.newUsername, password: testUser.password });
 
       expect(response.status).toBe(200);
-      expect(response.body).toBe(`Aloha ${testUser.newUsername}!`);
+      expect(response.body).toBe("username changed");
     });
   });
 

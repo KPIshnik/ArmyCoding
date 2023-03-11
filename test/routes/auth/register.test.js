@@ -74,7 +74,7 @@ describe("/auth/register ", () => {
     const testmailResponse = await superagent.get(
       `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${
         testmail.namespace
-      }&tag=${testUser.userName}&timestamp_from=${Date.now()}&livequery=true`
+      }&tag=${testUser.userName}&timestamp_from=${RealDate()}&livequery=true`
     );
 
     const user = await getUserByUserName(testUser.userName);
