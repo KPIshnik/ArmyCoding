@@ -4,9 +4,9 @@ const registerUserValidator = async (req, res, next) => {
   req.body.valid = false;
   const newUser = req.body;
 
-  const { userName, password, email } = newUser;
+  const { username, password, email } = newUser;
 
-  if (!userName) {
+  if (!username) {
     res.status(400).json("username missing");
     return;
   }

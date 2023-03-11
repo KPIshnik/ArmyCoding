@@ -60,7 +60,7 @@ describe("/auth/register ", () => {
           return code: 200,
           msg: "user username registered, please confirm email"`, async () => {
     const testUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "123",
       password2: "123",
       email: "a2f9p.testuser@inbox.testmail.app",
@@ -74,22 +74,22 @@ describe("/auth/register ", () => {
     const testmailResponse = await superagent.get(
       `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${
         testmail.namespace
-      }&tag=${testUser.userName}&timestamp_from=${RealDate()}&livequery=true`
+      }&tag=${testUser.username}&timestamp_from=${RealDate()}&livequery=true`
     );
 
-    const user = await getUserByUserName(testUser.userName);
+    const user = await getUserByUserName(testUser.username);
     const emailConfirmData = await getEmailConfirmDataById(user.id);
 
     //asssert
 
     expect(response.status).toBe(200);
     expect(response.body).toBe(
-      `user ${testUser.userName} registered, please confirm email`
+      `user ${testUser.username} registered, please confirm email`
     );
 
     expect(user).toEqual({
       id: expect.anything(),
-      username: testUser.userName,
+      username: testUser.username,
       email: null,
       password: `hashed ${testUser.password}`,
       googleid: null,
@@ -112,7 +112,7 @@ describe("/auth/register ", () => {
 
   test("should not register user with not matching pass", async () => {
     const testUser = {
-      userName: "user_with_bad_pass",
+      username: "user_with_bad_pass",
       password: "123",
       password2: "12345",
       email: "a2f9p.user_with_bad_pass@inbox.testmail.app",
@@ -122,7 +122,7 @@ describe("/auth/register ", () => {
       .post("/auth/register")
       .send(testUser);
 
-    const user = await getUserByUserName(testUser.userName);
+    const user = await getUserByUserName(testUser.username);
     //assert
 
     expect(response.status).toBe(400);
@@ -133,7 +133,7 @@ describe("/auth/register ", () => {
 
   test("should not register user with no pass", async () => {
     const testUser = {
-      userName: "user_with_bad_pass",
+      username: "user_with_bad_pass",
       password: "",
       password2: "",
       email: "a2f9p.user_with_bad_pass@inbox.testmail.app",
@@ -143,7 +143,7 @@ describe("/auth/register ", () => {
       .post("/auth/register")
       .send(testUser);
 
-    const user = await getUserByUserName(testUser.userName);
+    const user = await getUserByUserName(testUser.username);
     //assert
 
     expect(response.status).toBe(400);
@@ -154,7 +154,7 @@ describe("/auth/register ", () => {
 
   test("should not register user with empty username", async () => {
     const testUser = {
-      userName: "",
+      username: "",
       password: "123",
       password2: "123",
       email: "a2f9p.user_with_no_username@inbox.testmail.app",
@@ -164,7 +164,7 @@ describe("/auth/register ", () => {
       .post("/auth/register")
       .send(testUser);
 
-    const user = await getUserByUserName(testUser.userName);
+    const user = await getUserByUserName(testUser.username);
     //assert
 
     expect(response.status).toBe(400);
@@ -175,14 +175,14 @@ describe("/auth/register ", () => {
 
   test("should not register user with not unique username", async () => {
     const testUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "123",
       password2: "123",
       email: "testuser@google.com",
     };
 
     const notUniqueUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "1234",
       password2: "1234",
       email: "sommail@google.com",
@@ -190,7 +190,7 @@ describe("/auth/register ", () => {
 
     await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       "pass",
       null,
       null,
@@ -211,7 +211,7 @@ describe("/auth/register ", () => {
   });
   test("should not register user with no email", async () => {
     const testUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "123",
       password2: "123",
       email: "",
@@ -223,7 +223,7 @@ describe("/auth/register ", () => {
       .post("/auth/register")
       .send(testUser);
 
-    const user = await getUserByUserName(testUser.userName);
+    const user = await getUserByUserName(testUser.username);
 
     //assert
 
@@ -234,7 +234,7 @@ describe("/auth/register ", () => {
   });
   test("should not register user with not valid email", async () => {
     const testUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "123",
       password2: "123",
       email: "",
@@ -261,7 +261,7 @@ describe("/auth/register ", () => {
         .post("/auth/register")
         .send(testUser);
 
-      const user = await getUserByUserName(testUser.userName);
+      const user = await getUserByUserName(testUser.username);
 
       expect(response.status).toBe(400);
       expect(response.body).toBe("email not valid");
@@ -272,14 +272,14 @@ describe("/auth/register ", () => {
 
   test("should not register user with not unique email", async () => {
     const testUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "123",
       password2: "123",
       email: "a2f9p.testuser@google.com",
     };
 
     const notUniqueUser = {
-      userName: "testuser2",
+      username: "testuser2",
       password: "1234",
       password2: "1234",
       email: "a2f9p.testuser@google.com",
@@ -287,7 +287,7 @@ describe("/auth/register ", () => {
 
     await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       "pass",
       null,
       null,

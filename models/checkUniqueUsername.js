@@ -1,11 +1,11 @@
 const pool = require("./DBconnection");
 
-const checkUniqueUsername = async (userName) => {
+const checkUniqueUsername = async (username) => {
   const client = await pool.connect();
   try {
     const res = await client.query(
       "SELECT username FROM users WHERE username = $1",
-      [userName]
+      [username]
     );
 
     return res.rows[0] ? false : true;

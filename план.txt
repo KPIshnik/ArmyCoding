@@ -15,20 +15,24 @@
     put -- change todolist 
       !!! regfactor validator 
      !!solve Promiss.all+jest problem
+     !!!!!  Protect from other users+test
 
     delete -- delete todolist 
+    !!!!!  Protect from other users+test
    
 
 /todonote/:id   //todonote & priority & done 
     get -- get todonote
     post -- create todonote
      !! refactor and unit test for rank functions
+     !!!!!  Protect from other users+test
 
     put -- change todonote  
    !! refactor and unit test for rank functions
+    !!!!!  Protect from other users+test
 
     delete -- delete todonote
-
+    !!!!!  Protect from other users+test
 
 /todolists/permitted/:id
     get -- get todolist  or lists
@@ -38,3 +42,5 @@
     post -- share with user or users
     put.
     delete --  anshare with user/users
+
+!!!auth index.test.js

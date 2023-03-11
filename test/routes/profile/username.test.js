@@ -29,7 +29,7 @@ let agent;
 
 describe("/profile/avatar", () => {
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     email: "testuser@test.app",
 
@@ -42,7 +42,7 @@ describe("/profile/avatar", () => {
     agent = request.agent(url);
     await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       testUser.password,
       null,
       null,
@@ -140,7 +140,7 @@ describe("/profile/avatar", () => {
       //act
       for (pass of notValidPasses) {
         const response = await agent.post("/profile/username").send({
-          username: testUser.userName,
+          username: testUser.username,
           password: pass,
         });
 

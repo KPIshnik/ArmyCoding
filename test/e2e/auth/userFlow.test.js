@@ -10,7 +10,7 @@ let server;
 
 describe("user register via email and chenging userdata", () => {
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     password2: "123",
     email: "a2f9p.testuser@inbox.testmail.app",
@@ -47,7 +47,7 @@ describe("user register via email and chenging userdata", () => {
 
         expect(registerResponse.status).toBe(200);
         expect(registerResponse.body).toBe(
-          `user ${testUser.userName} registered, please confirm email`
+          `user ${testUser.username} registered, please confirm email`
         );
       });
 
@@ -56,7 +56,7 @@ describe("user register via email and chenging userdata", () => {
         //act
 
         const testmailResponse = await superagent.get(
-          `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${testmail.namespace}&tag=${testUser.userName}&timestamp_from=${date}&livequery=true`
+          `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${testmail.namespace}&tag=${testUser.username}&timestamp_from=${date}&livequery=true`
         );
 
         const lastRecivedEmail = testmailResponse.body.emails[0];
@@ -88,7 +88,7 @@ describe("user register via email and chenging userdata", () => {
           .redirects();
         //assert
         expect(loginResponse.status).toBe(200);
-        expect(loginResponse.body).toBe(`Aloha ${testUser.userName}!`);
+        expect(loginResponse.body).toBe(`Aloha ${testUser.username}!`);
       });
     });
   });

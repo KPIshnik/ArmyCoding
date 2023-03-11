@@ -22,7 +22,7 @@ let agent;
 
 describe("/profile/avatar", () => {
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     email: "testuser@test.app",
   };
@@ -32,7 +32,7 @@ describe("/profile/avatar", () => {
     agent = request.agent(url);
     const id = await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       testUser.password,
       null,
       null,
@@ -65,7 +65,7 @@ describe("/profile/avatar", () => {
 
       //assert
       expect(responce.status).toBe(200);
-      expect(responce.body).toBe(`Aloha ${testUser.userName}!`);
+      expect(responce.body).toBe(`Aloha ${testUser.username}!`);
     });
   });
 
@@ -75,7 +75,7 @@ describe("/profile/avatar", () => {
       const response = await agent.get("/auth/").redirects();
       //assert
       expect(response.status).toBe(200);
-      expect(response.body).toBe(`Aloha ${testUser.userName}!`);
+      expect(response.body).toBe(`Aloha ${testUser.username}!`);
     });
   });
 
@@ -85,7 +85,7 @@ describe("/profile/avatar", () => {
       const response = await agent.post("/auth/").redirects();
       //assert
       expect(response.status).toBe(200);
-      expect(response.body).toBe(`Aloha ${testUser.userName}!`);
+      expect(response.body).toBe(`Aloha ${testUser.username}!`);
     });
   });
 
@@ -130,7 +130,7 @@ describe("/profile/avatar", () => {
 //     test("should responce with 404 not found", async () => {
 //       //act
 //       const response = await agent
-//         .get(`/profile/avatar?username=${testUser.userName}`)
+//         .get(`/profile/avatar?username=${testUser.username}`)
 //         .redirects();
 
 //       //assert
@@ -145,7 +145,7 @@ describe("/profile/avatar", () => {
 //         .attach("avatar", avatar, "testuserAvatarBlack.png");
 
 //       const getAvatarRes = await agent
-//         .get(`/profile/avatar?username=${testUser.userName}`)
+//         .get(`/profile/avatar?username=${testUser.username}`)
 //         .redirects();
 
 //       const avatarWebp = await sharp(avatar).webp().toBuffer();
@@ -168,13 +168,13 @@ describe("/profile/avatar", () => {
 //         .attach("avatar", newAvatar, "testuserAvatarWhite.png");
 
 //       const getAvatarRes = await agent
-//         .get(`/profile/avatar?username=${testUser.userName}`)
+//         .get(`/profile/avatar?username=${testUser.username}`)
 //         .redirects();
 
 //       const newAvatarWebp = await sharp(newAvatar).webp().toBuffer();
 //       //assert
 //       expect(response.status).toBe(200);
-//       expect(response.body).toBe(`avatar for ${testUser.userName} updated`);
+//       expect(response.body).toBe(`avatar for ${testUser.username} updated`);
 //       expect(getAvatarRes.status).toBe(200);
 //       expect(Buffer.compare(getAvatarRes.body, newAvatarWebp)).toBe(0);
 //     });
@@ -185,13 +185,13 @@ describe("/profile/avatar", () => {
 //       const response = await agent.delete("/profile/avatar");
 
 //       const getAvatarRes = await agent
-//         .get(`/profile/avatar?username=${testUser.userName}`)
+//         .get(`/profile/avatar?username=${testUser.username}`)
 //         .redirects();
 
 //       //assert
 //       expect(response.status).toBe(200);
 //       expect(response.body).toBe(
-//         `${testUser.userName} avatar has been deleted`
+//         `${testUser.username} avatar has been deleted`
 //       );
 //       expect(getAvatarRes.status).toBe(404);
 //     });

@@ -22,7 +22,7 @@ describe("e2e testing chenging email", () => {
   response with code: 200, json: "confirm new email"`, async () => {
     //arrange
     const testUser = {
-      userName: "testuser",
+      username: "testuser",
       password: "123",
       password2: "123",
       email: "a2f9p.testuser@inbox.testmail.app",
@@ -57,7 +57,7 @@ describe("e2e testing chenging email", () => {
 
     expect(registerResponse.status).toBe(200);
     expect(registerResponse.body).toBe(
-      `user ${testUser.userName} registered, please confirm email`
+      `user ${testUser.username} registered, please confirm email`
     );
 
     expect(lastRecivedEmail.subject).toBe("Confirm email");
@@ -66,6 +66,6 @@ describe("e2e testing chenging email", () => {
     expect(confirmEmailResponse.body).toBe("Email confirmed");
 
     expect(loginResponse.status).toBe(200);
-    expect(loginResponse.body).toBe(`Aloha ${testUser.userName}!`);
+    expect(loginResponse.body).toBe(`Aloha ${testUser.username}!`);
   });
 });

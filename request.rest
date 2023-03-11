@@ -70,7 +70,7 @@ Content-Type: application/json
 
 {
 "email": "antaresstat@gmail.com",
-"userName": "Owl",
+"username": "Owl",
 "password": "s",
 "password2": "s"
 }

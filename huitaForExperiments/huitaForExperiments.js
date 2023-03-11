@@ -1,9 +1,21 @@
-const todos = [{ rank: 100 }, { rank: 200 }, { rank: 300 }, { raaank: 300 }];
+const superagent = require("superagent");
 
-for (t of todos) {
-  console.log(t.rank);
-}
-// const pool = require("../models/DBconnection");
+const f = (data) =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => resolve(console.log(data)), 1000);
+  });
+
+const arr = [1, 2, 3];
+
+(async () => {
+  arr.forEach(async (e) => {
+    await f(e);
+  });
+  console.log("AAA");
+})();
+// &timestamp_from=${Date.now()}
+//
+//const pool = require("../models/DBconnection");
 
 // const createHuinya = async () => {
 //   await pool.query("CREATE  table if not exists test(name varchar);");

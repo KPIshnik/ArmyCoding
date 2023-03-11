@@ -29,7 +29,7 @@ describe("Register user  VALIDATOR test", () => {
       //arrange
 
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "123",
         email: "validemail@gmail.com",
@@ -53,7 +53,7 @@ describe("Register user  VALIDATOR test", () => {
     test("should not validate not matching pass", async () => {
       //arrange
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "1234",
         email: "validemail@gmail.com",
@@ -75,7 +75,7 @@ describe("Register user  VALIDATOR test", () => {
     test("should not validate empty username", async () => {
       //arrange
       const testUser = {
-        userName: "",
+        username: "",
         password: "123",
         password2: "123",
         email: "validemail@gmail.com",
@@ -95,7 +95,7 @@ describe("Register user  VALIDATOR test", () => {
     test("should not validate empty email", async () => {
       //arrange
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "123",
         email: "",
@@ -114,7 +114,7 @@ describe("Register user  VALIDATOR test", () => {
 
     test("should not validate not valid email", async () => {
       const testUser = {
-        userName: "testuser",
+        username: "testuser",
         password: "123",
         password2: "123",
         email: "",

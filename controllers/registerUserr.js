@@ -6,7 +6,7 @@ const checkIsRegistered = require("../models/checkIsRegistered");
 
 const registerUser = async (req, res) => {
   const newUser = req.body;
-  const { userName, password, email } = newUser;
+  const { username, password, email } = newUser;
 
   try {
     if (!newUser.valid) {
@@ -19,7 +19,7 @@ const registerUser = async (req, res) => {
       return;
     }
 
-    const isUsernameUnique = await checkUniqueUsername(userName);
+    const isUsernameUnique = await checkUniqueUsername(username);
 
     if (!isUsernameUnique) {
       res.status(400).json("this username already registered, try another one");
@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
     const hashedPass = await bcript.hash(password, 10);
     const userid = await registerNewUser(
       null,
-      userName,
+      username,
       hashedPass,
       null,
       null,
@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
 
     await confirmEmailHelper(userid, email);
 
-    res.status(200).json(`user ${userName} registered, please confirm email`);
+    res.status(200).json(`user ${username} registered, please confirm email`);
   } catch (err) {
     console.log(err);
     res.status(500).json("Oops, server error((");

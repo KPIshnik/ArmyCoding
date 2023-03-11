@@ -26,6 +26,11 @@ const getTodoListsController = async (req, res) => {
     return;
   }
 
+  if (!(user.id === listData.owner_id)) {
+    res.status(400).json("access denied");
+    return;
+  }
+
   const todos = await getTodosByListId(listId);
   const preparedTodos = todos.map((todo, i) => {
     return {

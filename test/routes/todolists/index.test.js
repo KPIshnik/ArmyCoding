@@ -23,7 +23,7 @@ describe("/todolists", () => {
   date = new Date();
 
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     email: "testuser@test.app",
   };
@@ -69,7 +69,7 @@ describe("/todolists", () => {
     agent = request.agent(url);
     await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       testUser.password,
       null,
       null,
@@ -141,6 +141,10 @@ describe("/todolists", () => {
       await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
+    });
+
+    afterAll(async () => {
+      await agent.delete("/auth");
     });
 
     test(`create and get singl todolist,
@@ -711,6 +715,48 @@ describe("/todolists", () => {
         expect(response.status).toBe(400);
         expect(response.body).toBe("valid id required");
       });
+    });
+  });
+  describe("tests for user without access to list", () => {
+    badUser = {
+      username: "baduser",
+      email: "baduser@gmail.com",
+      password: 123,
+    };
+    beforeAll(async () => {
+      await registerNewUser(
+        badUser.email,
+        badUser.username,
+        badUser.password,
+        null,
+        null,
+        "email"
+      );
+      const res = await agent
+        .post(`/auth`)
+        .send({ email: badUser.email, password: badUser.password });
+    });
+
+    test("GET request should respose access denied", async () => {
+      //act
+      const res = await agent.get(`/todolists?id=${todolist.id}`);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
+    });
+    test("PUT request should respose access denied", async () => {
+      //act
+      const res = await agent.get(`/todolists`).send(todolist);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
+    });
+    test("DELETE request should respose access denied", async () => {
+      //act
+      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
     });
   });
 });

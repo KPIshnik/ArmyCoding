@@ -63,7 +63,7 @@ paths:
           schema:
             required:
               - email
-              - userName
+              - username
               - password
               - password2
             properties:

@@ -25,7 +25,7 @@ let agent;
 
 describe("/profile/avatar", () => {
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     email: "testuser@test.app",
 
@@ -37,7 +37,7 @@ describe("/profile/avatar", () => {
     agent = request.agent(url);
     const id = await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       testUser.password,
       null,
       null,
@@ -123,7 +123,7 @@ describe("/profile/avatar", () => {
       expect(delResp.body).toBe("loged out");
 
       expect(loginResp.status).toBe(200);
-      expect(loginResp.body).toBe(`Aloha ${testUser.userName}!`);
+      expect(loginResp.body).toBe(`Aloha ${testUser.username}!`);
 
       expect(setUserPassword).toHaveBeenCalled();
     });

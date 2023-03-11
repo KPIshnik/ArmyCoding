@@ -29,7 +29,7 @@ let agent;
 
 describe("/profile/avatar", () => {
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     email: "testuser@test.app",
 
@@ -42,7 +42,7 @@ describe("/profile/avatar", () => {
     agent = request.agent(url);
     await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       testUser.password,
       null,
       null,
@@ -124,7 +124,7 @@ describe("/profile/avatar", () => {
         `https://api.testmail.app/api/json?apikey=${
           testmail.api_key
         }&namespace=${testmail.namespace}&tag=${
-          testUser.userName
+          testUser.username
         }&timestamp_from=${Date.now()}&livequery=true`
       );
 
@@ -148,7 +148,7 @@ describe("/profile/avatar", () => {
       expect(confirmEmailResponse.status).toBe(200);
 
       expect(loginResp.status).toBe(200);
-      expect(loginResp.body).toBe(`Aloha ${testUser.userName}!`);
+      expect(loginResp.body).toBe(`Aloha ${testUser.username}!`);
     });
 
     test(`POST request, should NOT change email,

@@ -1,5 +1,6 @@
 const request = require("supertest");
-const { url } = require("../../../configs/credentials");
+const superagent = require("superagent");
+const { url, testmail } = require("../../../configs/credentials");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const registerNewUser = require("../../../models/registerNewUser");
@@ -14,7 +15,7 @@ jest.mock("bcrypt", () => {
   };
 });
 
-jest.setTimeout(300000);
+jest.setTimeout(30000);
 
 let server;
 let agent;
@@ -23,27 +24,27 @@ describe("/todolists", () => {
   date = new Date();
 
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
-    email: "testuser@test.app",
+    email: "a2f9p.testuser@inbox.testmail.app",
   };
 
   const testUser2 = {
-    userName: "testuser2",
+    username: "testuser2",
     password: "1232",
-    email: "testuser2@test.app",
+    email: "a2f9p.testuser2@inbox.testmail.app",
   };
 
   const testUser3 = {
-    userName: "testuser3",
+    username: "testuser3",
     password: "1233",
-    email: "testuser3@test.app",
+    email: "a2f9p.testuser3@inbox.testmail.app",
   };
 
   const testUser4 = {
-    userName: "testuser4",
+    username: "testuser4",
     password: "1234",
-    email: "testuser4@test.app",
+    email: "a2f9p.testuser4@inbox.testmail.app",
   };
 
   const testUsers = [testUser, testUser2, testUser3, testUser4];
@@ -53,38 +54,17 @@ describe("/todolists", () => {
     for (user of testUsers)
       await registerNewUser(
         user.email,
-        user.userName,
+        user.username,
         user.password,
         null,
         null,
         "email"
       );
-    jest
-      .useFakeTimers({
-        doNotFake: [
-          "nextTick",
-          "queueMicrotask",
-          "hrtime",
-          "performance",
-          "requestAnimationFrame",
-          "cancelAnimationFrame",
-          "requestIdleCallback",
-          "cancelIdleCallback",
-          "setImmediate",
-          "clearImmediate",
-          "setInterval",
-          "clearInterval",
-          "setTimeout",
-          "clearTimeout",
-        ],
-      })
-      .setSystemTime(date);
   });
 
   afterAll(async () => {
     await clearDB();
     await server.teardown();
-    jest.useRealTimers();
   });
 
   describe("tests with user not authirized", () => {
@@ -231,18 +211,39 @@ describe("/todolists", () => {
         .send({ listid, usersEmailArr });
       const getRes = await agent.get(`/todolists/share/${listid}`);
 
+      const recivedEmails = [];
+      for (user of sharedUsersarr) {
+        const testmailResponse = await superagent.get(
+          `https://api.testmail.app/api/json?apikey=${
+            testmail.api_key
+          }&namespace=${testmail.namespace}&tag=${
+            user.username
+          }&timestamp_from=${Date.now()}&livequery=true`
+        );
+        recivedEmails.push(testmailResponse.body.emails[0]);
+      }
+
       //assert
       expect(res.status).toBe(200);
       expect(res.body).toBe(`list ${listid} shared `);
 
       expect(getRes.status).toBe(200);
       expect(getRes.body.length).toBe(usersEmailArr.length);
+
       getRes.body.forEach((user, i) => {
         expect(user).toEqual({
           email: sharedUsersarr[i].email,
-          userName: sharedUsersarr[i].userName,
+          username: sharedUsersarr[i].username,
           id: expect.anything(),
         });
+      });
+
+      expect(recivedEmails.length).toBe(sharedUsersarr.length);
+      recivedEmails.forEach((email) => {
+        expect(email.subject).toBe("todolists app. New access granted");
+        expect(email.text).toBe(
+          `user ${testUser.username} shred "${todolist.listname}" todolist with you`
+        );
       });
     });
 

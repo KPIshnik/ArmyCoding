@@ -23,7 +23,7 @@ describe("/todolists", () => {
   date = new Date();
 
   const testUser = {
-    userName: "testuser",
+    username: "testuser",
     password: "123",
     email: "testuser@test.app",
   };
@@ -69,7 +69,7 @@ describe("/todolists", () => {
     agent = request.agent(url);
     await registerNewUser(
       testUser.email,
-      testUser.userName,
+      testUser.username,
       testUser.password,
       null,
       null,

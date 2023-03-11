@@ -62,7 +62,7 @@ describe("Register user controller test", () => {
       checkUniqueUsername.mockResolvedValueOnce(true);
 
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "123",
         email: "validmail@gmail.com",
@@ -79,7 +79,7 @@ describe("Register user controller test", () => {
       // проверяю что  респонс вызван с праильными аргументами
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith(
-        `user ${testUser.userName} registered, please confirm email`
+        `user ${testUser.username} registered, please confirm email`
       );
 
       // ***********
@@ -88,7 +88,7 @@ describe("Register user controller test", () => {
       // проверяю что  registerNewUser вызван с праильными аргументами
       expect(registerNewUser).toHaveBeenCalledWith(
         null,
-        testUser.userName,
+        testUser.username,
         `hashed ${testUser.password}`, // тут хз надо ли проверять что пароль хэшнут и как это делать
         null,
         null,
@@ -108,7 +108,7 @@ describe("Register user controller test", () => {
       checkUniqueUsername.mockReturnValueOnce(true); // один раз вернуть тру
 
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "123",
         email: "validmail@gmail.com",
@@ -136,7 +136,7 @@ describe("Register user controller test", () => {
       checkUniqueUsername.mockReturnValueOnce(false); // один раз вернуть фалс
 
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "123",
         email: "validmail@gmail.com",
@@ -159,7 +159,7 @@ describe("Register user controller test", () => {
     test(" when throws unhandled exception, should response with 500", async () => {
       // arrange
       const testUser = {
-        userName: "Bob",
+        username: "Bob",
         password: "123",
         password2: "123",
         email: "validmail@gmail.com",

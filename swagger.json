@@ -77,7 +77,7 @@
             "in": "body",
             "description": "user data",
             "schema": {
-              "required": ["email", "userName", "password", "password2"],
+              "required": ["email", "username", "password", "password2"],
               "properties": {
                 "email": {
                   "type": "string"

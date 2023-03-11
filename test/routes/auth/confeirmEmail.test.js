@@ -35,13 +35,13 @@ describe("/auth/confirmemail ", () => {
       email: "testmail@test.app",
       date: Date.now(),
       key: "key",
-      userName: "testuser",
+      username: "testuser",
       password: "pass",
     };
 
     const id = await registerNewUser(
       userData.email,
-      userData.userName,
+      userData.username,
       userData.password,
       null,
       null,
@@ -93,13 +93,13 @@ describe("/auth/confirmemail ", () => {
       email: "testmail@test.app",
       date: Date.now(),
       key: "key",
-      userName: "testuser",
+      username: "testuser",
       password: "pass",
     };
 
     const id = await registerNewUser(
       userData.email,
-      userData.userName,
+      userData.username,
       userData.password,
       null,
       null,
