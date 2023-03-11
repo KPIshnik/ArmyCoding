@@ -1,8 +1,8 @@
 const todos = [{ rank: 100 }, { rank: 200 }, { rank: 300 }, { raaank: 300 }];
-const newTodo = { priority: 3 };
 
-console.log(todos.filter((t) => t.rank));
-
+for (t of todos) {
+  console.log(t.rank);
+}
 // const pool = require("../models/DBconnection");
 
 // const createHuinya = async () => {

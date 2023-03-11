@@ -30,11 +30,11 @@
     delete -- delete todonote
 
 
-/todolist/permitted/:id
+/todolists/permitted/:id
     get -- get todolist  or lists
 
-/todotilst/share/:id?useremail
+/todotilsts/share/:id?useremail
     get -- users shared with
     post -- share with user or users
-    put -- share and unshare
+    put.
     delete --  anshare with user/users

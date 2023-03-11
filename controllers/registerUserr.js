@@ -8,11 +8,10 @@ const registerUser = async (req, res) => {
   const newUser = req.body;
   const { userName, password, email } = newUser;
 
-  if (!newUser.valid) {
-    throw new Error("not valid user data");
-  }
-
   try {
+    if (!newUser.valid) {
+      throw new Error("not valid user data");
+    }
     const isRegistered = await checkIsRegistered(email);
 
     if (isRegistered) {
