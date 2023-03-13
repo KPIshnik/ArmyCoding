@@ -14,7 +14,7 @@ jest.mock("bcrypt", () => {
   };
 });
 
-jest.setTimeout(30000);
+//jest.setTimeout(30000);
 
 let server;
 let agent;
@@ -64,6 +64,12 @@ describe("/todolists", () => {
     ],
   };
 
+  const todonote = {
+    listid: "",
+    text: "test note",
+    priority: 2,
+    done: false,
+  };
   beforeAll(async () => {
     server = await serverPromise;
     agent = request.agent(url);
@@ -137,13 +143,6 @@ describe("/todolists", () => {
   });
 
   describe("tests for authorized user", () => {
-    const todonote = {
-      listid: "",
-      text: "test note",
-      priority: 2,
-      done: false,
-    };
-
     beforeAll(async () => {
       await agent
         .post(`/auth`)
@@ -153,6 +152,11 @@ describe("/todolists", () => {
       todonote.listid = res.body.data.id;
     });
 
+    afterAll(async () => {
+      const res = await agent.post("/todonote").send(todonote);
+      todonote.id = res.body.id;
+      await agent.delete(`/auth`);
+    });
     test(`POST request should create todonote response with code 200, 
   msg(todonote created) `, async () => {
       //act
@@ -314,6 +318,56 @@ describe("/todolists", () => {
         expect(res.status).toBe(400);
         expect(res.body).toBe("todo text reuired");
       });
+    });
+  });
+  describe("tests for user without access to list", () => {
+    const badUser = {
+      username: "baduser",
+      email: "baduserEmail@gmail.com",
+      password: "123",
+    };
+    beforeAll(async () => {
+      await registerNewUser(
+        badUser.email,
+        badUser.username,
+        badUser.password,
+        null,
+        null,
+        "email"
+      );
+      await agent
+        .post(`/auth`)
+        .send({ email: badUser.email, password: badUser.password })
+        .redirects();
+    });
+
+    test("GET request should respose access denied", async () => {
+      //act
+      const res = await agent.get(`/todonote/${todonote.id}`);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
+    });
+    test("POST request should respose access denied", async () => {
+      //act
+      const res = await agent.post(`/todonote`).send(todonote);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
+    });
+    test("PUT request should respose access denied", async () => {
+      //act
+      const res = await agent.put(`/todonote`).send(todonote);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
+    });
+    test("DELETE request should respose access denied", async () => {
+      //act
+      const res = await agent.delete(`/todonote/${todonote.id}`);
+      //assert
+      expect(res.status).toBe(400);
+      expect(res.body).toBe("access denied");
     });
   });
 });

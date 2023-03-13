@@ -31,8 +31,9 @@ passport.use(
 
         if (!pass) return done(null, false);
         if (!user) return done(null, false);
+        const isPasswordValid = await verifyPassword(user, pass);
 
-        if (!(await verifyPassword(user, pass))) return done(null, false);
+        if (!isPasswordValid) return done(null, false);
 
         return done(null, user);
       } catch (err) {
@@ -53,16 +54,6 @@ passport.use(
 
     async (accessToken, refreshToken, profile, done) => {
       let user = await getUserByGoogleID(profile.id);
-
-      // !! REFAKTOR PART !!
-      // if (!user) {
-      //   const res = await googleRegisterUserController(profile);
-      // }
-
-      // const googleRegisterUserController = (profile) => {
-      //   isEmailunique(profile.email) ? caryOn : setGoogleID;
-      //   is;
-      // };
 
       if (!user) {
         if (await checkIsRegistered(profile.emails[0].value)) {

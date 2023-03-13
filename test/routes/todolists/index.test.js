@@ -14,7 +14,7 @@ jest.mock("bcrypt", () => {
   };
 });
 
-jest.setTimeout(300000);
+//jest.setTimeout(300000);
 
 let server;
 let agent;
@@ -144,7 +144,7 @@ describe("/todolists", () => {
     });
 
     afterAll(async () => {
-      await agent.delete("/auth");
+      const res = await agent.delete("/auth");
     });
 
     test(`create and get singl todolist,
@@ -718,10 +718,10 @@ describe("/todolists", () => {
     });
   });
   describe("tests for user without access to list", () => {
-    badUser = {
+    const badUser = {
       username: "baduser",
-      email: "baduser@gmail.com",
-      password: 123,
+      email: "baduserEmail@gmail.com",
+      password: "123",
     };
     beforeAll(async () => {
       await registerNewUser(
@@ -734,7 +734,8 @@ describe("/todolists", () => {
       );
       const res = await agent
         .post(`/auth`)
-        .send({ email: badUser.email, password: badUser.password });
+        .send({ email: badUser.email, password: badUser.password })
+        .redirects();
     });
 
     test("GET request should respose access denied", async () => {
@@ -746,14 +747,14 @@ describe("/todolists", () => {
     });
     test("PUT request should respose access denied", async () => {
       //act
-      const res = await agent.get(`/todolists`).send(todolist);
+      const res = await agent.put(`/todolists`).send(todolist);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
     test("DELETE request should respose access denied", async () => {
       //act
-      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const res = await agent.delete(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");

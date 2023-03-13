@@ -5,24 +5,34 @@ const setTodonoteController = require("../../controllers/todolists/todonote/setT
 const updateTodonoteController = require("../../controllers/todolists/todonote/updateTodonoteController");
 const router = expres.Router();
 const checkIsAuth = require("../../middlewares/checkIsAuth");
+const isListOwnerValidator = require("../../middlewares/validators/isListOwnerValidator");
+const isTodonoteOwnerValidator = require("../../middlewares/validators/isTodonoteOwnerValidator");
 const todonoteValidator = require("../../middlewares/validators/todonoteValidator");
 const uuidValidator = require("../../middlewares/validators/uuIdValidator");
 router.use(expres.json());
 
 router
   .get("/todonote/:id", checkIsAuth, uuidValidator, getTodonoteController)
-  .post("/todonote", checkIsAuth, todonoteValidator, setTodonoteController)
+  .post(
+    "/todonote",
+    checkIsAuth,
+    todonoteValidator,
+    isListOwnerValidator,
+    setTodonoteController
+  )
   .put(
     "/todonote",
     checkIsAuth,
     uuidValidator,
     todonoteValidator,
+    isListOwnerValidator,
     updateTodonoteController
   )
   .delete(
     "/todonote/:id",
     checkIsAuth,
     uuidValidator,
+    isTodonoteOwnerValidator,
     deleteTodonoteController
   );
 
