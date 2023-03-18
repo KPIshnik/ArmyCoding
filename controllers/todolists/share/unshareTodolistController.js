@@ -1,0 +1,13 @@
+const getUsersIdsByEmails = require("../../../models/getUserIdsByEmails");
+const unshareTodolist = require("../../../models/todilists/share/unshareTodolist");
+
+const unshareTodolistController = async (req, res) => {
+  const { id, email } = req.query;
+
+  const usersIds = await getUsersIdsByEmails([email]);
+  await unshareTodolist(id, usersIds[0]);
+
+  res.sendStatus(204);
+};
+
+module.exports = unshareTodolistController;

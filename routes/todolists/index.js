@@ -9,10 +9,12 @@ const createTodoListValidator = require("../../middlewares/validators/createTodo
 const updateTodoListValidator = require("../../middlewares/validators/updateTodoListValidator");
 const uuidValidator = require("../../middlewares/validators/uuIdValidator");
 const isListOwnerValidator = require("../../middlewares/validators/isListOwnerValidator");
+const getSinglTodoListController = require("../../controllers/todolists/getSinglTodoListController");
 router.use(expres.json());
 
 router
   .get("/todolists", checkIsAuth, getTodoListsController)
+  .get("/todolists/:id", checkIsAuth, uuidValidator, getSinglTodoListController)
   .post(
     "/todolists",
     checkIsAuth,
@@ -27,7 +29,7 @@ router
     updateTodoListController
   )
   .delete(
-    "/todolists/:id",
+    "/todolists",
     checkIsAuth,
     uuidValidator,
     isListOwnerValidator,

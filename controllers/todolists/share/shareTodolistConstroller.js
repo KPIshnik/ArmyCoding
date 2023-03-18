@@ -1,28 +1,13 @@
-const sendEmailThred = require("../../../helpers/sendMailThred");
-const getUsersIdsByEmails = require("../../../models/getUsersIdsByEmails");
-const getUserTodoListDataById = require("../../../models/todilists/getTodoLIstDataById");
-const shareTodolistWithUsers = require("../../../models/todilists/share/shareTodolistWthUsers");
+const shareTodolistHelper = require("../../../helpers/shareTodolistHelper");
 
 const shareTodolistController = async (req, res) => {
-  const { listid, usersEmailArr, valid } = req.body;
-  //   if (!valid) {
-  //     throw new Error("request data not valid");
-  //   }
+  let { listid, emails, valid } = req.body;
+  if (!valid) {
+    throw new Error("request data not valid");
+  }
   const user = req.user;
-  const filteredUsersEmailArr = usersEmailArr.filter(
-    (email) => !(user.email === email)
-  );
 
-  const usersIdArr = await getUsersIdsByEmails(filteredUsersEmailArr);
-  await shareTodolistWithUsers(listid, usersIdArr);
-  const listData = await getUserTodoListDataById(listid);
-
-  const emailSubject = "todolists app. New access granted";
-  const emailText = `user ${user.username} shred "${listData.listname}" todolist with you`;
-
-  usersEmailArr.forEach((email) => {
-    sendEmailThred(email, emailSubject, emailText);
-  });
+  await shareTodolistHelper(listid, emails, user);
 
   res.status(200).json(`list ${listid} shared `);
 };

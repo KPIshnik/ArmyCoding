@@ -15,6 +15,7 @@ const fail = require("./auth/fail");
 const todolists = require("./todolists");
 const todonote = require("./todolists/todonote");
 const share = require("./todolists/share");
+const permitted = require("./todolists/permitted");
 
 const router = express.Router();
 
@@ -35,7 +36,8 @@ router.use(
   fail,
   todolists,
   todonote,
-  share
+  share,
+  permitted
 );
 
 module.exports = router;

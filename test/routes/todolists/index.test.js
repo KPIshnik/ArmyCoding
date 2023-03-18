@@ -129,7 +129,7 @@ describe("/todolists", () => {
     test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolists/${todolist.id}`);
+      const res = await agent.delete(`/todolists?id=${todolist.id}`);
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");
@@ -158,7 +158,7 @@ describe("/todolists", () => {
       const response = await agent.post("/todolists").send(todolist);
 
       todolist.id = response.body.data ? response.body.data.id : undefined;
-      const getResp = await agent.get(`/todolists?id=${todolist.id}`);
+      const getResp = await agent.get(`/todolists/${todolist.id}`);
 
       //assert
       expect(response.status).toBe(200);
@@ -185,8 +185,8 @@ describe("/todolists", () => {
     test("DELETE request, should delete todolist, response with 200 code", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolists/${todolist.id}`);
-      const getRes = await agent.get(`/todolists?id=${todolist.id}`);
+      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const getRes = await agent.get(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(200);
       expect(res.body).toBe(`todolist ${todolist.listname} deleted`);
@@ -255,7 +255,7 @@ describe("/todolists", () => {
 
     test('PUT request, should update todolist, response with 200 code, "list listId updated"', async () => {
       //arrange
-      const getOldLst = await agent.get(`/todolists?id=${todolist.id}`);
+      const getOldLst = await agent.get(`/todolists/${todolist.id}`);
       const oldTodolist = getOldLst.body;
 
       const newTodos = oldTodolist.todos.filter(
@@ -296,7 +296,7 @@ describe("/todolists", () => {
       };
       //act
       const res = await agent.put("/todolists").send(newTodolist);
-      const getRes = await agent.get(`/todolists?id=${todolist.id}`);
+      const getRes = await agent.get(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(200);
       expect(res.body).toBe(`list ${oldTodolist.id} updated`);
@@ -454,7 +454,7 @@ describe("/todolists", () => {
       });
       describe("PUT request failure tests", () => {
         beforeAll(async () => {
-          const res = await agent.get(`/todolists?id=${todolist.id}`);
+          const res = await agent.get(`/todolists/${todolist.id}`);
           todolist.updated_at = res.body.updated_at;
         });
 
@@ -698,7 +698,7 @@ describe("/todolists", () => {
           with bad id`, async () => {
         const badId = "id123";
         //act
-        const response = await agent.get(`/todolists?id=${badId}`);
+        const response = await agent.get(`/todolists/${badId}`);
 
         //assert
         expect(response.status).toBe(400);
@@ -709,7 +709,7 @@ describe("/todolists", () => {
           with bad id`, async () => {
         const badId = "id123";
         //act
-        const response = await agent.delete(`/todolists/${badId}`);
+        const response = await agent.delete(`/todolists?id=${badId}`);
 
         //assert
         expect(response.status).toBe(400);
@@ -740,7 +740,7 @@ describe("/todolists", () => {
 
     test("GET request should respose access denied", async () => {
       //act
-      const res = await agent.get(`/todolists?id=${todolist.id}`);
+      const res = await agent.get(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
@@ -754,7 +754,7 @@ describe("/todolists", () => {
     });
     test("DELETE request should respose access denied", async () => {
       //act
-      const res = await agent.delete(`/todolists/${todolist.id}`);
+      const res = await agent.delete(`/todolists?id=${todolist.id}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");

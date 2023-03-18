@@ -1,8 +1,7 @@
-const uuidValidator = require("../../helpers/isUUIDvalid");
 const deleteTodolist = require("../../models/todilists/deleteTodolist");
 
 const deleteTodolistController = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query.id;
 
   const result = await deleteTodolist(id);
 

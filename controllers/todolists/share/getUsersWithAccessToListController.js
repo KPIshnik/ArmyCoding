@@ -4,9 +4,9 @@ const getUsersWithAccessIdsByListid = require("../../../models/todilists/share/g
 const getUsersWithAccessToListController = async (req, res) => {
   const listid = req.params.id;
 
-  //   if (!req.body.valid) {
-  //     throw new Error("request data not valid");
-  //   }
+  if (!req.body.valid) {
+    throw new Error("request data not valid");
+  }
 
   const usersIds = await getUsersWithAccessIdsByListid(listid);
   const users = await getUsersDataByIds(usersIds);
