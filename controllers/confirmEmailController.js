@@ -2,15 +2,15 @@ const setUserEmail = require("../models/setUserEmail");
 const getUserDataByKey = require("../models/getUserDataByKey");
 const { confirmEmailExpireTime } = require("../configs/settings");
 
-const confirmEmailController = async (req, res) => {
-  const key = req.query ? req.query.key : null;
-
-  if (!key) {
-    res.status(400).json("valid key required");
-    return;
-  }
-
+const confirmEmailController = async (req, res, next) => {
   try {
+    const key = req.query ? req.query.key : null;
+
+    if (!key) {
+      res.status(400).json("valid key required");
+      return;
+    }
+
     const userData = await getUserDataByKey(key);
 
     if (!userData) {
@@ -32,8 +32,7 @@ const confirmEmailController = async (req, res) => {
 
     res.status(200).json("Email confirmed");
   } catch (err) {
-    res.status(500).json("something went wrong");
-    throw err;
+    next(err);
   }
 };
 

@@ -1,4 +1,4 @@
-const logoutController = (req, res) => {
+const logoutController = (req, res, next) => {
   req.logOut((err) => {
     if (err) {
       return next(err);

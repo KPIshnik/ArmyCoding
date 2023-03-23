@@ -1,11 +1,15 @@
 const unshareListWithAllUsers = require("../models/todilists/share/unshareListWithAllUser");
 
 const unshareListWithAllUsersMidlware = async (req, res, next) => {
-  const { listid } = req.body;
+  try {
+    const { listid } = req.body;
 
-  await unshareListWithAllUsers(listid);
+    await unshareListWithAllUsers(listid);
 
-  next();
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = unshareListWithAllUsersMidlware;

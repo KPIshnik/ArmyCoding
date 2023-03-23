@@ -3,16 +3,16 @@ const verifyPassword = require("../models/verifyPassword");
 const setUserName = require("../models/setUserName");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
 
-const setUsernameController = async (req, res) => {
-  const userPass = req.body.password;
-  const username = req.body.username;
-  const user = req.user;
-
-  if (!req.body.valid) {
-    res.status(400).json("request not valid");
-  }
-
+const setUsernameController = async (req, res, next) => {
   try {
+    const userPass = req.body.password;
+    const username = req.body.username;
+    const user = req.user;
+
+    if (!req.body.valid) {
+      res.status(400).json("request not valid");
+    }
+
     if (!(await checkUniqueUsername(username))) {
       res.status(400).json("username should be unique");
       return;
@@ -27,8 +27,7 @@ const setUsernameController = async (req, res) => {
 
     res.status(200).json("username changed");
   } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+    next(err);
   }
 };
 

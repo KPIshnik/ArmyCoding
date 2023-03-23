@@ -1,13 +1,17 @@
 const getUsersIdsByEmails = require("../../../models/getUserIdsByEmails");
 const unshareTodolist = require("../../../models/todilists/share/unshareTodolist");
 
-const unshareTodolistController = async (req, res) => {
-  const { id, email } = req.query;
+const unshareTodolistController = async (req, res, next) => {
+  try {
+    const { id, email } = req.query;
 
-  const usersIds = await getUsersIdsByEmails([email]);
-  await unshareTodolist(id, usersIds[0]);
+    const usersIds = await getUsersIdsByEmails([email]);
+    await unshareTodolist(id, usersIds[0]);
 
-  res.sendStatus(204);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = unshareTodolistController;

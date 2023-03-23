@@ -1,8 +1,12 @@
 const checkNOTAuth = (req, res, next) => {
-  const x = req.isAuthenticated();
-  if (x) res.redirect("/");
+  try {
+    const x = req.isAuthenticated();
+    if (x) res.redirect("/");
 
-  return next();
+    return next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = checkNOTAuth;

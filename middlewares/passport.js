@@ -53,28 +53,32 @@ passport.use(
     },
 
     async (accessToken, refreshToken, profile, done) => {
-      let user = await getUserByGoogleID(profile.id);
+      try {
+        let user = await getUserByGoogleID(profile.id);
 
-      if (!user) {
-        if (await checkIsRegistered(profile.emails[0].value)) {
-          return done(null, false, {
-            message: "this email is already registered",
-          });
+        if (!user) {
+          if (await checkIsRegistered(profile.emails[0].value)) {
+            return done(null, false, {
+              message: "this email is already registered",
+            });
+          }
+          await registerNewUser(
+            profile.emails[0].value,
+            //profile.displayName,
+            null,
+            null,
+            profile.id,
+            null,
+            "google"
+          );
+          user = await getUserByGoogleID(profile.id);
+          return done(null, user); //and message that its because new
         }
-        await registerNewUser(
-          profile.emails[0].value,
-          //profile.displayName,
-          null,
-          null,
-          profile.id,
-          null,
-          "google"
-        );
-        user = await getUserByGoogleID(profile.id);
-        return done(null, user); //and message that its because new
-      }
 
-      return done(null, user);
+        return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
     }
   )
 );
@@ -88,29 +92,33 @@ passport.use(
       profileFields: ["id", "displayName", "photos", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
-      let user = await getUserByEmail(profile._json.email);
+      try {
+        let user = await getUserByEmail(profile._json.email);
 
-      if (await checkIsRegistered(profile._json.email)) {
-        return done(null, false, {
-          message: "this email is already registered",
-        });
-      }
+        if (await checkIsRegistered(profile._json.email)) {
+          return done(null, false, {
+            message: "this email is already registered",
+          });
+        }
 
-      if (!user) {
-        await registerNewUser(
-          profile._json.email,
-          //profile._json.name,
-          null,
-          null,
-          null,
-          profile._json.id,
-          "fb"
-        );
+        if (!user) {
+          await registerNewUser(
+            profile._json.email,
+            //profile._json.name,
+            null,
+            null,
+            null,
+            profile._json.id,
+            "fb"
+          );
 
-        user = await getUserByEmail(profile._json.email);
+          user = await getUserByEmail(profile._json.email);
+          return done(null, user);
+        }
         return done(null, user);
+      } catch (err) {
+        return done(err);
       }
-      return done(null, user);
     }
   )
 );

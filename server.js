@@ -18,14 +18,16 @@ const teardown = async (signal) => {
 
 process.on("SIGTERM", teardown);
 process.on("SIGINT", teardown);
+let startServer;
 
-const startServer = async () => {
+startServer = async () => {
   await migrateUp();
   server = app.listen(PORT, HOST, () => {
     console.log(`server started at ${PORT}`);
   });
 
   server.teardown = teardown;
+
   return server;
 };
 

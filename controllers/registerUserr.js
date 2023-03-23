@@ -4,7 +4,7 @@ const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
 const checkIsRegistered = require("../models/checkIsRegistered");
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   const newUser = req.body;
   const { username, password, email } = newUser;
 
@@ -40,8 +40,7 @@ const registerUser = async (req, res) => {
 
     res.status(200).json(`user ${username} registered, please confirm email`);
   } catch (err) {
-    console.log(err);
-    res.status(500).json("Oops, server error((");
+    next(err);
   }
 };
 

@@ -1,7 +1,8 @@
-const pool = require("../models/DBconnection");
+const fs = require("fs").promises;
+const path = require("path");
+const pathToLog = path.join(__dirname, "../log/errlog.txt");
 
-pool
-  .query("Select name from test where name=$1 and email=$2", ["1", "0"])
-  .then((res) => {
-    console.log(res.rows[0] ? true : false);
-  });
+fs.stat(pathToLog).then((data) => {
+  console.log(+data.mtime);
+  console.log(new Date());
+});

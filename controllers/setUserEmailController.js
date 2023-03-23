@@ -3,12 +3,12 @@ const verifyPassword = require("../models/verifyPassword");
 const checkUniqueUserEmail = require("../models/checkUniqueUserEmail");
 const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 
-const setUserEmailController = async (req, res) => {
-  const userPass = req.body.password;
-  const userEmail = req.body.email;
-  const user = req.user;
-
+const setUserEmailController = async (req, res, next) => {
   try {
+    const userPass = req.body.password;
+    const userEmail = req.body.email;
+    const user = req.user;
+
     if (await checkUniqueUserEmail(userEmail)) {
       res.status(400).json("email should be unique");
       return;
@@ -23,8 +23,7 @@ const setUserEmailController = async (req, res) => {
 
     res.status(200).json("confirm new email");
   } catch (err) {
-    console.log(err);
-    res.send("server error");
+    next(err);
   }
 };
 
