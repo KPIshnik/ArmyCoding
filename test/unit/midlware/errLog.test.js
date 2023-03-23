@@ -68,6 +68,7 @@ describe("error handling test", () => {
   afterAll(async () => {
     await clearDB();
     await server.teardown();
+    await fs.writeFile(pathToLog, "");
   });
   test("set email test", async () => {
     //arrange
