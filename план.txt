@@ -1,20 +1,21 @@
-3. очитстить лишние тесты + переименовать папки
-6. заменить pool на db 
+2. заменить pool на db 
+3. !! refactor and unit test for rank functions
+4. Check & redo routes naming.
+5. Check & redo delete actions
+5. Redo auth with jwt + kill passport
+6. use fb/google refresh
+6. test for fb and google
+7. !!solve Promiss.all+jest problem
+?
 8. Рефакторинг.
-0. test for fb and google
 
-1. Read rest again
 
 /todolists?id             
     get -- get todolist  or lists
     post -- create todolist    
-   
-   
     put -- change todolist 
       !!! regfactor validator 
      !!solve Promiss.all+jest problem
- 
-
     delete -- delete todolist 
   
    
@@ -41,4 +42,3 @@
     put.
     delete --  !!! redo delete
 
-!!!auth index.test.js
