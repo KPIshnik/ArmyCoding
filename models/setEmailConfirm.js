@@ -1,20 +1,11 @@
-const pool = require("./DBconnection");
+const db = require("./../DB/db");
 
 const setEmailConfirm = async (userID) => {
-  const client = await pool.connect();
-  try {
-    const res = await client.query(
-      "UPDATE  users SET confirmed = $2 WHERE id=$1;",
-      [userID, true]
-    );
-   return true;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    client.release();
-  }
+  const res = await db.query("UPDATE  users SET confirmed = $2 WHERE id=$1;", [
+    userID,
+    true,
+  ]);
+  return true;
 };
-
 
 module.exports = setEmailConfirm;

@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const updateTodos = async (todos) => {
   if (!todos.length) return;

@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const getListLastUpdateTimestamp = async (listId) => {
   const client = await pool.connect();

@@ -1,6 +1,6 @@
 const registerUser = require("../../../controllers/registerUserr");
 const bcript = require("bcrypt");
-const checkIsRegistered = require("../../../models/checkIsRegistered");
+const checkIsRegistered = require("../../../helpers/checkIsRegistered");
 const registerNewUser = require("../../../models/registerNewUser");
 const сonfirmEmailHelper = require("../../../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../../../models/checkUniqueUsername");
@@ -9,7 +9,7 @@ jest.setTimeout(30000);
 
 // *******
 // Мокаю все импорты в registerUser
-jest.mock("../../../models/checkIsRegistered");
+jest.mock("../../../helpers/checkIsRegistered");
 jest.mock("../../../models/registerNewUser");
 jest.mock("../../../helpers/confirmEmailHelper");
 jest.mock("../../../models/checkUniqueUsername");

@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const getUserTodoListsByUserid = async (id) => {
   const client = await pool.connect();

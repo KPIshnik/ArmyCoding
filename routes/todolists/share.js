@@ -5,10 +5,8 @@ const unshareTodolistController = require("../../controllers/todolists/share/uns
 const updateSharingListController = require("../../controllers/todolists/share/updateSharingListController");
 const router = expres.Router();
 const checkIsAuth = require("../../middlewares/checkIsAuth");
-const unshareListWithAllUsersMidlware = require("../../middlewares/unsherListWithAllUsersMidlware");
 const isListOwnerValidator = require("../../middlewares/validators/isListOwnerValidator");
 const shareTodolistValidator = require("../../middlewares/validators/shareTodolistValidator");
-const unshareTodolistValidator = require("../../middlewares/validators/unshareTodolistValidator");
 const uuidValidator = require("../../middlewares/validators/uuIdValidator");
 
 router.use(expres.json());

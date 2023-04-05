@@ -7,14 +7,14 @@ const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const getUserByEmail = require("../models/getUserByEmail");
-const verifyPassword = require("../models/verifyPassword");
+const verifyPassword = require("../helpers/verifyPassword");
 const getUserById = require("../models/getUserrById");
 const getUserByGoogleID = require("../models/getUserByGoogleId");
 const registerNewUser = require("../models/registerNewUser");
 const { url } = require("../configs/credentials");
 const { googleKeys } = require("../configs/credentials");
 const { facebookKeys } = require("../configs/credentials");
-const checkIsRegistered = require("../models/checkIsRegistered");
+const checkIsRegistered = require("../helpers/checkIsRegistered");
 
 const googID = googleKeys.googID;
 const googSecret = googleKeys.googSecret;

@@ -1,4 +1,3 @@
-2. заменить pool на db 
 3. !! refactor and unit test for rank functions
 4. Check & redo routes naming.
 5. Check & redo delete actions
@@ -10,7 +9,7 @@
 8. Рефакторинг.
 
 
-/todolists?id             
+/todolists/
     get -- get todolist  or lists
     post -- create todolist    
     put -- change todolist 
@@ -36,7 +35,7 @@
 /todolists/permitted/:id
     get -- get todolist  or lists
 
-/todotilsts/share/:id?useremail
+/todotilsts/:listid/users/:email? ??
     get -- users shared with
     post -- share with user or users
     put.

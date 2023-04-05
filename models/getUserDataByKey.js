@@ -1,12 +1,10 @@
-const pool = require("./DBconnection");
+const db = require("../DB/db");
 
 const getUserDataByKey = async (key) => {
-  const client = await pool.connect();
-
-  const res = await client.query("SELECT * FROM emailconfirm WHERE key = $1", [
+  const res = await db.query("SELECT * FROM emailconfirm WHERE key = $1", [
     key,
   ]);
-  client.release();
+
   return res.rows[0];
 };
 

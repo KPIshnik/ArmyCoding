@@ -1,27 +1,16 @@
-const pool = require("../models/DBconnection");
+const db = require("../DB/db");
 
 const deleteUnconfirmedUsers = async (expiredDate) => {
-  const client = await pool.connect();
+  const expiredUsers = await db.query(
+    "DELETE FROM emailconfirm WHERE date < $1 RETURNING id",
+    [expiredDate]
+  );
 
-  try {
-    const expiredUsers = await client.query(
-      "DELETE FROM emailconfirm WHERE date < $1 RETURNING id",
-      [expiredDate]
-    );
+  if (expiredUsers.rowCount != 0) {
+    usersToDelete = expiredUsers.rows.map((u) => u.id);
 
-    if (expiredUsers.rowCount != 0) {
-      usersToDelete = expiredUsers.rows.map((u) => u.id);
-
-      await client.query("DELETE FROM users WHERE id = any ($1)", [
-        [usersToDelete],
-      ]);
-      return usersToDelete;
-    }
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    client.release();
+    await db.query("DELETE FROM users WHERE id = any ($1)", [[usersToDelete]]);
+    return usersToDelete;
   }
 };
 

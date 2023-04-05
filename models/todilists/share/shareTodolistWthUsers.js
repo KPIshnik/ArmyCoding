@@ -1,4 +1,4 @@
-const pool = require("../../DBconnection");
+const db = require("../../../DB/db");
 
 const shareTodolistWithUsers = async (listid, listname, usersIdArr) => {
   if (!usersIdArr.length) return;
@@ -15,7 +15,7 @@ const shareTodolistWithUsers = async (listid, listname, usersIdArr) => {
   });
   const queryStr = query.slice(0, -2);
 
-  await pool.query(queryStr, paramArr);
+  await db.query(queryStr, paramArr);
 };
 
 module.exports = shareTodolistWithUsers;

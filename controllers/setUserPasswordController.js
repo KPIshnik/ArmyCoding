@@ -1,4 +1,4 @@
-const verifyPassword = require("../models/verifyPassword");
+const verifyPassword = require("../helpers/verifyPassword");
 const setUserPassword = require("../models/setUserPassword");
 const bcrypt = require("bcrypt");
 

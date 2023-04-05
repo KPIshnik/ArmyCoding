@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const updateTodolistData = async (listId, listname, date) => {
   await pool.query(

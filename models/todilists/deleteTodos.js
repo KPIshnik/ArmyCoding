@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const deleteTodos = async (todosToDeleteIds) => {
   const res = await pool.query(

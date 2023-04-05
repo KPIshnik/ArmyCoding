@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const createTodos = async (listId, todos) => {
   if (!todos.length) return;

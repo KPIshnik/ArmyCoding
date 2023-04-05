@@ -2,7 +2,7 @@ const registerNewUser = require("../models/registerNewUser");
 const bcript = require("bcrypt");
 const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
-const checkIsRegistered = require("../models/checkIsRegistered");
+const checkIsRegistered = require("../helpers/checkIsRegistered");
 
 const registerUser = async (req, res, next) => {
   const newUser = req.body;

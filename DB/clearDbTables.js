@@ -1,4 +1,4 @@
-const db = require("../models/DBconnection");
+const db = require("../DB/db");
 
 const clearDbTables = async () => {
   await db.query("DELETE FROM users;");

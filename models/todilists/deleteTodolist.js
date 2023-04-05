@@ -1,4 +1,4 @@
-const pool = require("../DBconnection");
+const pool = require("../../DB/db");
 
 const deleteTodoList = async (id) => {
   client = await pool.connect();

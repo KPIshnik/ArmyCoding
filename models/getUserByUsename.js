@@ -1,18 +1,10 @@
-const pool = require("./DBconnection");
+const db = require("../DB/db");
 
 const getUserByUserName = async (username) => {
-  const client = await pool.connect();
-  try {
-    const res = await client.query("SELECT * FROM users WHERE username = $1", [
-      username,
-    ]);
-    return res.rows[0];
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    client.release();
-  }
+  const res = await db.query("SELECT * FROM users WHERE username = $1", [
+    username,
+  ]);
+  return res.rows[0];
 };
 
 module.exports = getUserByUserName;

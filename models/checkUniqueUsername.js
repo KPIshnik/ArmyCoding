@@ -1,20 +1,11 @@
-const pool = require("./DBconnection");
+const db = require("../DB/db");
 
 const checkUniqueUsername = async (username) => {
-  const client = await pool.connect();
-  try {
-    const res = await client.query(
-      "SELECT username FROM users WHERE username = $1",
-      [username]
-    );
+  const res = await db.query("SELECT username FROM users WHERE username = $1", [
+    username,
+  ]);
 
-    return res.rows[0] ? false : true;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  } finally {
-    client.release();
-  }
+  return res.rows[0] ? false : true;
 };
 
 module.exports = checkUniqueUsername;

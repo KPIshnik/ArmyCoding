@@ -30,7 +30,7 @@ jest.mock("../../../models/getUserByEmail", () => {
     throw new Error("Register err");
   };
 });
-jest.mock("../../../models/checkIsRegistered", () => {
+jest.mock("../../../helpers/checkIsRegistered", () => {
   return () => {
     throw new Error("Auth err");
   };

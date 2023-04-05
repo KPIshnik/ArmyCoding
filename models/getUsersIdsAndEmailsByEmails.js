@@ -1,7 +1,7 @@
-const pool = require("./DBconnection");
+const db = require("../DB/db");
 
 const getUsersIdsAndEmailsByEmails = async (emails) => {
-  const res = await pool.query(
+  const res = await db.query(
     "SELECT id, email FROM users WHERE email = any ($1)",
     [emails]
   );

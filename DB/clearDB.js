@@ -1,5 +1,5 @@
 const migrate = require("node-pg-migrate").default;
-const db = require("../models/DBconnection");
+const db = require("../DB/db");
 const fs = require("fs");
 
 const count = fs.readdirSync(`${__dirname}/migrations`).length;

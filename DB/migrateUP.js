@@ -1,5 +1,5 @@
 const migrate = require("node-pg-migrate").default;
-const db = require("../models/DBconnection");
+const db = require("../DB/db");
 
 const options = {
   direction: "up",

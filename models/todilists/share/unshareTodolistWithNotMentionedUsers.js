@@ -1,7 +1,7 @@
-const pool = require("../../DBconnection");
+const db = require("../../../DB/db");
 
 const unshareTodolistWithNotMentionedUsers = async (listid, userids) => {
-  const res = await pool.query(
+  const res = await db.query(
     "DELETE FROM lists_sharing_table where listid= $1 and userid <> ALL ($2) returning listname",
     [listid, userids]
   );

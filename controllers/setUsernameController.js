@@ -1,5 +1,5 @@
 const bcript = require("bcrypt");
-const verifyPassword = require("../models/verifyPassword");
+const verifyPassword = require("../helpers/verifyPassword");
 const setUserName = require("../models/setUserName");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
 
