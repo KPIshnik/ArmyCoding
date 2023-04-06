@@ -2,7 +2,8 @@ const isUUIDvalid = require("../../helpers/isUUIDvalid");
 
 const todonoteValidator = async (req, res, next) => {
   try {
-    const { listid, text, priority, done } = req.body;
+    const { text, priority, done } = req.body;
+    const listid = req.params.listid;
     req.body.valid = false;
 
     if (!isUUIDvalid(listid)) {

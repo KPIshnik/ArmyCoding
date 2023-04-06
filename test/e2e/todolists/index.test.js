@@ -129,7 +129,7 @@ describe("/todolists", () => {
     test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const res = await agent.delete(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");
@@ -185,7 +185,7 @@ describe("/todolists", () => {
     test("DELETE request, should delete todolist, response with 200 code", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const res = await agent.delete(`/todolists/${todolist.id}`);
       const getRes = await agent.get(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(200);
@@ -709,7 +709,7 @@ describe("/todolists", () => {
           with bad id`, async () => {
         const badId = "id123";
         //act
-        const response = await agent.delete(`/todolists?id=${badId}`);
+        const response = await agent.delete(`/todolists/${badId}`);
 
         //assert
         expect(response.status).toBe(400);
@@ -754,7 +754,7 @@ describe("/todolists", () => {
     });
     test("DELETE request should respose access denied", async () => {
       //act
-      const res = await agent.delete(`/todolists?id=${todolist.id}`);
+      const res = await agent.delete(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");

@@ -12,16 +12,21 @@ const uuidValidator = require("../../middlewares/validators/uuIdValidator");
 router.use(expres.json());
 
 router
-  .get("/todonote/:id", checkIsAuth, uuidValidator, getTodonoteController)
+  .get(
+    "/todolists/todonotes/:id",
+    checkIsAuth,
+    uuidValidator,
+    getTodonoteController
+  )
   .post(
-    "/todonote",
+    "/todolists/:listid/todonotes",
     checkIsAuth,
     todonoteValidator,
     isListOwnerValidator,
     setTodonoteController
   )
   .put(
-    "/todonote",
+    "/todolists/:listid/todonotes/:id",
     checkIsAuth,
     uuidValidator,
     todonoteValidator,
@@ -29,7 +34,7 @@ router
     updateTodonoteController
   )
   .delete(
-    "/todonote/:id",
+    "/todolists/todonotes/:id",
     checkIsAuth,
     uuidValidator,
     isTodonoteOwnerValidator,

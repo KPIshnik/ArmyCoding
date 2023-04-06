@@ -1,4 +1,3 @@
-3. !! refactor and unit test for rank functions
 4. Check & redo routes naming.
 5. Check & redo delete actions
 5. Redo auth with jwt + kill passport

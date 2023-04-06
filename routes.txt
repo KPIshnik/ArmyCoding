@@ -1,0 +1,25 @@
+get /  --Aloha
+
+get, post, delete /auth/login
+
+/me/profile/avatar
+/me/profile/email
+/me/profile/password
+/me/profile/username
+
+get /users/:id/profile 
+get /users/:id/profile/email    ????
+get /users/:id/profile/avatar
+get /users/:id/profile/username
+
+++ delete /todolists/:id
+
+get /todolists/permitted
+get /todolists/permitted/:id
+
+
+get, post, put, delete /todolists/:id/share 
+
+get, post, put, delete /todolists/:listid/todonotes/:id 
+
+

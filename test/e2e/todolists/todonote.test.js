@@ -19,7 +19,7 @@ jest.mock("bcrypt", () => {
 let server;
 let agent;
 
-describe("/todolists", () => {
+describe("/todolists/todonotes", () => {
   date = new Date();
 
   const testUser = {
@@ -65,11 +65,13 @@ describe("/todolists", () => {
   };
 
   const todonote = {
-    listid: "",
     text: "test note",
     priority: 2,
     done: false,
   };
+
+  let listid;
+  let id;
   beforeAll(async () => {
     server = await serverPromise;
     agent = request.agent(url);
@@ -113,7 +115,9 @@ describe("/todolists", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/todonote/someid").redirects();
+        const response = await agent
+          .get("/todolists/todonotes/someid")
+          .redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -124,7 +128,9 @@ describe("/todolists", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/todonote").send(todolist.todos[0]);
+        const responce = await agent
+          .post("/todolists/someid/todonotes/")
+          .send(todolist.todos[0]);
 
         //assert
         expect(responce.status).toBe(401);
@@ -135,7 +141,7 @@ describe("/todolists", () => {
     test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todonote/someid"`);
+      const res = await agent.delete(`/todolists/todonotes/someid`);
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");
@@ -149,20 +155,26 @@ describe("/todolists", () => {
         .send({ email: testUser.email, password: testUser.password });
       const res = await agent.post("/todolists").send(todolist);
 
-      todonote.listid = res.body.data.id;
+      listid = res.body.data.id;
     });
 
     afterAll(async () => {
-      const res = await agent.post("/todonote").send(todonote);
-      todonote.id = res.body.id;
+      const res = await agent
+        .post(`/todolists/${listid}/todonotes`)
+        .send(todonote);
+
+      id = res.body.id;
       await agent.delete(`/auth`);
     });
     test(`POST request should create todonote response with code 200, 
   msg(todonote created) `, async () => {
       //act
-      const res = await agent.post("/todonote").send(todonote);
-      todonote.id = res.body.id;
-      const getRes = await agent.get(`/todonote/${todonote.id}`);
+      const res = await agent
+        .post(`/todolists/${listid}/todonotes`)
+        .send(todonote);
+
+      id = res.body.id;
+      const getRes = await agent.get(`/todolists/todonotes/${id}`);
 
       //assert
       expect(res.status).toBe(200);
@@ -171,6 +183,8 @@ describe("/todolists", () => {
       expect(getRes.status).toBe(200);
       expect(getRes.body).toEqual({
         ...todonote,
+        id,
+        listid,
       });
     });
 
@@ -182,32 +196,39 @@ describe("/todolists", () => {
       todonote.priority = 5;
 
       //act
-      const res = await agent.put("/todonote").send(todonote);
-      const getRes = await agent.get(`/todonote/${todonote.id}`);
+      const res = await agent
+        .put(`/todolists/${listid}/todonotes/${id}`)
+        .send(todonote);
+      const getRes = await agent.get(`/todolists/todonotes/${id}`);
 
       //assert
       expect(res.status).toBe(200);
-      expect(res.body).toBe(`todonote ${todonote.id} updated`);
+      expect(res.body).toBe(`todonote ${id} updated`);
 
       expect(getRes.status).toBe(200);
       expect(getRes.body).toEqual({
         ...todonote,
+        id,
+        listid,
       });
     });
 
     test('DELETE, should delete todonote, respose with code 200, "deleted" msg', async () => {
       //act
-      const res = await agent.delete(`/todonote/${todonote.id}`);
+      const res = await agent.delete(`/todolists/todonotes/${id}`);
+      const getRes = await agent.get(`/todolists/todonotes/${id}`);
+
       //assert
       expect(res.status).toBe(200);
       expect(res.body).toBe("deleted");
+      expect(getRes.status).toBe(404);
     });
+
     describe("feilure tests", () => {
       test("POST should not create todonote with not valid list ID", async () => {
         //act
-        const res = await agent.post("/todonote").send({
+        const res = await agent.post(`/todolists/asdf/todonotes`).send({
           ...todonote,
-          listid: "false",
         });
         //assert
         expect(res.status).toBe(400);
@@ -216,7 +237,7 @@ describe("/todolists", () => {
 
       test("POST should not create todonote with wrong done type", async () => {
         //act
-        const res = await agent.post("/todonote").send({
+        const res = await agent.post(`/todolists/${listid}/todonotes`).send({
           ...todonote,
           done: "false",
         });
@@ -226,7 +247,7 @@ describe("/todolists", () => {
       });
       test("POST should not create todonote with wrong priority type", async () => {
         //act
-        const res = await agent.post("/todonote").send({
+        const res = await agent.post(`/todolists/${listid}/todonotes`).send({
           ...todonote,
           priority: "1",
         });
@@ -236,7 +257,7 @@ describe("/todolists", () => {
       });
       test("POST should not create todonote without text", async () => {
         //act
-        const res = await agent.post("/todonote").send({
+        const res = await agent.post(`/todolists/${listid}/todonotes`).send({
           ...todonote,
           text: "",
         });
@@ -246,14 +267,14 @@ describe("/todolists", () => {
       });
       test("GET should not get todonote with not valid  id", async () => {
         //act
-        const res = await agent.get("/todonote/123454");
+        const res = await agent.get("/todolists/todonotes/123454");
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
       });
       test("delete should not delete todonote with not valid list id", async () => {
         //act
-        const res = await agent.delete("/todonote/123454");
+        const res = await agent.delete("/todolists/todonotes/123454");
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
@@ -261,7 +282,7 @@ describe("/todolists", () => {
       test("delete should resp with 404", async () => {
         //act
         const res = await agent.delete(
-          "/todonote/54e18a6a-be9a-11ed-afa1-0242ac120002"
+          "/todolists/todonotes/54e18a6a-be9a-11ed-afa1-0242ac120002"
         );
         //assert
         expect(res.status).toBe(404);
@@ -270,8 +291,8 @@ describe("/todolists", () => {
       test("PUT should not update todonote with not valid  id", async () => {
         //act
         const res = await agent
-          .put("/todonote")
-          .send({ ...todonote, id: "not valid" });
+          .put(`/todolists/${listid}/todonotes/ "not valid"`)
+          .send(todonote);
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
@@ -279,10 +300,9 @@ describe("/todolists", () => {
 
       test("PUT should not create todonote with not valid list ID", async () => {
         //act
-        const res = await agent.put("/todonote").send({
-          ...todonote,
-          listid: "false",
-        });
+        const res = await agent
+          .put(`/todolists/notvalid/todonotes/${id}`)
+          .send(todonote);
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid list id required");
@@ -290,30 +310,36 @@ describe("/todolists", () => {
 
       test("put should not create todonote with wrong done type", async () => {
         //act
-        const res = await agent.put("/todonote").send({
-          ...todonote,
-          done: "false",
-        });
+        const res = await agent
+          .put(`/todolists/${listid}/todonotes/${id}`)
+          .send({
+            ...todonote,
+            done: "false",
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("done should be boolean type");
       });
       test("put should not create todonote with wrong priority type", async () => {
         //act
-        const res = await agent.put("/todonote").send({
-          ...todonote,
-          priority: "1",
-        });
+        const res = await agent
+          .put(`/todolists/${listid}/todonotes/${id}`)
+          .send({
+            ...todonote,
+            priority: "1",
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("priority should be integer type");
       });
       test("put should not create todonote without text", async () => {
         //act
-        const res = await agent.put("/todonote").send({
-          ...todonote,
-          text: "",
-        });
+        const res = await agent
+          .put(`/todolists/${listid}/todonotes/${id}`)
+          .send({
+            ...todonote,
+            text: "",
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("todo text reuired");
@@ -343,28 +369,32 @@ describe("/todolists", () => {
 
     test("GET request should respose access denied", async () => {
       //act
-      const res = await agent.get(`/todonote/${todonote.id}`);
+      const res = await agent.get(`/todolists/todonotes/${id}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
     test("POST request should respose access denied", async () => {
       //act
-      const res = await agent.post(`/todonote`).send(todonote);
+      const res = await agent
+        .post(`/todolists/${listid}/todonotes`)
+        .send(todonote);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
     test("PUT request should respose access denied", async () => {
       //act
-      const res = await agent.put(`/todonote`).send(todonote);
+      const res = await agent
+        .put(`/todolists/${listid}/todonotes/${id}`)
+        .send(todonote);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
     test("DELETE request should respose access denied", async () => {
       //act
-      const res = await agent.delete(`/todonote/${todonote.id}`);
+      const res = await agent.delete(`/todolists/todonotes/${id}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");

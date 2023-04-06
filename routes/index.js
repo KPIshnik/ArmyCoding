@@ -34,10 +34,10 @@ router.use(
   userEmail,
   password,
   fail,
-  todolists,
   todonote,
   share,
-  permitted
+  permitted,
+  todolists
 );
 
 module.exports = router;

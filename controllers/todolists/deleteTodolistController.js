@@ -2,7 +2,7 @@ const deleteTodolist = require("../../models/todilists/deleteTodolist");
 
 const deleteTodolistController = async (req, res, next) => {
   try {
-    const id = req.query.id;
+    const id = req.params.id;
 
     const result = await deleteTodolist(id);
 

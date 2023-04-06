@@ -29,7 +29,7 @@ router
     updateTodoListController
   )
   .delete(
-    "/todolists",
+    "/todolists/:id",
     checkIsAuth,
     uuidValidator,
     isListOwnerValidator,

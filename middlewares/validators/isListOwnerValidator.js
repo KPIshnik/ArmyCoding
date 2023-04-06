@@ -5,7 +5,11 @@ const isListOwnerValidator = async (req, res, next) => {
     req.body.valid = false;
 
     const listid =
-      req.params.id || req.body.listid || req.body.id || req.query.id;
+      req.params.listid ||
+      req.params.id ||
+      req.body.listid ||
+      req.body.id ||
+      req.query.id;
 
     const listData = await getUserTodoListDataById(listid);
 

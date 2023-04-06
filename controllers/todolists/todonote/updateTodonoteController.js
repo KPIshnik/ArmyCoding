@@ -4,7 +4,8 @@ const updateTodos = require("../../../models/todilists/updateTodos");
 
 const updateTodonoteController = async (req, res, next) => {
   try {
-    const { listid, id, text, priority, done, valid } = req.body;
+    const { text, priority, done, valid } = req.body;
+    const { listid, id } = req.params;
     if (!valid) {
       throw new Error("request data not valid");
     }
