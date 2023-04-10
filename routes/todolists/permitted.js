@@ -9,9 +9,9 @@ const uuidValidator = require("../../middlewares/validators/uuIdValidator");
 router.use(expres.json());
 
 router
-  .get("/permitted", checkIsAuth, getPermittedTodolistsController)
+  .get("/todolists/permitted", checkIsAuth, getPermittedTodolistsController)
   .get(
-    "/permitted/:id",
+    "/todolists/permitted/:id",
     checkIsAuth,
     uuidValidator,
     getSinglTodoListController

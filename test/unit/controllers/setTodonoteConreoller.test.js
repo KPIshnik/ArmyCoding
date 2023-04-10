@@ -20,27 +20,31 @@ const res = {
 const next = jest.fn();
 
 const todonote = {
-  listid: 1,
   text: "todonote",
   priority: 2,
   done: true,
   valid: true,
 };
-
+const listid = 1;
 describe("setTodonoteController", () => {
   beforeEach(() => {
     createTodos.mockClear();
     updateTodos.mockClear();
     res.status.mockClear();
   });
+
   test("1 todonote, priority 2", async () => {
     //arrnage
+
     const todos = [{ id: 1, rank: 1 }];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 2 },
     };
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -59,10 +63,13 @@ describe("setTodonoteController", () => {
     //arrnage
     const todos = [{ id: 1, rank: 1 }];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 12 },
     };
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -81,9 +88,12 @@ describe("setTodonoteController", () => {
     //arrnage
     const todos = [{ id: 1, rank: 1 }];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 1 },
     };
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -107,9 +117,12 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 1200 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 1 },
     };
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -136,9 +149,12 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 2146483647 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 5 },
     };
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -167,6 +183,9 @@ describe("setTodonoteController", () => {
     ];
 
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority },
     };
 
@@ -177,7 +196,7 @@ describe("setTodonoteController", () => {
         })
     );
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     //act
     await setTodonoteController(req, res, next);
     //assert
@@ -200,6 +219,9 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 1300 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 3 },
     };
 
@@ -210,7 +232,7 @@ describe("setTodonoteController", () => {
         })
     );
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     //act
     await setTodonoteController(req, res, next);
     //assert
@@ -228,6 +250,9 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 1300 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 1 },
     };
 
@@ -238,7 +263,7 @@ describe("setTodonoteController", () => {
         })
     );
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     //act
     await setTodonoteController(req, res, next);
     //assert
@@ -256,6 +281,9 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 40 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 4 },
     };
 
@@ -266,7 +294,7 @@ describe("setTodonoteController", () => {
         })
     );
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     //act
     await setTodonoteController(req, res, next);
     //assert
@@ -284,6 +312,9 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 40 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 5 },
     };
 
@@ -294,7 +325,7 @@ describe("setTodonoteController", () => {
         })
     );
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     //act
     await setTodonoteController(req, res, next);
     //assert
@@ -312,6 +343,9 @@ describe("setTodonoteController", () => {
       { id: 4, rank: 40 },
     ];
     const req = {
+      params: {
+        listid,
+      },
       body: { ...todonote, priority: 15 },
     };
 
@@ -322,7 +356,7 @@ describe("setTodonoteController", () => {
         })
     );
 
-    const { listid, text, done } = todonote;
+    const { text, done } = todonote;
     //act
     await setTodonoteController(req, res, next);
     //assert

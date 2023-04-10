@@ -194,39 +194,39 @@ describe("/todolist/share", () => {
           //act
 
           const res = await agent
-            .post("/todolist/share")
-            .send({ listid, emails });
+            .post(`/todolists/${listid}/share`)
+            .send({ emails });
 
           for (list of todolistArr) {
             const listid = list.id;
             await agent
-              .post("/todolist/share")
-              .send({ listid, emails: [testUser2.email] });
+              .post(`/todolists/${listid}/share`)
+              .send({ emails: [testUser2.email] });
           }
 
-          const recivedEmails = [];
-          for (user of sharedUsers) {
-            const testmailResponse = await superagent.get(
-              `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${testmail.namespace}&tag=${user.username}&timestamp_from=${date}&livequery=true`
-            );
-            recivedEmails.push(testmailResponse.body.emails[0]);
-          }
+          // const recivedEmails = [];
+          // for (user of sharedUsers) {
+          //   const testmailResponse = await superagent.get(
+          //     `https://api.testmail.app/api/json?apikey=${testmail.api_key}&namespace=${testmail.namespace}&tag=${user.username}&timestamp_from=${date}&livequery=true`
+          //   );
+          //   recivedEmails.push(testmailResponse.body.emails[0]);
+          // }
 
           //assert
           expect(res.status).toBe(200);
           expect(res.body).toBe(`list ${listid} shared `);
 
-          expect(recivedEmails.length).toBe(sharedUsers.length);
-          recivedEmails.forEach((email) => {
-            expect(email.subject).toBe("todolists app. New access granted");
-            expect(email.text).toBe(
-              `user ${testUser.username} shred "${todolist.listname}" todolist with you`
-            );
-          });
+          // expect(recivedEmails.length).toBe(sharedUsers.length);
+          // recivedEmails.forEach((email) => {
+          //   expect(email.subject).toBe("todolists app. New access granted");
+          //   expect(email.text).toBe(
+          //     `user ${testUser.username} shred "${todolist.listname}" todolist with you`
+          //   );
+          // });
         });
 
         test("get request should response with status 200 ", async () => {
-          const getRes = await agent.get(`/todolist/share/${todolist.id}`);
+          const getRes = await agent.get(`/todolists/${todolist.id}/share`);
           //act
           expect(getRes.status).toBe(200);
           expect(getRes.body.length).toBe(emails.length);
@@ -245,7 +245,7 @@ describe("/todolist/share", () => {
           //arrange
           todolistArr.sort((a, b) => a.listname - b.listname);
           //act
-          const res = await agent2.get("/permitted");
+          const res = await agent2.get("/todolists/permitted");
           //assert
 
           expect(res.status).toBe(200);
@@ -262,7 +262,7 @@ describe("/todolist/share", () => {
             (todo1, todo2) => todo1.priority - todo2.priority
           );
           //act
-          const res = await agent2.get(`/permitted/${todolist.id}`);
+          const res = await agent2.get(`/todolists/permitted/${todolist.id}`);
           //assert
           expect(res.status).toBe(200);
           expect(res.body.listname).toBe(todolist.listname);
@@ -280,163 +280,162 @@ describe("/todolist/share", () => {
         });
       });
 
-      // describe("unshare", () => {
-      //   test("delete, should response with 204", async () => {
-      //     const res = await agent.delete(
-      //       `/todolist/share?id=${listid}&email=${emails[1]}`
-      //     );
+      describe("unshare", () => {
+        test("delete, should response with 204", async () => {
+          const res = await agent.delete(
+            `/todolists/${listid}/share/${emails[1]}`
+          );
 
-      //     expect(res.status).toBe(204);
-      //   });
+          expect(res.status).toBe(204);
+        });
 
-      //   test("get request should response with status 200 ", async () => {
-      //     const getRes = await agent.get(`/todolist/share/${todolist.id}`);
-      //     //act
-      //     expect(getRes.status).toBe(200);
-      //     expect(getRes.body.length).toBe(emails.length - 1);
+        test("get request should response with status 200 ", async () => {
+          const getRes = await agent.get(`/todolists/${todolist.id}/share/`);
+          //act
+          expect(getRes.status).toBe(200);
+          expect(getRes.body.length).toBe(emails.length - 1);
 
-      //     getRes.body.forEach((user, i) => {
-      //       expect(user).toEqual({
-      //         email: sharedUsers[i].email,
-      //         username: sharedUsers[i].username,
-      //         id: expect.anything(),
-      //       });
-      //     });
-      //   });
+          getRes.body.forEach((user, i) => {
+            expect(user).toEqual({
+              email: sharedUsers[i].email,
+              username: sharedUsers[i].username,
+              id: expect.anything(),
+            });
+          });
+        });
 
-      //   test(`get permitted todolist, shuold responce with 400 code,
-      //   acces denied `, async () => {
-      //     //act
-      //     const res = await agent3.get(`/permitted/${listid}`);
-      //     //assert
-      //     expect(res.status).toBe(400);
-      //     expect(res.body).toBe("access denied");
-      //   });
-      // });
+        test(`get permitted todolist, shuold responce with 400 code,
+        acces denied `, async () => {
+          //act
+          const res = await agent3.get(`/todolists/permitted/${listid}`);
+          //assert
+          expect(res.status).toBe(400);
+          expect(res.body).toBe("access denied");
+        });
+      });
 
-      // describe("update sharing ", () => {
-      //   test("put request,  should  eresponce with 204 code", async () => {
-      //     //act
-      //     const res = await agent.put("/todolist/share").send({
-      //       listid,
-      //       emails: updateUsersEmails,
-      //     });
+      describe("update sharing ", () => {
+        test("put request,  should  eresponce with 204 code", async () => {
+          //act
+          const res = await agent.put(`/todolists/${listid}/share`).send({
+            listid,
+            emails: updateUsersEmails,
+          });
 
-      //     //assert
-      //     expect(res.status).toBe(204);
-      //   });
+          //assert
+          expect(res.status).toBe(204);
+        });
 
-      //   test("get request should response with status 200 ", async () => {
-      //     const getRes = await agent.get(`/todolist/share/${todolist.id}`);
-      //     //act
-      //     expect(getRes.status).toBe(200);
-      //     expect(getRes.body.length).toBe(updateUsersEmails.length);
+        test("get request should response with status 200 ", async () => {
+          const getRes = await agent.get(`/todolists/${todolist.id}/share`);
+          //act
+          expect(getRes.status).toBe(200);
+          expect(getRes.body.length).toBe(updateUsersEmails.length);
 
-      //     getRes.body.forEach((user, i) => {
-      //       expect(user).toEqual({
-      //         email: updateUsers[i].email,
-      //         username: updateUsers[i].username,
-      //         id: expect.anything(),
-      //       });
-      //     });
-      //   });
+          getRes.body.forEach((user, i) => {
+            expect(user).toEqual({
+              email: updateUsers[i].email,
+              username: updateUsers[i].username,
+              id: expect.anything(),
+            });
+          });
+        });
 
-      //   test(`get permitted todolist fort testuser3, shuold responce with 200 code,
-      //   and send todolist `, async () => {
-      //     //arrange
-      //     const sortedTodos = [...todolist.todos].sort(
-      //       (todo1, todo2) => todo1.priority - todo2.priority
-      //     );
-      //     //act
-      //     const res = await agent3.get(`/permitted/${todolist.id}`);
-      //     //assert
-      //     expect(res.status).toBe(200);
-      //     expect(res.body.listname).toBe(todolist.listname);
+        test(`get permitted todolist fort testuser3, shuold responce with 200 code,
+        and send todolist `, async () => {
+          //arrange
+          const sortedTodos = [...todolist.todos].sort(
+            (todo1, todo2) => todo1.priority - todo2.priority
+          );
+          //act
+          const res = await agent3.get(`/todolists/permitted/${todolist.id}`);
+          //assert
+          expect(res.status).toBe(200);
+          expect(res.body.listname).toBe(todolist.listname);
 
-      //     expect(res.body.todos.length).toBe(todolist.todos.length);
+          expect(res.body.todos.length).toBe(todolist.todos.length);
 
-      //     res.body.todos.forEach((todo, i) => {
-      //       expect(todo).toEqual({
-      //         id: expect.anything(),
-      //         text: sortedTodos[i].text,
-      //         done: sortedTodos[i].done,
-      //         priority: i + 1,
-      //       });
-      //     });
-      //   });
+          res.body.todos.forEach((todo, i) => {
+            expect(todo).toEqual({
+              id: expect.anything(),
+              text: sortedTodos[i].text,
+              done: sortedTodos[i].done,
+              priority: i + 1,
+            });
+          });
+        });
 
-      //   test(`get permitted todolist for testuser4, shuold responce with 200 code,
-      //   and send todolist `, async () => {
-      //     //arrange
-      //     const sortedTodos = [...todolist.todos].sort(
-      //       (todo1, todo2) => todo1.priority - todo2.priority
-      //     );
-      //     //act
-      //     const res = await agent4.get(`/permitted/${todolist.id}`);
-      //     //assert
-      //     expect(res.status).toBe(200);
-      //     expect(res.body.listname).toBe(todolist.listname);
+        test(`get permitted todolist for testuser4, shuold responce with 200 code,
+        and send todolist `, async () => {
+          //arrange
+          const sortedTodos = [...todolist.todos].sort(
+            (todo1, todo2) => todo1.priority - todo2.priority
+          );
+          //act
+          const res = await agent4.get(`/todolists/permitted/${todolist.id}`);
+          //assert
+          expect(res.status).toBe(200);
+          expect(res.body.listname).toBe(todolist.listname);
 
-      //     expect(res.body.todos.length).toBe(todolist.todos.length);
+          expect(res.body.todos.length).toBe(todolist.todos.length);
 
-      //     res.body.todos.forEach((todo, i) => {
-      //       expect(todo).toEqual({
-      //         id: expect.anything(),
-      //         text: sortedTodos[i].text,
-      //         done: sortedTodos[i].done,
-      //         priority: i + 1,
-      //       });
-      //     });
-      //   });
+          res.body.todos.forEach((todo, i) => {
+            expect(todo).toEqual({
+              id: expect.anything(),
+              text: sortedTodos[i].text,
+              done: sortedTodos[i].done,
+              priority: i + 1,
+            });
+          });
+        });
 
-      //   test(`get permitted todolist, should responce with 200 code,
-      //   and send todolist `, async () => {
-      //     //act
-      //     const res = await agent2.get(`/permitted/${todolist.id}`);
-      //     //assert
-      //     expect(res.status).toBe(400);
-      //     expect(res.body).toBe("access denied");
-      //   });
-      // });
+        test(`get permitted todolist, should responce with 200 code,
+        and send todolist `, async () => {
+          //act
+          const res = await agent2.get(`/todolists/permitted/${todolist.id}`);
+          //assert
+          expect(res.status).toBe(400);
+          expect(res.body).toBe("access denied");
+        });
+      });
 
-      // describe("acces tests", () => {
-      //   test("try to share not your list", async () => {
-      //     //act
-      //     const res = await agent2
-      //       .post("/todolist/share")
-      //       .send({ listid, emails });
-      //     //assert
-      //     expect(res.status).toBe(400);
-      //     expect(res.body).toBe("access denied");
-      //   });
+      describe("acces tests", () => {
+        test("try to share not your list", async () => {
+          //act
+          const res = await agent2
+            .post(`/todolists/${listid}/share`)
+            .send({ emails });
+          //assert
+          expect(res.status).toBe(400);
+          expect(res.body).toBe("access denied");
+        });
 
-      //   test("try to unshare not your list", async () => {
-      //     const res = await agent2.delete(
-      //       `/todolist/share?id=${listid}&email=${emails[1]}`
-      //     );
-      //     //assert
-      //     expect(res.status).toBe(400);
-      //     expect(res.body).toBe("access denied");
-      //   });
+        test("try to unshare not your list", async () => {
+          const res = await agent2.delete(
+            `/todolists/${listid}/share/${emails[1]}`
+          );
+          //assert
+          expect(res.status).toBe(400);
+          expect(res.body).toBe("access denied");
+        });
 
-      //   test("try to update sharing of not your list", async () => {
-      //     //act
-      //     const res = await agent2.put("/todolist/share").send({
-      //       listid,
-      //       emails: updateUsersEmails,
-      //     });
+        test("try to update sharing of not your list", async () => {
+          //act
+          const res = await agent2.put(`/todolists/${listid}/share`).send({
+            emails: updateUsersEmails,
+          });
 
-      //     //assert
-      //     expect(res.status).toBe(400);
-      //     expect(res.body).toBe("access denied");
-      //   });
-      // });
+          //assert
+          expect(res.status).toBe(400);
+          expect(res.body).toBe("access denied");
+        });
+      });
     });
 
     describe("feilure tests", () => {
       test("get request", async () => {
         //act
-        const res = await agent.get("/todolist/share/baduuid");
+        const res = await agent.get(`/todolists/badid/share`);
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
@@ -444,8 +443,7 @@ describe("/todolist/share", () => {
       describe("post requests", () => {
         test("bad listid, should responce code 400, 'valid id requires' msg", async () => {
           //act
-          const res = await agent.post("/todolist/share").send({
-            listid: "badid",
+          const res = await agent.post(`/todolists/badid/share`).send({
             emails: ["somemail@gmail.com"],
           });
           //assert
@@ -455,8 +453,7 @@ describe("/todolist/share", () => {
 
         test("bad emails, should responce code 400, 'valid emails requires' msg", async () => {
           //act
-          const res = await agent.post("/todolist/share").send({
-            listid: todolist.id,
+          const res = await agent.post(`/todolists/${todolist.id}/share`).send({
             emails: ["somemail@gmail.com", "some2mail@gmail.com", 2],
           });
           //assert
@@ -467,8 +464,7 @@ describe("/todolist/share", () => {
       describe("put request", () => {
         test("bad listid, should responce code 400, 'valid id requires' msg", async () => {
           //act
-          const res = await agent.put("/todolist/share").send({
-            listid: "badid",
+          const res = await agent.put(`/todolists/badid/share`).send({
             emails: ["somemail@gmail.com"],
           });
           //assert
@@ -478,8 +474,7 @@ describe("/todolist/share", () => {
 
         test("bad emails, should responce code 400, 'valid emails requires' msg", async () => {
           //act
-          const res = await agent.put("/todolist/share").send({
-            listid: todolist.id,
+          const res = await agent.put(`/todolists/${todolist.id}/share`).send({
             emails: ["somemail@gmail.com", true, "some2mail@gmail.com"],
           });
           //assert
@@ -491,7 +486,7 @@ describe("/todolist/share", () => {
         test("bad listid, should responce code 400, 'valid id requires' msg", async () => {
           //act
           const res = await agent.delete(
-            `/todolist/share?id=${"todolist.id"}&email=${"email"}`
+            `/todolists/${"todolist.id"}/share/${"email"}`
           );
           //assert
           expect(res.status).toBe(400);
@@ -500,7 +495,7 @@ describe("/todolist/share", () => {
       });
       test("permitted get request", async () => {
         //act
-        const res = await agent.get(`/permitted/badid`);
+        const res = await agent.get(`/todolists/permitted/badid`);
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
@@ -514,7 +509,7 @@ describe("/todolist/share", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/todolist/share/someid").redirects();
+        const response = await agent.get(`/todolists/id/share`).redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -525,7 +520,7 @@ describe("/todolist/share", () => {
     describe("/permitted get requests", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/permitted/someid").redirects();
+        const response = await agent.get(`/todolists/id/share`).redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -533,7 +528,7 @@ describe("/todolist/share", () => {
       });
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/permitted").redirects();
+        const response = await agent.get("/todolists/permitted").redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -544,7 +539,9 @@ describe("/todolist/share", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/todolist/share/").send("fakedata");
+        const responce = await agent
+          .post("/todolists/id/share")
+          .send("fakedata");
 
         //assert
         expect(responce.status).toBe(401);
@@ -555,7 +552,7 @@ describe("/todolist/share", () => {
     test("PUT request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.put(`/todolist/share`).send("fakedata");
+      const res = await agent.put(`/todolists/id/share`).send("fakedata");
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");
@@ -564,7 +561,7 @@ describe("/todolist/share", () => {
     test("DELETE request, responce with 401 status and 'not authorized' msg", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolist/share`);
+      const res = await agent.delete(`/todolists/id/share/email`);
       //assert
       expect(res.status).toBe(401);
       expect(res.body).toBe("not authorized");

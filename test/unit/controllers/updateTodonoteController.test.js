@@ -19,12 +19,13 @@ const next = jest.fn();
 
 const todonote = {
   id: "someid",
-  listid: 1,
   text: "todonote",
   priority: 2,
   done: true,
   valid: true,
 };
+const id = "someid";
+const listid = 1;
 
 describe("updateTodonoteController", () => {
   beforeEach(() => {
@@ -42,10 +43,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 8 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 2 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -69,10 +74,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 80 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 1 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -96,10 +105,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 80 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 2 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -123,10 +136,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 8 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 4 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -150,10 +167,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 8 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 5 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -179,10 +200,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 8 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 100 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -208,10 +233,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 8 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 2 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -235,10 +264,14 @@ describe("updateTodonoteController", () => {
       { id: 4, rank: 8 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 1 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -262,10 +295,14 @@ describe("updateTodonoteController", () => {
       { ...todonote, rank: 10 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 5 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -289,10 +326,14 @@ describe("updateTodonoteController", () => {
       { ...todonote, rank: 10 },
     ];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 15 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -310,10 +351,14 @@ describe("updateTodonoteController", () => {
     //arrnage
     const todos = [{ ...todonote, rank: 70 }];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 1 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -331,10 +376,14 @@ describe("updateTodonoteController", () => {
     //arrnage
     const todos = [{ ...todonote, rank: 70 }];
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 4 },
     };
 
-    const { id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -359,9 +408,13 @@ describe("updateTodonoteController", () => {
     ];
 
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 1 },
     };
-    const { listid, id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -392,9 +445,13 @@ describe("updateTodonoteController", () => {
     ];
 
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 5 },
     };
-    const { listid, id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {
@@ -425,9 +482,13 @@ describe("updateTodonoteController", () => {
     ];
 
     const req = {
+      params: {
+        listid,
+        id,
+      },
       body: { ...todonote, priority: 3 },
     };
-    const { listid, id, text, done } = todonote;
+    const { text, done } = todonote;
     getTodosByListId.mockImplementationOnce(
       () =>
         new Promise((resolve) => {

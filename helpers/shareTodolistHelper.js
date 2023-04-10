@@ -22,9 +22,10 @@ const shareTodolistHelper = async (listid, emails, user) => {
   const emailSubject = "todolists app. New access granted";
   const emailText = `user ${user.username} shred "${listData.listname}" todolist with you`;
 
-  emails.forEach((email) => {
-    sendEmailThred(email, emailSubject, emailText);
-  });
+  // emails.forEach((email) => {
+  //   sendEmailThred(email, emailSubject, emailText);
+  // });
+
   return usersIds;
 };
 module.exports = shareTodolistHelper;

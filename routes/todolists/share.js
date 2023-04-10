@@ -13,13 +13,13 @@ router.use(expres.json());
 
 router
   .get(
-    "/todolist/share/:id",
+    "/todolists/:id/share",
     checkIsAuth,
     uuidValidator,
     getUsersWithAccessToListController
   )
   .post(
-    "/todolist/share",
+    "/todolists/:id/share",
     checkIsAuth,
     uuidValidator,
     shareTodolistValidator,
@@ -27,7 +27,7 @@ router
     shareTodolistController
   )
   .put(
-    "/todolist/share",
+    "/todolists/:id/share",
     checkIsAuth,
     uuidValidator,
     shareTodolistValidator,
@@ -35,7 +35,7 @@ router
     updateSharingListController
   )
   .delete(
-    "/todolist/share",
+    "/todolists/:id/share/:email",
     checkIsAuth,
     uuidValidator,
     isListOwnerValidator,

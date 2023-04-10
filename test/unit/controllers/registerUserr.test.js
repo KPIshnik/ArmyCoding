@@ -171,8 +171,7 @@ describe("Register user controller test", () => {
       await registerUser(mockRequest, mockResponse, mockNextFunction);
 
       //assert
-      expect(mockResponse.status).toHaveBeenCalledWith(500);
-      expect(mockResponse.json).toHaveBeenCalledWith("Oops, server error((");
+      expect(mockNextFunction.mock.calls[0][0]).toBeInstanceOf(Error);
     });
   });
 });

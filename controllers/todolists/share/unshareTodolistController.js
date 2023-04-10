@@ -3,7 +3,7 @@ const unshareTodolist = require("../../../models/todilists/share/unshareTodolist
 
 const unshareTodolistController = async (req, res, next) => {
   try {
-    const { id, email } = req.query;
+    const { id, email } = req.params;
 
     const usersIds = await getUsersIdsByEmails([email]);
     await unshareTodolist(id, usersIds[0]);

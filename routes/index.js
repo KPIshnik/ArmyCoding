@@ -35,8 +35,8 @@ router.use(
   password,
   fail,
   todonote,
-  share,
   permitted,
+  share,
   todolists
 );
 

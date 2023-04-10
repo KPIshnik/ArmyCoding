@@ -1,5 +1,5 @@
 4. Check & redo routes naming.
-5. Check & redo delete actions
+
 5. Redo auth with jwt + kill passport
 6. use fb/google refresh
 6. test for fb and google
@@ -21,11 +21,10 @@
 /todonote/:id   //todonote & priority & done 
     get -- get todonote
     post -- create todonote
-     !! refactor and unit test for rank functions
+   
 
 
     put -- change todonote  
-   !! refactor and unit test for rank functions
 
 
     delete -- delete todonote

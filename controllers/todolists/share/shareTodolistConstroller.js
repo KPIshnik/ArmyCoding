@@ -2,7 +2,9 @@ const shareTodolistHelper = require("../../../helpers/shareTodolistHelper");
 
 const shareTodolistController = async (req, res, next) => {
   try {
-    let { listid, emails, valid } = req.body;
+    const { emails, valid } = req.body;
+    const listid = req.params.id;
+
     if (!valid) {
       throw new Error("request data not valid");
     }

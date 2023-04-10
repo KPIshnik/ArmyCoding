@@ -9,12 +9,11 @@ const setUserPasswordController = async (req, res, next) => {
     const newPass = req.body.newPass;
 
     if (!req.body.valid) {
-      res.status(400).json("request not valid");
+      return res.status(400).json("request not valid");
     }
 
     if (!(await verifyPassword(user, password))) {
-      res.status(400).json("wrong pass");
-      return;
+      return res.status(400).json("wrong pass");
     }
 
     const hashedPass = await bcrypt.hash(newPass, 10);
