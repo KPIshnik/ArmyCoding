@@ -16,8 +16,8 @@ const checkIsAuth = (req, res, next) => {
       return;
     }
 
-    if (!req.user.username & (req.url != "/profile/username")) {
-      res.redirect("/profile/username");
+    if (!req.user.username & (req.url != "/me/profile/username")) {
+      res.redirect("/me/profile/username");
       return;
     }
     next();

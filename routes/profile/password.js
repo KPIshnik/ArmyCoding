@@ -6,11 +6,11 @@ const resetPassValidator = require("../../middlewares/validators/resetPasswordVa
 const router = expres.Router();
 
 router
-  .get("/profile/password", checkIsAuth, (req, res) =>
+  .get("/me/profile/password", checkIsAuth, (req, res) =>
     res.status(200).json("pass page")
   )
   .post(
-    "/profile/password",
+    "/me/profile/password",
     checkIsAuth,
     resetPassValidator,
     setUserPasswordController

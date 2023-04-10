@@ -27,7 +27,7 @@ jest.setTimeout(30000);
 let server;
 let agent;
 
-describe("/profile/avatar", () => {
+describe("/me/profile/avatar", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -71,7 +71,7 @@ describe("/profile/avatar", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/profile/username").redirects();
+        const response = await agent.get("/me/profile/username").redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -82,7 +82,7 @@ describe("/profile/avatar", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/profile/username").send({
+        const responce = await agent.post("/me/profile/username").send({
           password: testUser.password,
           username: testUser.newUsername,
         });
@@ -103,7 +103,7 @@ describe("/profile/avatar", () => {
 
     test("GET requst. Should response with 200 code and 'username page' msg", async () => {
       //act
-      const response = await agent.get(`/profile/username`);
+      const response = await agent.get(`/me/profile/username`);
 
       //assert
       expect(response.status).toBe(200);
@@ -114,7 +114,7 @@ describe("/profile/avatar", () => {
           and response with 200 code and 'username chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/username").send({
+      const response = await agent.post("/me/profile/username").send({
         password: testUser.password,
         username: testUser.newUsername,
       });
@@ -139,7 +139,7 @@ describe("/profile/avatar", () => {
       const notValidPasses = ["", null, undefined];
       //act
       for (pass of notValidPasses) {
-        const response = await agent.post("/profile/username").send({
+        const response = await agent.post("/me/profile/username").send({
           username: testUser.username,
           password: pass,
         });
@@ -156,7 +156,7 @@ describe("/profile/avatar", () => {
       const notValidUsernames = ["", null, undefined];
       //act
       for (username of notValidUsernames) {
-        const response = await agent.post("/profile/username").send({
+        const response = await agent.post("/me/profile/username").send({
           username,
           password: testUser.password,
         });
@@ -172,7 +172,7 @@ describe("/profile/avatar", () => {
             and response with 400 code and "wrong pass" msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/username").send({
+      const response = await agent.post("/me/profile/username").send({
         password: "fakepassword",
         username: "uniqueusername@mail",
       });
@@ -187,7 +187,7 @@ describe("/profile/avatar", () => {
             and response with 400 code and "username should be unique" msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/username").send({
+      const response = await agent.post("/me/profile/username").send({
         password: testUser.password,
         username: testUser.doubleName,
       });

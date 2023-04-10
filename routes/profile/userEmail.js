@@ -6,11 +6,11 @@ const resetUserEmailValidator = require("../../middlewares/validators/resetUserE
 const router = expres.Router();
 
 router
-  .get("/profile/email", checkIsAuth, (req, res) =>
+  .get("/me/profile/email", checkIsAuth, (req, res) =>
     res.status(200).json("useremail page")
   )
   .post(
-    "/profile/email",
+    "/me/profile/email",
     checkIsAuth,
     resetUserEmailValidator,
     setUserEmailController

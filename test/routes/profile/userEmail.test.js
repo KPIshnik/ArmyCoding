@@ -27,7 +27,7 @@ jest.setTimeout(30000);
 let server;
 let agent;
 
-describe("/profile/avatar", () => {
+describe("/me/profile/avatar", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -71,7 +71,7 @@ describe("/profile/avatar", () => {
     describe("get request", () => {
       test("should response with 200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/profile/email").redirects();
+        const response = await agent.get("/me/profile/email").redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -82,7 +82,7 @@ describe("/profile/avatar", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/profile/email").send({
+        const responce = await agent.post("/me/profile/email").send({
           password: testUser.password,
           newPass: testUser.newPassword,
           newPass2: testUser.newPassword,
@@ -104,7 +104,7 @@ describe("/profile/avatar", () => {
 
     test("GET requst. Should response with 200 code and 'useremail page' msg", async () => {
       //act
-      const response = await agent.get(`/profile/email`);
+      const response = await agent.get(`/me/profile/email`);
 
       //assert
       expect(response.status).toBe(200);
@@ -115,7 +115,7 @@ describe("/profile/avatar", () => {
         and response with 200 code and 'email chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/email").send({
+      const response = await agent.post("/me/profile/email").send({
         password: testUser.password,
         email: testUser.newEmail,
       });
@@ -156,7 +156,7 @@ describe("/profile/avatar", () => {
       const notValidPasses = ["", null, undefined];
       //act
       for (pass of notValidPasses) {
-        const response = await agent.post("/profile/email").send({
+        const response = await agent.post("/me/profile/email").send({
           email: testUser.email,
           password: pass,
         });
@@ -173,7 +173,7 @@ describe("/profile/avatar", () => {
       const notValidEmails = ["", null, undefined];
       //act
       for (email of notValidEmails) {
-        const response = await agent.post("/profile/email").send({
+        const response = await agent.post("/me/profile/email").send({
           email,
           password: testUser.password,
         });
@@ -189,7 +189,7 @@ describe("/profile/avatar", () => {
       and response with 400 code and "wrong pass" msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/email").send({
+      const response = await agent.post("/me/profile/email").send({
         password: "fakepassword",
         email: "uniqueEmail@mail",
       });
@@ -204,7 +204,7 @@ describe("/profile/avatar", () => {
       and response with 400 code and "email should be unique" msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/email").send({
+      const response = await agent.post("/me/profile/email").send({
         password: testUser.password,
         email: testUser.doubleEmail,
       });

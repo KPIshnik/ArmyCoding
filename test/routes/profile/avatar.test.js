@@ -20,7 +20,7 @@ jest.mock("bcrypt", () => {
 let server;
 let agent;
 
-describe("/profile/avatar", () => {
+describe("/me/profile/avatar", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -58,7 +58,7 @@ describe("/profile/avatar", () => {
       test("should response with 401 status and 'not authorized' msg", async () => {
         //act
         const response = await agent
-          .post("/profile/avatar")
+          .post("/me/profile/avatar")
           .send({ file: "{ buffer: Buffer.alloc(1) }" });
 
         //assert
@@ -71,7 +71,7 @@ describe("/profile/avatar", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
         const responce = await agent
-          .put("/profile/avatar")
+          .put("/me/profile/avatar")
           .send({ file: "{ buffer: Buffer.alloc(1) }" });
 
         //assert
@@ -84,7 +84,7 @@ describe("/profile/avatar", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
         const responce = await agent
-          .delete("/profile/avatar")
+          .delete("/me/profile/avatar")
           .send({ file: "{ buffer: Buffer.alloc(1) }" });
 
         //assert
@@ -108,7 +108,7 @@ describe("/profile/avatar", () => {
     test("should responce with 404 not found", async () => {
       //act
       const response = await agent
-        .get(`/profile/avatar?username=${testUser.username}`)
+        .get(`/me/profile/avatar?username=${testUser.username}`)
         .redirects();
 
       //assert
@@ -119,11 +119,11 @@ describe("/profile/avatar", () => {
       //act
 
       const response = await agent
-        .post("/profile/avatar")
+        .post("/me/profile/avatar")
         .attach("avatar", avatar, "testuserAvatarBlack.png");
 
       const getAvatarRes = await agent
-        .get(`/profile/avatar?username=${testUser.username}`)
+        .get(`/me/profile/avatar?username=${testUser.username}`)
         .redirects();
 
       const avatarWebp = await sharp(avatar).webp().toBuffer();
@@ -142,11 +142,11 @@ describe("/profile/avatar", () => {
       //act
 
       const response = await agent
-        .put("/profile/avatar")
+        .put("/me/profile/avatar")
         .attach("avatar", newAvatar, "testuserAvatarWhite.png");
 
       const getAvatarRes = await agent
-        .get(`/profile/avatar?username=${testUser.username}`)
+        .get(`/me/profile/avatar?username=${testUser.username}`)
         .redirects();
 
       const newAvatarWebp = await sharp(newAvatar).webp().toBuffer();
@@ -160,10 +160,10 @@ describe("/profile/avatar", () => {
     test("delete request", async () => {
       //act
 
-      const response = await agent.delete("/profile/avatar");
+      const response = await agent.delete("/me/profile/avatar");
 
       const getAvatarRes = await agent
-        .get(`/profile/avatar?username=${testUser.username}`)
+        .get(`/me/profile/avatar?username=${testUser.username}`)
         .redirects();
 
       //assert

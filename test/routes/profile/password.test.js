@@ -23,7 +23,7 @@ jest.mock("bcrypt", () => {
 let server;
 let agent;
 
-describe("/profile/avatar", () => {
+describe("/me/profile/avatar", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -58,7 +58,7 @@ describe("/profile/avatar", () => {
     describe("get request", () => {
       test("should response with  200 status and 'register page' msg", async () => {
         //act
-        const response = await agent.get("/profile/password").redirects();
+        const response = await agent.get("/me/profile/password").redirects();
 
         //assert
         expect(response.status).toBe(200);
@@ -69,7 +69,7 @@ describe("/profile/avatar", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/profile/password").send({
+        const responce = await agent.post("/me/profile/password").send({
           password: testUser.password,
           newPass: testUser.newPassword,
           newPass2: testUser.newPassword,
@@ -91,7 +91,7 @@ describe("/profile/avatar", () => {
 
     test("GET requst. Should response with 200 code and 'pass page' msg", async () => {
       //act
-      const response = await agent.get(`/profile/password`);
+      const response = await agent.get(`/me/profile/password`);
 
       //assert
       expect(response.status).toBe(200);
@@ -102,7 +102,7 @@ describe("/profile/avatar", () => {
     and response with 200 code and 'password chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/profile/password").send({
+      const response = await agent.post("/me/profile/password").send({
         password: testUser.password,
         newPass: testUser.newPassword,
         newPass2: testUser.newPassword,
@@ -134,7 +134,7 @@ describe("/profile/avatar", () => {
     const notValidPasses = ["", null, undefined];
     //act
     for (pass of notValidPasses) {
-      const response = await agent.post("/profile/password").send({
+      const response = await agent.post("/me/profile/password").send({
         password: "",
         newPass: testUser.newPassword,
         newPass2: testUser.newPassword,
@@ -151,7 +151,7 @@ describe("/profile/avatar", () => {
     and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
     //act
 
-    const response = await agent.post("/profile/password").send({
+    const response = await agent.post("/me/profile/password").send({
       password: testUser.password,
       newPass: 123,
       newPass2: 1234,
@@ -167,7 +167,7 @@ describe("/profile/avatar", () => {
   and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
     //act
 
-    const response = await agent.post("/profile/password").send({
+    const response = await agent.post("/me/profile/password").send({
       password: "fakepassword",
       newPass: testUser.newPassword,
       newPass2: testUser.newPassword,
