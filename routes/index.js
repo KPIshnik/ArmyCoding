@@ -16,6 +16,7 @@ const todolists = require("./todolists");
 const todonote = require("./todolists/todonote");
 const share = require("./todolists/share");
 const permitted = require("./todolists/permitted");
+const users = require("./profile/users");
 
 const router = express.Router();
 
@@ -30,6 +31,7 @@ router.use(
   googleAuth,
   fbAuthCb,
   confirmEmail,
+  users,
   username,
   userEmail,
   password,

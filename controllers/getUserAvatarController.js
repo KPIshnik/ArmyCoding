@@ -2,9 +2,10 @@ const path = require("path");
 const getUsernameById = require("../models/getUsernameById");
 const fs = require("fs");
 
-const getAvatarConrtroller = async (req, res, next) => {
+const getUserAvaatarConreoller = async (req, res, next) => {
   try {
-    const username = req.user.username;
+    const { id } = req.params;
+    const username = await getUsernameById(id);
 
     isAvatar = fs.existsSync(
       path.join(__dirname, `../public/avatars/${username}.webp`)
@@ -18,4 +19,4 @@ const getAvatarConrtroller = async (req, res, next) => {
   }
 };
 
-module.exports = getAvatarConrtroller;
+module.exports = getUserAvaatarConreoller;

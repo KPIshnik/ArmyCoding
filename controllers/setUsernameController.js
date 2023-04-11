@@ -2,6 +2,7 @@ const bcript = require("bcrypt");
 const verifyPassword = require("../helpers/verifyPassword");
 const setUserName = require("../models/setUserName");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
+const renameAvatar = require("../helpers/renameAvatar");
 
 const setUsernameController = async (req, res, next) => {
   try {
@@ -23,6 +24,7 @@ const setUsernameController = async (req, res, next) => {
       return;
     }
 
+    await renameAvatar(req.user.username, username);
     await setUserName(user.id, username);
 
     res.status(200).json("username changed");

@@ -1,9 +1,7 @@
 
 
-get /users/:id/profile 
-get /users/:id/profile/avatar
-get /users/:id/profile/username
 
 
+update username efect on AVATAR??
 
 

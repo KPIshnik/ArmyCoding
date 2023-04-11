@@ -1,5 +1,5 @@
 4. Check & redo routes naming.
-
+5. kill redirects
 5. Redo auth with jwt + kill passport
 6. use fb/google refresh
 6. test for fb and google

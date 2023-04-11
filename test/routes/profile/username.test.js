@@ -26,8 +26,9 @@ jest.setTimeout(30000);
 
 let server;
 let agent;
+let agent2;
 
-describe("/me/profile/avatar", () => {
+describe("username routine", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -37,10 +38,18 @@ describe("/me/profile/avatar", () => {
     doubleName: "doubleName",
   };
 
+  const testUser2 = {
+    username: "testuser2",
+    password: "123",
+    email: "testuser2@test.app",
+  };
+
   beforeAll(async () => {
     server = await serverPromise;
     agent = request.agent(url);
-    await registerNewUser(
+    agent2 = request.agent(url);
+
+    testUser.id = await registerNewUser(
       testUser.email,
       testUser.username,
       testUser.password,
@@ -52,6 +61,15 @@ describe("/me/profile/avatar", () => {
       "double@mail",
       testUser.doubleName,
       "doublepass",
+      null,
+      null,
+      "email"
+    );
+
+    await registerNewUser(
+      testUser2.email,
+      testUser2.username,
+      testUser2.password,
       null,
       null,
       "email"
@@ -196,6 +214,20 @@ describe("/me/profile/avatar", () => {
       expect(response.status).toBe(400);
       expect(response.body).toBe("username should be unique");
       expect(setUserName).not.toHaveBeenCalled();
+    });
+
+    test(`get request, should get username of another user`, async () => {
+      //arrange
+      await agent2.post("/auth").send(testUser2);
+      //act
+
+      const response = await agent2.get(
+        `/users/${testUser.id}/profile/username`
+      );
+
+      //assert
+      expect(response.status).toBe(200);
+      expect(response.body).toBe(testUser.newUsername);
     });
   });
 });
