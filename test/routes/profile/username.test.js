@@ -86,17 +86,6 @@ describe("username routine", () => {
   });
 
   describe("tests with user not authirized", () => {
-    describe("get request", () => {
-      test("should response with 200 status and 'register page' msg", async () => {
-        //act
-        const response = await agent.get("/me/profile/username").redirects();
-
-        //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
-      });
-    });
-
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
@@ -117,15 +106,6 @@ describe("username routine", () => {
       await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
-    });
-
-    test("GET requst. Should response with 200 code and 'username page' msg", async () => {
-      //act
-      const response = await agent.get(`/me/profile/username`);
-
-      //assert
-      expect(response.status).toBe(200);
-      expect(response.body).toBe("username page");
     });
 
     test(`POST request, should change email,

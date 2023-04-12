@@ -27,7 +27,7 @@ jest.setTimeout(30000);
 let server;
 let agent;
 
-describe("/me/profile/avatar", () => {
+describe("useremail", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -68,17 +68,6 @@ describe("/me/profile/avatar", () => {
   });
 
   describe("tests with user not authirized", () => {
-    describe("get request", () => {
-      test("should response with 200 status and 'register page' msg", async () => {
-        //act
-        const response = await agent.get("/me/profile/email").redirects();
-
-        //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
-      });
-    });
-
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
@@ -100,15 +89,6 @@ describe("/me/profile/avatar", () => {
       await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
-    });
-
-    test("GET requst. Should response with 200 code and 'useremail page' msg", async () => {
-      //act
-      const response = await agent.get(`/me/profile/email`);
-
-      //assert
-      expect(response.status).toBe(200);
-      expect(response.body).toBe("useremail page");
     });
 
     test(`POST request, should change email,

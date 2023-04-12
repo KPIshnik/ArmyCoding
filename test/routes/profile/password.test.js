@@ -23,7 +23,7 @@ jest.mock("bcrypt", () => {
 let server;
 let agent;
 
-describe("/me/profile/avatar", () => {
+describe("password", () => {
   const testUser = {
     username: "testuser",
     password: "123",
@@ -55,17 +55,6 @@ describe("/me/profile/avatar", () => {
   });
 
   describe("tests with user not authirized", () => {
-    describe("get request", () => {
-      test("should response with  200 status and 'register page' msg", async () => {
-        //act
-        const response = await agent.get("/me/profile/password").redirects();
-
-        //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
-      });
-    });
-
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
@@ -87,15 +76,6 @@ describe("/me/profile/avatar", () => {
       await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
-    });
-
-    test("GET requst. Should response with 200 code and 'pass page' msg", async () => {
-      //act
-      const response = await agent.get(`/me/profile/password`);
-
-      //assert
-      expect(response.status).toBe(200);
-      expect(response.body).toBe("pass page");
     });
 
     test(`POST request, should change password, 

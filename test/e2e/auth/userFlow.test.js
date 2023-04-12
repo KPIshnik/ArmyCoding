@@ -92,6 +92,20 @@ describe("user register via email and chenging userdata", () => {
       });
     });
   });
+  test("shoul get user profile", async () => {
+    //act
+    const res = await agent.get("/me/profile");
+    //assert
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      id: expect.anything(),
+      username: testUser.username,
+      email: testUser.email,
+      googleid: null,
+      facebookid: null,
+      auth_type: "email",
+    });
+  });
 
   describe("chenging username", () => {
     test("should seccesfuly change logged in user's username", async () => {

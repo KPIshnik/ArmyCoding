@@ -5,15 +5,11 @@ const resetUsernameValidator = require("../../middlewares/validators/resetUserna
 
 const router = expres.Router();
 
-router
-  .get("/me/profile/username", checkIsAuth, (req, res) =>
-    res.status(200).json("username page")
-  )
-  .post(
-    "/me/profile/username",
-    checkIsAuth,
-    resetUsernameValidator,
-    setUsernameController
-  );
+router.post(
+  "/me/profile/username",
+  checkIsAuth,
+  resetUsernameValidator,
+  setUsernameController
+);
 
 module.exports = router;

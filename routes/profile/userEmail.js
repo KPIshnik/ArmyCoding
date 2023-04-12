@@ -5,15 +5,11 @@ const resetUserEmailValidator = require("../../middlewares/validators/resetUserE
 
 const router = expres.Router();
 
-router
-  .get("/me/profile/email", checkIsAuth, (req, res) =>
-    res.status(200).json("useremail page")
-  )
-  .post(
-    "/me/profile/email",
-    checkIsAuth,
-    resetUserEmailValidator,
-    setUserEmailController
-  );
+router.post(
+  "/me/profile/email",
+  checkIsAuth,
+  resetUserEmailValidator,
+  setUserEmailController
+);
 
 module.exports = router;
