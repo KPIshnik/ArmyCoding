@@ -3,7 +3,7 @@ const verifyPassword = require("../helpers/verifyPassword");
 const checkUniqueUserEmail = require("../models/checkUniqueUserEmail");
 const confirmEmailHelper = require("../helpers/confirmEmailHelper");
 
-const setUserEmailController = async (req, res, next) => {
+const updateUserEmailController = async (req, res, next) => {
   try {
     const userPass = req.body.password;
     const userEmail = req.body.email;
@@ -27,4 +27,4 @@ const setUserEmailController = async (req, res, next) => {
   }
 };
 
-module.exports = setUserEmailController;
+module.exports = updateUserEmailController;

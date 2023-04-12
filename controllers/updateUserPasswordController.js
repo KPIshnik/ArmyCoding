@@ -2,7 +2,7 @@ const verifyPassword = require("../helpers/verifyPassword");
 const setUserPassword = require("../models/setUserPassword");
 const bcrypt = require("bcrypt");
 
-const setUserPasswordController = async (req, res, next) => {
+const updateUserPasswordController = async (req, res, next) => {
   try {
     const user = req.user;
     const password = req.body.password;
@@ -26,4 +26,4 @@ const setUserPasswordController = async (req, res, next) => {
   }
 };
 
-module.exports = setUserPasswordController;
+module.exports = updateUserPasswordController;

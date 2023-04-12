@@ -1,15 +1,15 @@
 const expres = require("express");
-const setUsernameController = require("../../controllers/setUsernameController");
+const updateUsernameController = require("../../controllers/updateUsernameController");
 const checkIsAuth = require("../../middlewares/checkIsAuth");
 const resetUsernameValidator = require("../../middlewares/validators/resetUsernameValidator");
 
 const router = expres.Router();
 
-router.post(
+router.put(
   "/me/profile/username",
   checkIsAuth,
   resetUsernameValidator,
-  setUsernameController
+  updateUsernameController
 );
 
 module.exports = router;

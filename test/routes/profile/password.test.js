@@ -58,7 +58,7 @@ describe("password", () => {
     describe("post request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/me/profile/password").send({
+        const responce = await agent.put("/me/profile/password").send({
           password: testUser.password,
           newPass: testUser.newPassword,
           newPass2: testUser.newPassword,
@@ -82,7 +82,7 @@ describe("password", () => {
     and response with 200 code and 'password chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/password").send({
+      const response = await agent.put("/me/profile/password").send({
         password: testUser.password,
         newPass: testUser.newPassword,
         newPass2: testUser.newPassword,
@@ -114,7 +114,7 @@ describe("password", () => {
     const notValidPasses = ["", null, undefined];
     //act
     for (pass of notValidPasses) {
-      const response = await agent.post("/me/profile/password").send({
+      const response = await agent.put("/me/profile/password").send({
         password: "",
         newPass: testUser.newPassword,
         newPass2: testUser.newPassword,
@@ -131,7 +131,7 @@ describe("password", () => {
     and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
     //act
 
-    const response = await agent.post("/me/profile/password").send({
+    const response = await agent.put("/me/profile/password").send({
       password: testUser.password,
       newPass: 123,
       newPass2: 1234,
@@ -147,7 +147,7 @@ describe("password", () => {
   and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
     //act
 
-    const response = await agent.post("/me/profile/password").send({
+    const response = await agent.put("/me/profile/password").send({
       password: "fakepassword",
       newPass: testUser.newPassword,
       newPass2: testUser.newPassword,

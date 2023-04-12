@@ -110,7 +110,7 @@ describe("user register via email and chenging userdata", () => {
   describe("chenging username", () => {
     test("should seccesfuly change logged in user's username", async () => {
       const response = await agent
-        .post(`/me/profile/username`)
+        .put(`/me/profile/username`)
         .send({ username: testUser.newUsername, password: testUser.password });
 
       expect(response.status).toBe(200);
@@ -126,7 +126,7 @@ describe("user register via email and chenging userdata", () => {
       date = Date.now();
 
       const response = await agent
-        .post(`/me/profile/email`)
+        .put(`/me/profile/email`)
         .send({ email: testUser.newEmail, password: testUser.password });
 
       expect(response.status).toBe(200);
@@ -176,7 +176,7 @@ describe("user register via email and chenging userdata", () => {
 
   describe("chenging password", () => {
     test("should seccesfuly change logged in user's username", async () => {
-      const response = await agent.post(`/me/profile/password`).send({
+      const response = await agent.put(`/me/profile/password`).send({
         password: testUser.password,
         newPass: testUser.newPassword,
         newPass2: testUser.newPassword,

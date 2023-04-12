@@ -4,7 +4,7 @@ const setUserName = require("../models/setUserName");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
 const renameAvatar = require("../helpers/renameAvatar");
 
-const setUsernameController = async (req, res, next) => {
+const updateUsernameController = async (req, res, next) => {
   try {
     const userPass = req.body.password;
     const username = req.body.username;
@@ -33,4 +33,4 @@ const setUsernameController = async (req, res, next) => {
   }
 };
 
-module.exports = setUsernameController;
+module.exports = updateUsernameController;

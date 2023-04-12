@@ -1,15 +1,15 @@
 const expres = require("express");
 const checkIsAuth = require("../../middlewares/checkIsAuth");
-const setUserPasswordController = require("../../controllers/setUserPasswordController");
+const updateUserPasswordController = require("../../controllers/updateUserPasswordController");
 const resetPassValidator = require("../../middlewares/validators/resetPasswordValidator");
 
 const router = expres.Router();
 
-router.post(
+router.put(
   "/me/profile/password",
   checkIsAuth,
   resetPassValidator,
-  setUserPasswordController
+  updateUserPasswordController
 );
 
 module.exports = router;
