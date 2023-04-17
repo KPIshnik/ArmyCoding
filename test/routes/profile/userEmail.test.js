@@ -68,10 +68,10 @@ describe("useremail", () => {
   });
 
   describe("tests with user not authirized", () => {
-    describe("post request", () => {
+    describe("put request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/me/profile/email").send({
+        const responce = await agent.put("/me/profile/email").send({
           password: testUser.password,
           newPass: testUser.newPassword,
           newPass2: testUser.newPassword,
@@ -91,11 +91,11 @@ describe("useremail", () => {
         .send({ email: testUser.email, password: testUser.password });
     });
 
-    test(`POST request, should change email,
+    test(`put request, should change email,
         and response with 200 code and 'email chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/email").send({
+      const response = await agent.put("/me/profile/email").send({
         password: testUser.password,
         email: testUser.newEmail,
       });
@@ -131,12 +131,12 @@ describe("useremail", () => {
       expect(loginResp.body).toBe(`Aloha ${testUser.username}!`);
     });
 
-    test(`POST request, should NOT change email,
+    test(`put request, should NOT change email,
       and response with 400 code and 'password required' msg`, async () => {
       const notValidPasses = ["", null, undefined];
       //act
       for (pass of notValidPasses) {
-        const response = await agent.post("/me/profile/email").send({
+        const response = await agent.put("/me/profile/email").send({
           email: testUser.email,
           password: pass,
         });
@@ -148,12 +148,12 @@ describe("useremail", () => {
       }
     });
 
-    test(`POST request, should NOT change email,
+    test(`put request, should NOT change email,
         and response with 400 code and "email required" msg`, async () => {
       const notValidEmails = ["", null, undefined];
       //act
       for (email of notValidEmails) {
-        const response = await agent.post("/me/profile/email").send({
+        const response = await agent.put("/me/profile/email").send({
           email,
           password: testUser.password,
         });
@@ -165,11 +165,11 @@ describe("useremail", () => {
       }
     });
 
-    test(`POST request, should NOT change email,
+    test(`put request, should NOT change email,
       and response with 400 code and "wrong pass" msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/email").send({
+      const response = await agent.put("/me/profile/email").send({
         password: "fakepassword",
         email: "uniqueEmail@mail",
       });
@@ -180,11 +180,11 @@ describe("useremail", () => {
       expect(confirmEmailHelper).not.toHaveBeenCalled();
     });
 
-    test(`POST request, should NOT change email,
+    test(`put request, should NOT change email,
       and response with 400 code and "email should be unique" msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/email").send({
+      const response = await agent.put("/me/profile/email").send({
         password: testUser.password,
         email: testUser.doubleEmail,
       });

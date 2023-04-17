@@ -105,13 +105,13 @@ describe("/todolists", () => {
   test("", () => {});
   describe("tests with user not authirized", () => {
     describe("get request", () => {
-      test("should response with 200 status and 'register page' msg", async () => {
+      test("should response with 401 status and 'not authorized' msg", async () => {
         //act
         const response = await agent.get("/todolists").redirects();
 
         //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
+        expect(response.status).toBe(401);
+        expect(response.body).toBe("not authorized");
       });
     });
 

@@ -47,14 +47,6 @@ describe("/auth/register ", () => {
     jest.useRealTimers();
   });
 
-  test(`should return code: 200, msg: "register page"
-      on get request when not authorithed`, async () => {
-    const response = await request(server).get("/auth/register");
-
-    expect(response.status).toBe(200);
-    expect(response.body).toBe("register page");
-  });
-
   test(`should register user with correct data on post request,
           send confirm email and
           return code: 200,

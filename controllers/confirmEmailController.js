@@ -6,7 +6,7 @@ const confirmEmailController = async (req, res, next) => {
   try {
     const key = req.query ? req.query.key : null;
 
-    if (!key) {
+    if (!key || typeof key != "string") {
       res.status(400).json("valid key required");
       return;
     }

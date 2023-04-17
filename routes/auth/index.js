@@ -8,13 +8,15 @@ const router = expres.Router();
 router.use(expres.json());
 
 router
-  .get("/auth", checkNOTAuth, (req, res) => {
-    const msg = "register page";
-    res.status(200).json(msg);
-  })
-  .post("/auth", checkNOTAuth, passport.authenticate("local"), (req, res) => {
-    res.redirect("/");
-  })
+  .post(
+    "/auth",
+    //kill chek, kill pasport
+    checkNOTAuth,
+    passport.authenticate("local"),
+    (req, res) => {
+      res.redirect("/");
+    }
+  )
   .delete("/auth", checkIsAuth, logoutController);
 
 module.exports = router;

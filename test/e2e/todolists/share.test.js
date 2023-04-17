@@ -507,32 +507,32 @@ describe("/todolist/share", () => {
       await agent.delete("/auth");
     });
     describe("get request", () => {
-      test("should response with 200 status and 'register page' msg", async () => {
+      test("should response with 401 status and 'not authorized' msg", async () => {
         //act
         const response = await agent.get(`/todolists/id/share`).redirects();
 
         //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
+        expect(response.status).toBe(401);
+        expect(response.body).toBe("not authorized");
       });
     });
 
     describe("/permitted get requests", () => {
-      test("should response with 200 status and 'register page' msg", async () => {
+      test("should response with 401 status and 'not authorized' msg", async () => {
         //act
         const response = await agent.get(`/todolists/id/share`).redirects();
 
         //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
+        expect(response.status).toBe(401);
+        expect(response.body).toBe("not authorized");
       });
-      test("should response with 200 status and 'register page' msg", async () => {
+      test("should response with 401 status and 'not authorized' msg", async () => {
         //act
         const response = await agent.get("/todolists/permitted").redirects();
 
         //assert
-        expect(response.status).toBe(200);
-        expect(response.body).toBe("register page");
+        expect(response.status).toBe(401);
+        expect(response.body).toBe("not authorized");
       });
     });
 

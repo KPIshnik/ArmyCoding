@@ -85,7 +85,7 @@ describe("error handling test", () => {
 
     //act
     const res = await agent
-      .post("/me/profile/email")
+      .put("/me/profile/email")
       .send({ email: "newemail@gmail.com", password: testUser.password });
     const log = await fs.stat(pathToLog);
     //assert

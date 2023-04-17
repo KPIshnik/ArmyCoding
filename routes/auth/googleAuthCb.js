@@ -2,7 +2,7 @@ const expres = require("express");
 const passport = require("passport");
 
 const router = expres.Router();
-
+//kill
 router.get(
   "/auth/google/cb",
   passport.authenticate("google", {

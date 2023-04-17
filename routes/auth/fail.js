@@ -3,7 +3,7 @@ const checkNotAuth = require("../../middlewares/checkNOTAuth");
 
 const router = expres.Router();
 
-router.get("/auth/fail", checkNotAuth, (req, res) => {
+router.get("/auth/fail", (req, res) => {
   let msg;
   if (req.session)
     msg = req.session.messages[0] ? req.session.messages[0] : "Unauthorized((";

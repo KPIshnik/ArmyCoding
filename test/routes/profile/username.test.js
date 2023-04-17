@@ -86,10 +86,10 @@ describe("username routine", () => {
   });
 
   describe("tests with user not authirized", () => {
-    describe("post request", () => {
+    describe("put request", () => {
       test("should responce with 401 status and 'not authorized' msg", async () => {
         //act
-        const responce = await agent.post("/me/profile/username").send({
+        const responce = await agent.put("/me/profile/username").send({
           password: testUser.password,
           username: testUser.newUsername,
         });
@@ -108,11 +108,11 @@ describe("username routine", () => {
         .send({ email: testUser.email, password: testUser.password });
     });
 
-    test(`POST request, should change email,
+    test(`put request, should change email,
           and response with 200 code and 'username chenged' msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/username").send({
+      const response = await agent.put("/me/profile/username").send({
         password: testUser.password,
         username: testUser.newUsername,
       });
@@ -132,12 +132,12 @@ describe("username routine", () => {
       expect(loginResp.body).toBe(`Aloha ${testUser.newUsername}!`);
     });
 
-    test(`POST request, should NOT change username,
+    test(`put request, should NOT change username,
             and response with 400 code and 'password required' msg`, async () => {
       const notValidPasses = ["", null, undefined];
       //act
       for (pass of notValidPasses) {
-        const response = await agent.post("/me/profile/username").send({
+        const response = await agent.put("/me/profile/username").send({
           username: testUser.username,
           password: pass,
         });
@@ -149,12 +149,12 @@ describe("username routine", () => {
       }
     });
 
-    test(`POST request, should NOT change username,
+    test(`put request, should NOT change username,
               and response with 400 code and "username required" msg`, async () => {
       const notValidUsernames = ["", null, undefined];
       //act
       for (username of notValidUsernames) {
-        const response = await agent.post("/me/profile/username").send({
+        const response = await agent.put("/me/profile/username").send({
           username,
           password: testUser.password,
         });
@@ -166,11 +166,11 @@ describe("username routine", () => {
       }
     });
 
-    test(`POST request, should NOT change username,
+    test(`put request, should NOT change username,
             and response with 400 code and "wrong pass" msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/username").send({
+      const response = await agent.put("/me/profile/username").send({
         password: "fakepassword",
         username: "uniqueusername@mail",
       });
@@ -181,11 +181,11 @@ describe("username routine", () => {
       expect(setUserName).not.toHaveBeenCalled();
     });
 
-    test(`POST request, should NOT change username,
+    test(`put request, should NOT change username,
             and response with 400 code and "username should be unique" msg`, async () => {
       //act
 
-      const response = await agent.post("/me/profile/username").send({
+      const response = await agent.put("/me/profile/username").send({
         password: testUser.password,
         username: testUser.doubleName,
       });
