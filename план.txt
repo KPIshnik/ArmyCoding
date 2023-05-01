@@ -1,5 +1,5 @@
-5. kill bad redirects and gets
 5. Redo auth with jwt + kill passport
+5. use https
 6. use fb/google refresh
 6. test for fb and google
 7. !!solve Promiss.all+jest problem
