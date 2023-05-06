@@ -1,21 +1,23 @@
-const checkIsAuth = (req, res, next) => {
+const { tokensecret } = require("../configs/credentials");
+const veifyToken = require("../helpers/verifyToken");
+
+const checkIsAuth = async (req, res, next) => {
   try {
-    if (!req.isAuthenticated()) {
-      res.status(401).json("not authorized");
+    const token = req.headers.authorization.split(" ")[1];
 
-      return;
-    }
+    if (!token) return res.sendStatus(401);
 
-    if (!req.user.email) {
-      res.status(401).json("confirm email");
-      return;
-    }
+    const user = await veifyToken(token, tokensecret);
 
-    if (!req.user.username & (req.url != "/me/profile/username")) {
-      res.status(401).json("set username");
+    if (!user) return res.status(401);
 
-      return;
-    }
+    req.user = user;
+
+    if (!req.user.email) return res.status(403).json("confirm email");
+
+    if (!req.user.username & (req.url != "/me/profile/username"))
+      return res.status(403).json("set username");
+
     next();
   } catch (err) {
     next(err);

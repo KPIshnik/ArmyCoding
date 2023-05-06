@@ -1,40 +1,12 @@
-5. Redo auth with jwt + kill passport
-5. use https
-6. use fb/google refresh
-6. test for fb and google
-7. !!solve Promiss.all+jest problem
+1. Redo auth with jwt + kill passport
+1.5 udate changing userr datat controllers with updateauth  
+2. use fb/google refresh
+3. use https
+4. test for fb and google
+6. !!solve Promiss.all+jest problem
 ?
-8. Рефакторинг.
+7. замутить валаби
+7. Рефакторинг.
 
 
-/todolists/
-    get -- get todolist  or lists
-    post -- create todolist    
-    put -- change todolist 
-      !!! regfactor validator 
-     !!solve Promiss.all+jest problem
-    delete -- delete todolist 
-  
-   
-
-/todonote/:id   //todonote & priority & done 
-    get -- get todonote
-    post -- create todonote
-   
-
-
-    put -- change todonote  
-
-
-    delete -- delete todonote
-
-
-/todolists/permitted/:id
-    get -- get todolist  or lists
-
-/todotilsts/:listid/users/:email? ??
-    get -- users shared with
-    post -- share with user or users
-    put.
-    delete --  !!! redo delete
 

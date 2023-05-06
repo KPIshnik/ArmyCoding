@@ -1,5 +1,5 @@
  
-GET http://localhost:3000/todolists?id=9485c150-b219-4745-98ae-7ac81f344f93
+GET http://localhost:3000/
 
 
 

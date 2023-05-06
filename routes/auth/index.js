@@ -1,22 +1,15 @@
 const expres = require("express");
 const passport = require("../../middlewares/passport");
 const checkIsAuth = require("../../middlewares/checkIsAuth");
-const checkNOTAuth = require("../../middlewares/checkNOTAuth");
-const logoutController = require("../../controllers/logoutController");
+const { login, logout, totalLogout, refresh } = require("../../services/auth");
 
 const router = expres.Router();
 router.use(expres.json());
 
 router
-  .post(
-    "/auth",
-    //kill chek, kill pasport
-    checkNOTAuth,
-    passport.authenticate("local"),
-    (req, res) => {
-      res.redirect("/");
-    }
-  )
-  .delete("/auth", checkIsAuth, logoutController);
+  .post("/auth", login)
+  .post("/auth/refresh", refresh)
+  .delete("/auth", checkIsAuth, logout)
+  .delete("/auth/total", checkIsAuth, totalLogout);
 
 module.exports = router;
