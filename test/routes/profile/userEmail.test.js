@@ -26,6 +26,7 @@ jest.setTimeout(30000);
 
 let server;
 let agent;
+const tokens = {};
 
 describe("useremail", () => {
   const testUser = {
@@ -79,26 +80,29 @@ describe("useremail", () => {
 
         //assert
         expect(responce.status).toBe(401);
-        expect(responce.body).toBe("not authorized");
       });
     });
   });
 
   describe("tests for authorized user", () => {
     beforeAll(async () => {
-      await agent
+      const login = await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
+      tokens.user = { ...login.body };
     });
 
     test(`put request, should change email,
         and response with 200 code and 'email chenged' msg`, async () => {
       //act
 
-      const response = await agent.put("/me/profile/email").send({
-        password: testUser.password,
-        email: testUser.newEmail,
-      });
+      const response = await agent
+        .put("/me/profile/email")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
+        .send({
+          password: testUser.password,
+          email: testUser.newEmail,
+        });
 
       const testmailResponse = await superagent.get(
         `https://api.testmail.app/api/json?apikey=${
@@ -117,8 +121,7 @@ describe("useremail", () => {
 
       const loginResp = await agent
         .post("/auth")
-        .send({ email: testUser.newEmail, password: testUser.password })
-        .redirects();
+        .send({ email: testUser.newEmail, password: testUser.password });
 
       //assert
       expect(response.status).toBe(200);

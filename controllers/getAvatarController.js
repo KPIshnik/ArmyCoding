@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const getAvatarConrtroller = async (req, res, next) => {
   try {
-    const username = req.user.username;
+    const username = req.user && req.user.username;
 
     isAvatar = fs.existsSync(
       path.join(__dirname, `../public/avatars/${username}.webp`)

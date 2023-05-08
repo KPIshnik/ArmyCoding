@@ -2,6 +2,7 @@ const setUserEmail = require("../models/setUserEmail");
 const getUserDataByKey = require("../models/getUserDataByKey");
 const { confirmEmailExpireTime } = require("../configs/settings");
 const issueTokenPair = require("../helpers/issueTokenPair");
+const deleteAllTokens = require("../models/auth/deleteAllTokens");
 
 const confirmEmailController = async (req, res, next) => {
   try {
@@ -30,6 +31,7 @@ const confirmEmailController = async (req, res, next) => {
     }
 
     await setUserEmail(userData.id, userData.email);
+    await deleteAllTokens(userData.id);
 
     res.sendStatus(200);
   } catch (err) {

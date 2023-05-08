@@ -63,7 +63,6 @@ describe("/auth/confirmemail ", () => {
     const user = await getUserById(id);
     //assert
     expect(response.status).toBe(200);
-    expect(response.body).toBe("Email confirmed");
 
     expect(user.email).toBe(userData.email);
   });

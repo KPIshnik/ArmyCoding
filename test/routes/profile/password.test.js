@@ -22,6 +22,7 @@ jest.mock("bcrypt", () => {
 
 let server;
 let agent;
+const tokens = {};
 
 describe("password", () => {
   const testUser = {
@@ -66,44 +67,41 @@ describe("password", () => {
 
         //assert
         expect(responce.status).toBe(401);
-        expect(responce.body).toBe("not authorized");
       });
     });
   });
 
   describe("tests for authorized user", () => {
     beforeAll(async () => {
-      await agent
+      const login = await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
+      tokens.user = { ...login.body };
     });
 
     test(`POST request, should change password, 
     and response with 200 code and 'password chenged' msg`, async () => {
       //act
 
-      const response = await agent.put("/me/profile/password").send({
-        password: testUser.password,
-        newPass: testUser.newPassword,
-        newPass2: testUser.newPassword,
-      });
-
-      const delResp = await agent.delete("/auth");
+      const response = await agent
+        .put("/me/profile/password")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
+        .send({
+          password: testUser.password,
+          newPass: testUser.newPassword,
+          newPass2: testUser.newPassword,
+        });
 
       const loginResp = await agent
         .post("/auth")
-        .send({ email: testUser.email, password: testUser.newPassword })
-        .redirects();
+        .send({ email: testUser.email, password: testUser.newPassword });
 
+      tokens.user = { ...loginResp.body };
       //assert
       expect(response.status).toBe(200);
       expect(response.body).toBe("password chenged");
 
-      expect(delResp.status).toBe(200);
-      expect(delResp.body).toBe("loged out");
-
       expect(loginResp.status).toBe(200);
-      expect(loginResp.body).toBe(`Aloha ${testUser.username}!`);
 
       expect(setUserPassword).toHaveBeenCalled();
     });
@@ -114,11 +112,14 @@ describe("password", () => {
     const notValidPasses = ["", null, undefined];
     //act
     for (pass of notValidPasses) {
-      const response = await agent.put("/me/profile/password").send({
-        password: "",
-        newPass: testUser.newPassword,
-        newPass2: testUser.newPassword,
-      });
+      const response = await agent
+        .put("/me/profile/password")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
+        .send({
+          password: "",
+          newPass: testUser.newPassword,
+          newPass2: testUser.newPassword,
+        });
 
       //assert
       expect(response.status).toBe(400);
@@ -131,11 +132,14 @@ describe("password", () => {
     and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
     //act
 
-    const response = await agent.put("/me/profile/password").send({
-      password: testUser.password,
-      newPass: 123,
-      newPass2: 1234,
-    });
+    const response = await agent
+      .put("/me/profile/password")
+      .set("Authorization", `Bearer ${tokens.user.token}`)
+      .send({
+        password: testUser.password,
+        newPass: 123,
+        newPass2: 1234,
+      });
 
     //assert
     expect(response.status).toBe(400);
@@ -147,11 +151,14 @@ describe("password", () => {
   and response with 400 code and 'pass to short or doesn't match' msg`, async () => {
     //act
 
-    const response = await agent.put("/me/profile/password").send({
-      password: "fakepassword",
-      newPass: testUser.newPassword,
-      newPass2: testUser.newPassword,
-    });
+    const response = await agent
+      .put("/me/profile/password")
+      .set("Authorization", `Bearer ${tokens.user.token}`)
+      .send({
+        password: "fakepassword",
+        newPass: testUser.newPassword,
+        newPass2: testUser.newPassword,
+      });
 
     //assert
     expect(response.status).toBe(400);

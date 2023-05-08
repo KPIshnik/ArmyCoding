@@ -13,6 +13,13 @@ redo test
 1 e2e todolists +++
 2 e2e userflow
 3 routes
-4. unit
+  ++ Profile/avatar, password, username 
+  -- profile/userEmail == do with internet. TEST deleted tokens
+  -- auth == test with intet
+ 
+
+  4. unit
+  -- unit == test with intet
+
 
 

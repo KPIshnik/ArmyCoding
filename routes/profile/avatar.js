@@ -11,7 +11,7 @@ const delAvatarConrtroller = require("../../controllers/delAvatarController");
 router.use(expres.json());
 
 router
-  .get("/me/profile/avatar", getAvatarController)
+  .get("/me/profile/avatar", checkIsAuth, getAvatarController)
   .post("/me/profile/avatar", checkIsAuth, uploadAvatar, setAvatarController)
   .put("/me/profile/avatar", checkIsAuth, uploadAvatar, chengeAvatarController)
   .delete("/me/profile/avatar", checkIsAuth, delAvatarConrtroller);

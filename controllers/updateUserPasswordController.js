@@ -1,4 +1,5 @@
 const verifyPassword = require("../helpers/verifyPassword");
+const getUserById = require("../models/getUserrById");
 const setUserPassword = require("../models/setUserPassword");
 const bcrypt = require("bcrypt");
 

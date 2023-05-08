@@ -22,6 +22,8 @@ let agent;
 let agent2;
 let avatarWebp;
 
+const tokens = {};
+
 describe("avatar routine", () => {
   const testUser = {
     username: "testuser",
@@ -39,7 +41,6 @@ describe("avatar routine", () => {
   beforeAll(async () => {
     server = await serverPromise;
     agent = request.agent(url);
-    agent2 = request.agent(url);
 
     testUser.id = await registerNewUser(
       testUser.email,
@@ -83,7 +84,6 @@ describe("avatar routine", () => {
 
         //assert
         expect(response.status).toBe(401);
-        expect(response.body).toBe("not authorized");
       });
     });
 
@@ -96,7 +96,6 @@ describe("avatar routine", () => {
 
         //assert
         expect(responce.status).toBe(401);
-        expect(responce.body).toBe("not authorized");
       });
     });
 
@@ -109,7 +108,6 @@ describe("avatar routine", () => {
 
         //assert
         expect(responce.status).toBe(401);
-        expect(responce.body).toBe("not authorized");
       });
     });
   });
@@ -121,14 +119,21 @@ describe("avatar routine", () => {
         path.join(__dirname, "../..", "/img/testuserAvatarBlack.png")
       );
       avatarWebp = await sharp(avatar).webp().toBuffer();
-      await agent
+      const login = await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
+
+      const login2 = await agent.post("/auth").send(testUser2);
+
+      tokens.user2 = { ...login2.body };
+      tokens.user = { ...login.body };
     });
 
     test("should responce with 404 not found", async () => {
       //act
-      const response = await agent.get(`/me/profile/avatar`);
+      const response = await agent
+        .get(`/me/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user.token}`);
 
       //assert
       expect(response.status).toBe(404);
@@ -139,10 +144,12 @@ describe("avatar routine", () => {
 
       const response = await agent
         .post("/me/profile/avatar")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
         .attach("avatar", avatar, "testuserAvatarBlack.png");
 
-      const getAvatarRes = await agent.get(`/me/profile/avatar`);
-
+      const getAvatarRes = await agent
+        .get(`/me/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user.token}`);
       //assert
       expect(response.status).toBe(201);
       expect(response.body).toBe("avatar is set");
@@ -151,37 +158,38 @@ describe("avatar routine", () => {
     });
 
     test("get another users avatar", async () => {
-      //arrange
-      await agent2.post("/auth").send(testUser2);
-
       //act
-      const res = await agent2.get(`/users/${testUser.id}/profile/avatar`);
+      const res = await agent
+        .get(`/users/${testUser.id}/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user2.token}`);
       //assert
       expect(res.status).toBe(200);
       expect(Buffer.compare(res.body, avatarWebp)).toBe(0);
     });
 
     test("get another users not existing avatar", async () => {
-      //arrange
-      await agent2.post("/auth").send(testUser2);
-
       //act
-      const res = await agent2.get(
-        `/users/021205da-d87b-11ed-afa1-0242ac120002/profile/avatar`
-      );
+      const res = await agent
+        .get(`/users/021205da-d87b-11ed-afa1-0242ac120002/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user2.token}`);
       //assert
       expect(res.status).toBe(404);
     });
 
     test("renaming avatar after renaming user", async () => {
       //arrange
-      await agent.post("/me/profile/username").send({
-        username: testUser.newname,
-        password: testUser.password,
-      });
+      await agent
+        .post("/me/profile/username")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
+        .send({
+          username: testUser.newname,
+          password: testUser.password,
+        });
 
       //act
-      const getAvatarRes = await agent.get(`/me/profile/avatar`);
+      const getAvatarRes = await agent
+        .get(`/me/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user.token}`);
 
       //assert
       expect(getAvatarRes.status).toBe(200);
@@ -196,9 +204,12 @@ describe("avatar routine", () => {
 
       const response = await agent
         .put("/me/profile/avatar")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
         .attach("avatar", newAvatar, "testuserAvatarWhite.png");
 
-      const getAvatarRes = await agent.get(`/me/profile/avatar`);
+      const getAvatarRes = await agent
+        .get(`/me/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user.token}`);
 
       const newAvatarWebp = await sharp(newAvatar).webp().toBuffer();
       //assert
@@ -210,9 +221,13 @@ describe("avatar routine", () => {
     test("delete request", async () => {
       //act
 
-      const response = await agent.delete("/me/profile/avatar");
+      const response = await agent
+        .delete("/me/profile/avatar")
+        .set("Authorization", `Bearer ${tokens.user.token}`);
 
-      const getAvatarRes = await agent.get(`/me/profile/avatar`);
+      const getAvatarRes = await agent
+        .get(`/me/profile/avatar`)
+        .set("Authorization", `Bearer ${tokens.user.token}`);
 
       //assert
       expect(response.status).toBe(200);
