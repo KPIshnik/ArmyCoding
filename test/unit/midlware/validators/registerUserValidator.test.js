@@ -2,8 +2,6 @@ const registerUserValidator = require("../../../../middlewares/validators/regist
 
 jest.setTimeout(30000);
 describe("Register user  VALIDATOR test", () => {
-  // ********************
-  // мокаю Responce
   const mockResponse = {
     status: jest.fn(() => {
       return mockResponse;

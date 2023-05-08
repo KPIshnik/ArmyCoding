@@ -18,7 +18,7 @@ jest.mock("bcrypt", () => {
 
 let server;
 let agent;
-
+const tokens = {};
 describe("/todolists/todonotes", () => {
   date = new Date();
 
@@ -115,13 +115,10 @@ describe("/todolists/todonotes", () => {
     describe("get request", () => {
       test("should response with 401 status and 'not authorized' msg", async () => {
         //act
-        const response = await agent
-          .get("/todolists/todonotes/someid")
-          .redirects();
+        const response = await agent.get("/todolists/todonotes/someid");
 
         //assert
         expect(response.status).toBe(401);
-        expect(response.body).toBe("not authorized");
       });
     });
 
@@ -134,7 +131,6 @@ describe("/todolists/todonotes", () => {
 
         //assert
         expect(responce.status).toBe(401);
-        expect(responce.body).toBe("not authorized");
       });
     });
 
@@ -144,16 +140,21 @@ describe("/todolists/todonotes", () => {
       const res = await agent.delete(`/todolists/todonotes/someid`);
       //assert
       expect(res.status).toBe(401);
-      expect(res.body).toBe("not authorized");
     });
   });
 
   describe("tests for authorized user", () => {
     beforeAll(async () => {
-      await agent
+      const login = await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
-      const res = await agent.post("/todolists").send(todolist);
+
+      tokens.user1 = { ...login.body };
+
+      const res = await agent
+        .post("/todolists")
+        .set("Authorization", `Bearer ${tokens.user1.token}`)
+        .send(todolist);
 
       listid = res.body.data.id;
     });
@@ -161,20 +162,24 @@ describe("/todolists/todonotes", () => {
     afterAll(async () => {
       const res = await agent
         .post(`/todolists/${listid}/todonotes`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`)
         .send(todonote);
 
       id = res.body.id;
-      await agent.delete(`/auth`);
     });
+
     test(`POST request should create todonote response with code 200, 
   msg(todonote created) `, async () => {
       //act
       const res = await agent
         .post(`/todolists/${listid}/todonotes`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`)
         .send(todonote);
 
       id = res.body.id;
-      const getRes = await agent.get(`/todolists/todonotes/${id}`);
+      const getRes = await agent
+        .get(`/todolists/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`);
 
       //assert
       expect(res.status).toBe(200);
@@ -198,8 +203,11 @@ describe("/todolists/todonotes", () => {
       //act
       const res = await agent
         .put(`/todolists/${listid}/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`)
         .send(todonote);
-      const getRes = await agent.get(`/todolists/todonotes/${id}`);
+      const getRes = await agent
+        .get(`/todolists/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`);
 
       //assert
       expect(res.status).toBe(200);
@@ -215,8 +223,12 @@ describe("/todolists/todonotes", () => {
 
     test('DELETE, should delete todonote, respose with code 200, "deleted" msg', async () => {
       //act
-      const res = await agent.delete(`/todolists/todonotes/${id}`);
-      const getRes = await agent.get(`/todolists/todonotes/${id}`);
+      const res = await agent
+        .delete(`/todolists/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`);
+      const getRes = await agent
+        .get(`/todolists/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.user1.token}`);
 
       //assert
       expect(res.status).toBe(200);
@@ -227,9 +239,12 @@ describe("/todolists/todonotes", () => {
     describe("feilure tests", () => {
       test("POST should not create todonote with not valid list ID", async () => {
         //act
-        const res = await agent.post(`/todolists/asdf/todonotes`).send({
-          ...todonote,
-        });
+        const res = await agent
+          .post(`/todolists/asdf/todonotes`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
+          .send({
+            ...todonote,
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid list id required");
@@ -237,53 +252,66 @@ describe("/todolists/todonotes", () => {
 
       test("POST should not create todonote with wrong done type", async () => {
         //act
-        const res = await agent.post(`/todolists/${listid}/todonotes`).send({
-          ...todonote,
-          done: "false",
-        });
+        const res = await agent
+          .post(`/todolists/${listid}/todonotes`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
+          .send({
+            ...todonote,
+            done: "false",
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("done should be boolean type");
       });
       test("POST should not create todonote with wrong priority type", async () => {
         //act
-        const res = await agent.post(`/todolists/${listid}/todonotes`).send({
-          ...todonote,
-          priority: "1",
-        });
+        const res = await agent
+          .post(`/todolists/${listid}/todonotes`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
+          .send({
+            ...todonote,
+            priority: "1",
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("priority should be integer type");
       });
       test("POST should not create todonote without text", async () => {
         //act
-        const res = await agent.post(`/todolists/${listid}/todonotes`).send({
-          ...todonote,
-          text: "",
-        });
+        const res = await agent
+          .post(`/todolists/${listid}/todonotes`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
+          .send({
+            ...todonote,
+            text: "",
+          });
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("todo text reuired");
       });
       test("GET should not get todonote with not valid  id", async () => {
         //act
-        const res = await agent.get("/todolists/todonotes/123454");
+        const res = await agent
+          .get("/todolists/todonotes/123454")
+          .set("Authorization", `Bearer ${tokens.user1.token}`);
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
       });
       test("delete should not delete todonote with not valid list id", async () => {
         //act
-        const res = await agent.delete("/todolists/todonotes/123454");
+        const res = await agent
+          .delete("/todolists/todonotes/123454")
+          .set("Authorization", `Bearer ${tokens.user1.token}`);
         //assert
         expect(res.status).toBe(400);
         expect(res.body).toBe("valid id required");
       });
       test("delete should resp with 404", async () => {
         //act
-        const res = await agent.delete(
-          "/todolists/todonotes/54e18a6a-be9a-11ed-afa1-0242ac120002"
-        );
+        const res = await agent
+          .delete("/todolists/todonotes/54e18a6a-be9a-11ed-afa1-0242ac120002")
+          .set("Authorization", `Bearer ${tokens.user1.token}`);
         //assert
         expect(res.status).toBe(404);
       });
@@ -292,6 +320,7 @@ describe("/todolists/todonotes", () => {
         //act
         const res = await agent
           .put(`/todolists/${listid}/todonotes/ "not valid"`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
           .send(todonote);
         //assert
         expect(res.status).toBe(400);
@@ -302,6 +331,7 @@ describe("/todolists/todonotes", () => {
         //act
         const res = await agent
           .put(`/todolists/notvalid/todonotes/${id}`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
           .send(todonote);
         //assert
         expect(res.status).toBe(400);
@@ -312,6 +342,7 @@ describe("/todolists/todonotes", () => {
         //act
         const res = await agent
           .put(`/todolists/${listid}/todonotes/${id}`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
           .send({
             ...todonote,
             done: "false",
@@ -324,6 +355,7 @@ describe("/todolists/todonotes", () => {
         //act
         const res = await agent
           .put(`/todolists/${listid}/todonotes/${id}`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
           .send({
             ...todonote,
             priority: "1",
@@ -336,6 +368,7 @@ describe("/todolists/todonotes", () => {
         //act
         const res = await agent
           .put(`/todolists/${listid}/todonotes/${id}`)
+          .set("Authorization", `Bearer ${tokens.user1.token}`)
           .send({
             ...todonote,
             text: "",
@@ -361,15 +394,17 @@ describe("/todolists/todonotes", () => {
         null,
         "email"
       );
-      await agent
+      const login = await agent
         .post(`/auth`)
-        .send({ email: badUser.email, password: badUser.password })
-        .redirects();
+        .send({ email: badUser.email, password: badUser.password });
+      tokens.badUser = { ...login.body };
     });
 
     test("GET request should respose access denied", async () => {
       //act
-      const res = await agent.get(`/todolists/todonotes/${id}`);
+      const res = await agent
+        .get(`/todolists/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
@@ -378,6 +413,7 @@ describe("/todolists/todonotes", () => {
       //act
       const res = await agent
         .post(`/todolists/${listid}/todonotes`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`)
         .send(todonote);
       //assert
       expect(res.status).toBe(400);
@@ -387,6 +423,7 @@ describe("/todolists/todonotes", () => {
       //act
       const res = await agent
         .put(`/todolists/${listid}/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`)
         .send(todonote);
       //assert
       expect(res.status).toBe(400);
@@ -394,12 +431,12 @@ describe("/todolists/todonotes", () => {
     });
     test("DELETE request should respose access denied", async () => {
       //act
-      const res = await agent.delete(`/todolists/todonotes/${id}`);
+      const res = await agent
+        .delete(`/todolists/todonotes/${id}`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
   });
 });
-
-//ERROR HANDLE!!

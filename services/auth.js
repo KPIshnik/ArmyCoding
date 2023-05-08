@@ -84,12 +84,12 @@ const totalLogout = async (req, res, next) => {
 };
 
 exports.updateAuthTokens = async (userid, deviceid) => {
-  const user = getUserById(userid);
+  const user = await getUserById(userid);
 
   delete user.password;
   user.deviceid = deviceid;
 
-  const tokens = issueTokenPair(user);
+  const tokens = await issueTokenPair(user);
   return tokens;
 };
 

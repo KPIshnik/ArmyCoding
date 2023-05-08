@@ -7,7 +7,8 @@ const updateUserEmailController = async (req, res, next) => {
   try {
     const userPass = req.body.password;
     const userEmail = req.body.email;
-    const user = req.user;
+    const userid = req.user.id;
+    const user = await getUserById(userid);
 
     if (await checkUniqueUserEmail(userEmail)) {
       res.status(400).json("email should be unique");

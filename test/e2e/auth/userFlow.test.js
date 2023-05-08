@@ -3,10 +3,12 @@ const { url, testmail } = require("../../../configs/credentials");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const superagent = require("superagent");
+const jwt = require("jsonwebtoken");
 
 jest.setTimeout(60000);
 
 let server;
+let tokens = {};
 
 describe("user register via email and chenging userdata", () => {
   const testUser = {
@@ -84,17 +86,21 @@ describe("user register via email and chenging userdata", () => {
         //act
         const loginResponse = await agent
           .post(`/auth`)
-          .send({ email: testUser.email, password: testUser.password })
-          .redirects();
+          .send({ email: testUser.email, password: testUser.password });
+
+        tokens = { ...loginResponse.body };
         //assert
         expect(loginResponse.status).toBe(200);
-        expect(loginResponse.body).toBe(`Aloha ${testUser.username}!`);
+        expect(typeof loginResponse.body.token).toBe("string");
+        expect(typeof loginResponse.body.refreshtoken).toBe("string");
       });
     });
   });
   test("shoul get user profile", async () => {
     //act
-    const res = await agent.get("/me/profile");
+    const res = await agent
+      .get("/me/profile")
+      .set("Authorization", `Bearer ${tokens.token}`);
     //assert
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -111,10 +117,19 @@ describe("user register via email and chenging userdata", () => {
     test("should seccesfuly change logged in user's username", async () => {
       const response = await agent
         .put(`/me/profile/username`)
+        .set("Authorization", `Bearer ${tokens.token}`)
         .send({ username: testUser.newUsername, password: testUser.password });
 
+      //assert
       expect(response.status).toBe(200);
-      expect(response.body).toBe("username changed");
+      expect(typeof response.body.token).toBe("string");
+      expect(typeof response.body.refreshtoken).toBe("string");
+      expect(jwt.decode(response.body.token).username).toBe(
+        testUser.newUsername
+      );
+
+      //--
+      tokens = { ...response.body };
     });
   });
 
@@ -127,6 +142,7 @@ describe("user register via email and chenging userdata", () => {
 
       const response = await agent
         .put(`/me/profile/email`)
+        .set("Authorization", `Bearer ${tokens.token}`)
         .send({ email: testUser.newEmail, password: testUser.password });
 
       expect(response.status).toBe(200);
@@ -157,7 +173,6 @@ describe("user register via email and chenging userdata", () => {
       // asssert;
 
       expect(response.status).toBe(200);
-      expect(response.body).toBe("Email confirmed");
     });
 
     test(`should login via new Email,
@@ -166,21 +181,31 @@ describe("user register via email and chenging userdata", () => {
       //act
       const response = await agent
         .post(`/auth`)
-        .send({ email: testUser.newEmail, password: testUser.password })
-        .redirects();
+        .send({ email: testUser.newEmail, password: testUser.password });
+
+      const alohaRes = await agent
+        .get("/")
+        .set("Authorization", `Bearer ${response.body.token}`);
       //assert
       expect(response.status).toBe(200);
-      expect(response.body).toBe(`Aloha ${testUser.newUsername}!`);
+      expect(typeof response.body.token).toBe("string");
+      expect(typeof response.body.refreshtoken).toBe("string");
+      expect(alohaRes.status).toBe(200);
+      //--
+      tokens = { ...response.body };
     });
   });
 
   describe("chenging password", () => {
     test("should seccesfuly change logged in user's username", async () => {
-      const response = await agent.put(`/me/profile/password`).send({
-        password: testUser.password,
-        newPass: testUser.newPassword,
-        newPass2: testUser.newPassword,
-      });
+      const response = await agent
+        .put(`/me/profile/password`)
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send({
+          password: testUser.password,
+          newPass: testUser.newPassword,
+          newPass2: testUser.newPassword,
+        });
 
       expect(response.status).toBe(200);
       expect(response.body).toBe("password chenged");

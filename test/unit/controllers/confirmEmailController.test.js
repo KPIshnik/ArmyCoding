@@ -54,7 +54,6 @@ describe("Confirm email controller tests", () => {
 
     expect(setUserEmail).toHaveBeenCalledWith(userData.id, userData.email);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.json).toHaveBeenCalledWith("Email confirmed");
   });
 
   test('shuold return code:  400 msg: "valid key required", when key is missing', async () => {

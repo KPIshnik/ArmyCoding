@@ -9,4 +9,10 @@
 7. Рефакторинг.
 
 
+redo test
+1 e2e todolists +++
+2 e2e userflow
+3 routes
+4. unit
+
 

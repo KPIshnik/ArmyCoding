@@ -18,6 +18,7 @@ jest.mock("bcrypt", () => {
 
 let server;
 let agent;
+let tokens;
 
 describe("/todolists", () => {
   date = new Date();
@@ -75,6 +76,7 @@ describe("/todolists", () => {
       null,
       "email"
     );
+
     jest
       .useFakeTimers({
         doNotFake: [
@@ -107,11 +109,10 @@ describe("/todolists", () => {
     describe("get request", () => {
       test("should response with 401 status and 'not authorized' msg", async () => {
         //act
-        const response = await agent.get("/todolists").redirects();
+        const response = await agent.get("/todolists");
 
         //assert
         expect(response.status).toBe(401);
-        expect(response.body).toBe("not authorized");
       });
     });
 
@@ -122,7 +123,6 @@ describe("/todolists", () => {
 
         //assert
         expect(responce.status).toBe(401);
-        expect(responce.body).toBe("not authorized");
       });
     });
 
@@ -132,19 +132,15 @@ describe("/todolists", () => {
       const res = await agent.delete(`/todolists/${todolist.id}`);
       //assert
       expect(res.status).toBe(401);
-      expect(res.body).toBe("not authorized");
     });
   });
 
   describe("tests for authorized user", () => {
     beforeAll(async () => {
-      await agent
+      const res = await agent
         .post(`/auth`)
         .send({ email: testUser.email, password: testUser.password });
-    });
-
-    afterAll(async () => {
-      const res = await agent.delete("/auth");
+      tokens = { ...res.body };
     });
 
     test(`create and get singl todolist,
@@ -155,10 +151,15 @@ describe("/todolists", () => {
 
       //act
 
-      const response = await agent.post("/todolists").send(todolist);
+      const response = await agent
+        .post("/todolists")
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send(todolist);
 
       todolist.id = response.body.data ? response.body.data.id : undefined;
-      const getResp = await agent.get(`/todolists/${todolist.id}`);
+      const getResp = await agent
+        .get(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.token}`);
 
       //assert
       expect(response.status).toBe(200);
@@ -185,8 +186,12 @@ describe("/todolists", () => {
     test("DELETE request, should delete todolist, response with 200 code", async () => {
       //arrange
       //act
-      const res = await agent.delete(`/todolists/${todolist.id}`);
-      const getRes = await agent.get(`/todolists/${todolist.id}`);
+      const res = await agent
+        .delete(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.token}`);
+      const getRes = await agent
+        .get(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.token}`);
       //assert
       expect(res.status).toBe(200);
       expect(res.body).toBe(`todolist ${todolist.listname} deleted`);
@@ -228,13 +233,27 @@ describe("/todolists", () => {
 
       //act
 
-      const resp = await agent.post("/todolists").send(todolist);
-      await agent.post("/todolists").send(todolist2);
-      await agent.post("/todolists").send(todolist3);
-      await agent.post("/todolists").send(todolist4);
+      const resp = await agent
+        .post("/todolists")
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send(todolist);
+      await agent
+        .post("/todolists")
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send(todolist2);
+      await agent
+        .post("/todolists")
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send(todolist3);
+      await agent
+        .post("/todolists")
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send(todolist4);
 
       todolist.id = resp.body.data ? resp.body.data.id : undefined;
-      const getResp = await agent.get(`/todolists`);
+      const getResp = await agent
+        .get(`/todolists`)
+        .set("Authorization", `Bearer ${tokens.token}`);
 
       const userTodoLists = getResp.body;
 
@@ -255,7 +274,9 @@ describe("/todolists", () => {
 
     test('PUT request, should update todolist, response with 200 code, "list listId updated"', async () => {
       //arrange
-      const getOldLst = await agent.get(`/todolists/${todolist.id}`);
+      const getOldLst = await agent
+        .get(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.token}`);
       const oldTodolist = getOldLst.body;
 
       const newTodos = oldTodolist.todos.filter(
@@ -295,8 +316,13 @@ describe("/todolists", () => {
         todos: newTodos,
       };
       //act
-      const res = await agent.put("/todolists").send(newTodolist);
-      const getRes = await agent.get(`/todolists/${todolist.id}`);
+      const res = await agent
+        .put("/todolists")
+        .set("Authorization", `Bearer ${tokens.token}`)
+        .send(newTodolist);
+      const getRes = await agent
+        .get(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.token}`);
       //assert
       expect(res.status).toBe(200);
       expect(res.body).toBe(`list ${oldTodolist.id} updated`);
@@ -330,6 +356,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .post("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithNoListname);
 
           //assert
@@ -359,6 +386,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .post("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithBrokenPriority);
 
           //assert
@@ -388,6 +416,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .post("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithDoneType);
 
           //assert
@@ -416,6 +445,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .post("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithNoText);
 
           //assert
@@ -445,6 +475,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .post("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithBrokenPriority);
 
           //assert
@@ -454,7 +485,9 @@ describe("/todolists", () => {
       });
       describe("PUT request failure tests", () => {
         beforeAll(async () => {
-          const res = await agent.get(`/todolists/${todolist.id}`);
+          const res = await agent
+            .get(`/todolists/${todolist.id}`)
+            .set("Authorization", `Bearer ${tokens.token}`);
           todolist.updated_at = res.body.updated_at;
         });
 
@@ -470,6 +503,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithNoListname);
 
           //assert
@@ -501,6 +535,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithBrokenPriority);
 
           //assert
@@ -532,6 +567,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithDoneType);
 
           //assert
@@ -562,6 +598,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithNoText);
 
           //assert
@@ -593,6 +630,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithBrokenPriority);
 
           //assert
@@ -624,6 +662,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithBrokenPriority);
 
           //assert
@@ -655,6 +694,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWithoutTimestamp);
 
           //assert
@@ -686,6 +726,7 @@ describe("/todolists", () => {
           //act
           const response = await agent
             .put("/todolists")
+            .set("Authorization", `Bearer ${tokens.token}`)
             .send(todolistWrongTimestamp);
 
           //assert
@@ -698,7 +739,9 @@ describe("/todolists", () => {
           with bad id`, async () => {
         const badId = "id123";
         //act
-        const response = await agent.get(`/todolists/${badId}`);
+        const response = await agent
+          .get(`/todolists/${badId}`)
+          .set("Authorization", `Bearer ${tokens.token}`);
 
         //assert
         expect(response.status).toBe(400);
@@ -709,7 +752,9 @@ describe("/todolists", () => {
           with bad id`, async () => {
         const badId = "id123";
         //act
-        const response = await agent.delete(`/todolists/${badId}`);
+        const response = await agent
+          .delete(`/todolists/${badId}`)
+          .set("Authorization", `Bearer ${tokens.token}`);
 
         //assert
         expect(response.status).toBe(400);
@@ -734,32 +779,37 @@ describe("/todolists", () => {
       );
       const res = await agent
         .post(`/auth`)
-        .send({ email: badUser.email, password: badUser.password })
-        .redirects();
+        .send({ email: badUser.email, password: badUser.password });
+      tokens.badUser = { ...res.body };
     });
 
     test("GET request should respose access denied", async () => {
       //act
-      const res = await agent.get(`/todolists/${todolist.id}`);
+      const res = await agent
+        .get(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
     test("PUT request should respose access denied", async () => {
       //act
-      const res = await agent.put(`/todolists`).send(todolist);
+      const res = await agent
+        .put(`/todolists`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`)
+        .send(todolist);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
     test("DELETE request should respose access denied", async () => {
       //act
-      const res = await agent.delete(`/todolists/${todolist.id}`);
+      const res = await agent
+        .delete(`/todolists/${todolist.id}`)
+        .set("Authorization", `Bearer ${tokens.badUser.token}`);
       //assert
       expect(res.status).toBe(400);
       expect(res.body).toBe("access denied");
     });
   });
 });
-
-// //ERROR HANDLE!!

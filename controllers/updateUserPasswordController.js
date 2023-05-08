@@ -4,9 +4,11 @@ const bcrypt = require("bcrypt");
 
 const updateUserPasswordController = async (req, res, next) => {
   try {
-    const user = req.user;
+    const userid = req.user.id;
     const password = req.body.password;
     const newPass = req.body.newPass;
+
+    const user = await getUserById(userid);
 
     if (!req.body.valid) {
       return res.status(400).json("request not valid");

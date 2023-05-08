@@ -1,6 +1,7 @@
 const setUserEmail = require("../models/setUserEmail");
 const getUserDataByKey = require("../models/getUserDataByKey");
 const { confirmEmailExpireTime } = require("../configs/settings");
+const issueTokenPair = require("../helpers/issueTokenPair");
 
 const confirmEmailController = async (req, res, next) => {
   try {
@@ -30,7 +31,7 @@ const confirmEmailController = async (req, res, next) => {
 
     await setUserEmail(userData.id, userData.email);
 
-    res.status(200).json("Email confirmed");
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
