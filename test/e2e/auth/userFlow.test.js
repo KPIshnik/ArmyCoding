@@ -77,7 +77,6 @@ describe("user register via email and chenging userdata", () => {
         // asssert;
 
         expect(confirmEmailResponse.status).toBe(200);
-        expect(confirmEmailResponse.body).toBe("Email confirmed");
       });
 
       test(`should login via user data,

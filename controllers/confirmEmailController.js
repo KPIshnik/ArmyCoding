@@ -1,12 +1,11 @@
 const setUserEmail = require("../models/setUserEmail");
 const getUserDataByKey = require("../models/getUserDataByKey");
 const { confirmEmailExpireTime } = require("../configs/settings");
-const issueTokenPair = require("../helpers/issueTokenPair");
 const deleteAllTokens = require("../models/auth/deleteAllTokens");
 
 const confirmEmailController = async (req, res, next) => {
   try {
-    const key = req.query ? req.query.key : null;
+    const key = req.query && req.query.key;
 
     if (!key || typeof key != "string") {
       res.status(400).json("valid key required");

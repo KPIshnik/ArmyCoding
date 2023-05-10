@@ -14,8 +14,6 @@ jest.mock("bcrypt", () => {
   };
 });
 
-//jest.setTimeout(300000);
-
 let server;
 let agent;
 let tokens;
@@ -102,9 +100,10 @@ describe("/todolists", () => {
   afterAll(async () => {
     await clearDB();
     await server.teardown();
+
     jest.useRealTimers();
   });
-  test("", () => {});
+
   describe("tests with user not authirized", () => {
     describe("get request", () => {
       test("should response with 401 status and 'not authorized' msg", async () => {
@@ -320,6 +319,7 @@ describe("/todolists", () => {
         .put("/todolists")
         .set("Authorization", `Bearer ${tokens.token}`)
         .send(newTodolist);
+
       const getRes = await agent
         .get(`/todolists/${todolist.id}`)
         .set("Authorization", `Bearer ${tokens.token}`);

@@ -1,12 +1,14 @@
 jest.mock("../../../models/getUserByUsename");
 jest.mock("../../../models/setUserEmail");
 jest.mock("../../../models/getUserDataByKey");
+jest.mock("../../../models/auth/deleteAllTokens");
 
 //mock date
 const setUserEmail = require("../../../models/setUserEmail");
 const getUserDataByKey = require("../../../models/getUserDataByKey");
 const { confirmEmailExpireTime } = require("../../../configs/settings");
 const confirmEmailController = require("../../../controllers/confirmEmailController");
+const deleteAllTokens = require("../../../models/auth/deleteAllTokens");
 
 describe("Confirm email controller tests", () => {
   const mockNextFunction = jest.fn();
@@ -41,6 +43,7 @@ describe("Confirm email controller tests", () => {
     getUserDataByKey.mockClear();
     mockResponse.status.mockClear();
     mockResponse.json.mockClear();
+    deleteAllTokens.mockClear();
   });
 
   test("should confirm email when everything ok", async () => {
@@ -53,7 +56,8 @@ describe("Confirm email controller tests", () => {
     //assert
 
     expect(setUserEmail).toHaveBeenCalledWith(userData.id, userData.email);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.sendStatus).toHaveBeenCalledWith(200);
+    expect(deleteAllTokens).toHaveBeenCalledWith(userData.id);
   });
 
   test('shuold return code:  400 msg: "valid key required", when key is missing', async () => {

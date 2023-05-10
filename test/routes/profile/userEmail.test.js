@@ -123,15 +123,15 @@ describe("useremail", () => {
         .post("/auth")
         .send({ email: testUser.newEmail, password: testUser.password });
 
+      tokens.user = { ...loginResp.body };
+
       //assert
       expect(response.status).toBe(200);
       expect(response.body).toBe("confirm new email");
 
-      expect(confirmEmailResponse.body).toBe("Email confirmed");
       expect(confirmEmailResponse.status).toBe(200);
 
       expect(loginResp.status).toBe(200);
-      expect(loginResp.body).toBe(`Aloha ${testUser.username}!`);
     });
 
     test(`put request, should NOT change email,
@@ -139,10 +139,13 @@ describe("useremail", () => {
       const notValidPasses = ["", null, undefined];
       //act
       for (pass of notValidPasses) {
-        const response = await agent.put("/me/profile/email").send({
-          email: testUser.email,
-          password: pass,
-        });
+        const response = await agent
+          .put("/me/profile/email")
+          .set("Authorization", `Bearer ${tokens.user.token}`)
+          .send({
+            email: testUser.email,
+            password: pass,
+          });
 
         //assert
         expect(response.status).toBe(400);
@@ -156,10 +159,13 @@ describe("useremail", () => {
       const notValidEmails = ["", null, undefined];
       //act
       for (email of notValidEmails) {
-        const response = await agent.put("/me/profile/email").send({
-          email,
-          password: testUser.password,
-        });
+        const response = await agent
+          .put("/me/profile/email")
+          .set("Authorization", `Bearer ${tokens.user.token}`)
+          .send({
+            email,
+            password: testUser.password,
+          });
 
         //assert
         expect(response.status).toBe(400);
@@ -172,10 +178,13 @@ describe("useremail", () => {
       and response with 400 code and "wrong pass" msg`, async () => {
       //act
 
-      const response = await agent.put("/me/profile/email").send({
-        password: "fakepassword",
-        email: "uniqueEmail@mail",
-      });
+      const response = await agent
+        .put("/me/profile/email")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
+        .send({
+          password: "fakepassword",
+          email: "uniqueEmail@mail",
+        });
 
       //assert
       expect(response.status).toBe(401);
@@ -187,10 +196,13 @@ describe("useremail", () => {
       and response with 400 code and "email should be unique" msg`, async () => {
       //act
 
-      const response = await agent.put("/me/profile/email").send({
-        password: testUser.password,
-        email: testUser.doubleEmail,
-      });
+      const response = await agent
+        .put("/me/profile/email")
+        .set("Authorization", `Bearer ${tokens.user.token}`)
+        .send({
+          password: testUser.password,
+          email: testUser.doubleEmail,
+        });
 
       //assert
       expect(response.status).toBe(400);
@@ -199,5 +211,3 @@ describe("useremail", () => {
     });
   });
 });
-
-//ERROR HANDLE!!

@@ -1,12 +1,13 @@
 1. Redo auth with jwt + kill passport
-1.5 udate changing userr datat controllers with updateauth  
 2. use fb/google refresh
 3. use https
 4. test for fb and google
-6. !!solve Promiss.all+jest problem
+
+7. sawagger
 ?
 7. замутить валаби
 7. Рефакторинг.
+8. solve Promiss.all+jest problem
 
 
 redo test
@@ -14,12 +15,12 @@ redo test
 2 e2e userflow
 3 routes
   ++ Profile/avatar, password, username 
-  -- profile/userEmail == do with internet. TEST deleted tokens
-  -- auth == test with intet
+  ++ profile/userEmail == do with internet. TEST deleted tokens
+  ++ auth == test with intet
  
 
-  4. unit
-  -- unit == test with intet
+4. unit ++
+  
 
 
 
