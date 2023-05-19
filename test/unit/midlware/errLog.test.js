@@ -1,7 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 const request = require("supertest");
-const { url } = require("../../../configs/credentials");
+const { url } = require("../../../configs/config");
 const clearDB = require("../../../DB/clearDB");
 const registerNewUser = require("../../../models/registerNewUser");
 const serverPromise = require("../../../server");

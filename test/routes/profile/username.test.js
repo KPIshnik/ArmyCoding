@@ -1,11 +1,9 @@
 const request = require("supertest");
-const { url, testmail } = require("../../../configs/credentials");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const registerNewUser = require("../../../models/registerNewUser");
-const setUserPassword = require("../../../models/setUserPassword");
-const superagent = require("superagent");
 const setUserName = require("../../../models/setUserName");
+const { url } = require("../../../configs/config");
 
 jest.mock("../../../models/setUserName", () =>
   jest.fn(jest.requireActual("../../../models/setUserName"))

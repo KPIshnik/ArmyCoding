@@ -1,38 +1,8 @@
 const expres = require("express");
-const passport = require("passport");
+const { auth } = require("../../services/auth");
 
 const router = expres.Router();
-//kill
-router.get(
-  "/auth/google/cb",
-  passport.authenticate("google", {
-    failureRedirect: "/auth/fail",
-    failureMessage: true,
-  }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
+
+router.get("/auth/google/cb", auth.google.getProfile, auth.google.authenticate);
 
 module.exports = router;
-
-// (req, res, next) => {
-//   passport.authenticate(
-//     "google",
-
-//     (err, user, info) => {
-//       if (err) {
-//         return next(err);
-//       }
-//       if (!user) {
-//         return res.status(401).json(info);
-//       }
-// req.login(user, function(err){
-//   if(err){
-//     return next(err);
-//   }
-
-//       return res.redirect("/");
-//     }
-//   )(req, res, next);
-// }

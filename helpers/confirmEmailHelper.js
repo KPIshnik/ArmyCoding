@@ -1,6 +1,6 @@
 const sendEmailThred = require("./sendMailThred");
 
-const { url } = require("../configs/credentials.js");
+const { url } = require("../configs/config");
 const generateKey = require("./generateKey");
 const createEmailConfirmRow = require("../models/createEmailConfirmRow");
 

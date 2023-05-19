@@ -1,7 +1,7 @@
 const {
   cleaningDBInteval,
   confirmEmailExpireTime,
-} = require("../configs/settings");
+} = require("../configs/config");
 const deleteUnconfirmedUsers = require("../models/delUnconfirmedUsers");
 
 const expiredDate = Date.now() - confirmEmailExpireTime;

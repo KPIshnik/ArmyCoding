@@ -1,10 +1,9 @@
-const bcript = require("bcrypt");
 const verifyPassword = require("../helpers/verifyPassword");
 const setUserName = require("../models/setUserName");
 const checkUniqueUsername = require("../models/checkUniqueUsername");
 const renameAvatar = require("../helpers/renameAvatar");
-const { updateAuthTokens } = require("../services/auth");
 const getUserById = require("../models/getUserrById");
+const { auth } = require("../services/auth");
 
 const updateUsernameController = async (req, res, next) => {
   try {
@@ -30,7 +29,7 @@ const updateUsernameController = async (req, res, next) => {
     await renameAvatar(req.user.username, username);
     await setUserName(user.id, username);
 
-    const tokens = await updateAuthTokens(user.id, user.deviceid);
+    const tokens = await auth.updateAuthTokens(user.id, req.user.deviceid);
 
     res.status(200).json(tokens);
   } catch (err) {

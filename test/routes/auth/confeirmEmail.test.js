@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { url } = require("../../../configs/credentials");
+const { url } = require("../../../configs/config");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const clearDbTables = require("../../../DB/clearDbTables");

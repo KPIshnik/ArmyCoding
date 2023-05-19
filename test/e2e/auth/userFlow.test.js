@@ -1,9 +1,10 @@
 const request = require("supertest");
-const { url, testmail } = require("../../../configs/credentials");
+const { testmail } = require("../../../configs/credentials");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const superagent = require("superagent");
 const jwt = require("jsonwebtoken");
+const { url } = require("../../../configs/config");
 
 jest.setTimeout(60000);
 

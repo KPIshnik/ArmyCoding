@@ -1,25 +1,16 @@
 1. Redo auth with jwt + kill passport
 2. use fb/google refresh
-3. use https
+7. sawagger
 4. test for fb and google
 
-7. sawagger
 ?
-7. замутить валаби
-7. Рефакторинг.
-8. solve Promiss.all+jest problem
+6. rewrite send mail kill sandgrid
+7. use https
+8. Redo configs and credentials
+9. Рефакторинг.
+10. solve Promiss.all+jest problem
 
 
-redo test
-1 e2e todolists +++
-2 e2e userflow
-3 routes
-  ++ Profile/avatar, password, username 
-  ++ profile/userEmail == do with internet. TEST deleted tokens
-  ++ auth == test with intet
- 
-
-4. unit ++
   
 
 

@@ -1,6 +1,6 @@
 const setUserEmail = require("../models/setUserEmail");
 const getUserDataByKey = require("../models/getUserDataByKey");
-const { confirmEmailExpireTime } = require("../configs/settings");
+const { confirmEmailExpireTime } = require("../configs/config");
 const deleteAllTokens = require("../models/auth/deleteAllTokens");
 
 const confirmEmailController = async (req, res, next) => {

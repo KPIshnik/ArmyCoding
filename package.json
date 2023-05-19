@@ -15,6 +15,7 @@
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",
     "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
     "deep-email-validator": "^0.1.21",
     "express": "^4.17.1",
     "express-session": "^1.17.1",

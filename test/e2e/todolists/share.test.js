@@ -1,9 +1,10 @@
 const request = require("supertest");
 const superagent = require("superagent");
-const { url, testmail } = require("../../../configs/credentials");
+const { testmail } = require("../../../configs/credentials");
 const clearDB = require("../../../DB/clearDB");
 const serverPromise = require("../../../server");
 const registerNewUser = require("../../../models/registerNewUser");
+const { url } = require("../../../configs/config");
 
 jest.mock("bcrypt", () => {
   const originalBcript = jest.requireActual("bcrypt");

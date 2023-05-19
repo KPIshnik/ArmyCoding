@@ -1,0 +1,26 @@
+Fri May 19 2023 17:55:41 GMT+0300 (Eastern European Summer Time)
+ReferenceError: getUserByGoogleID is not defined
+    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:156:18)
+    at Layer.handle [as handle_request] (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/route.js:144:13)
+    at getProfile (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:146:7)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+Fri May 19 2023 17:56:48 GMT+0300 (Eastern European Summer Time)
+ReferenceError: getUserByGoogleID is not defined
+    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:159:18)
+    at Layer.handle [as handle_request] (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/route.js:144:13)
+    at getProfile (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:149:7)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+Fri May 19 2023 18:14:48 GMT+0300 (Eastern European Summer Time)
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:387:5)
+    at ServerResponse.setHeader (node:_http_outgoing:644:11)
+    at ServerResponse.header (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/response.js:794:10)
+    at ServerResponse.send (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/response.js:174:12)
+    at ServerResponse.json (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/response.js:278:15)
+    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:183:23)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
