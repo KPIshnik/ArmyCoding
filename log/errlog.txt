@@ -1,26 +1,22 @@
-Fri May 19 2023 17:55:41 GMT+0300 (Eastern European Summer Time)
-ReferenceError: getUserByGoogleID is not defined
-    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:156:18)
-    at Layer.handle [as handle_request] (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/layer.js:95:5)
-    at next (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/route.js:144:13)
-    at getProfile (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:146:7)
-    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+Sat May 20 2023 10:33:07 GMT+0300 (Eastern European Summer Time)
+Error: Bad Request
+    at Request.callback (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/superagent/lib/node/index.js:905:17)
+    at IncomingMessage.<anonymous> (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/superagent/lib/node/index.js:1145:18)
+    at IncomingMessage.emit (node:events:525:35)
+    at endReadableNT (node:internal/streams/readable:1358:12)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
-Fri May 19 2023 17:56:48 GMT+0300 (Eastern European Summer Time)
-ReferenceError: getUserByGoogleID is not defined
-    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:159:18)
-    at Layer.handle [as handle_request] (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/layer.js:95:5)
-    at next (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/router/route.js:144:13)
-    at getProfile (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:149:7)
-    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+Sat May 20 2023 11:50:41 GMT+0300 (Eastern European Summer Time)
+Error: Bad Request
+    at Request.callback (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/superagent/lib/node/index.js:905:17)
+    at IncomingMessage.<anonymous> (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/superagent/lib/node/index.js:1145:18)
+    at IncomingMessage.emit (node:events:525:35)
+    at endReadableNT (node:internal/streams/readable:1358:12)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
-Fri May 19 2023 18:14:48 GMT+0300 (Eastern European Summer Time)
-Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-    at new NodeError (node:internal/errors:387:5)
-    at ServerResponse.setHeader (node:_http_outgoing:644:11)
-    at ServerResponse.header (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/response.js:794:10)
-    at ServerResponse.send (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/response.js:174:12)
-    at ServerResponse.json (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/node_modules/express/lib/response.js:278:15)
-    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth.js:183:23)
+Sat May 20 2023 11:53:59 GMT+0300 (Eastern European Summer Time)
+TypeError: Cannot read properties of undefined (reading 'deviceid')
+    at issueTokenPair (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/helpers/issueTokenPair.js:10:13)
+    at authenticate (/home/kpishnik/Desktop/DEV/NodeJS/practice/ArmyCoding/services/auth/facebook.js:76:30)
     at processTicksAndRejections (node:internal/process/task_queues:96:5)
 

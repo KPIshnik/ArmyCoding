@@ -1,19 +1,7 @@
 const expres = require("express");
-const passport = require("passport");
+const auth = require("../../services/auth");
 
 const router = expres.Router();
-router.get(
-  "/auth/fb/cb",
-  // fbAuthController
-  //(req, res)=>{
-
-  //}
-  passport.authenticate("facebook", {
-    failureRedirect: "/auth/fail",
-  }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
+router.get("/auth/fb/cb", auth.facebook.getProfile, auth.facebook.authenticate);
 
 module.exports = router;

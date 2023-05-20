@@ -1,5 +1,9 @@
 1. Redo auth with jwt + kill passport
-2. use fb/google refresh
+    -- nonce fb
+    -- validate fb
+    -- nonce g
+    -- validate g
+    -- https://developers.facebook.com/docs/facebook-login/guides/test
 7. sawagger
 4. test for fb and google
 

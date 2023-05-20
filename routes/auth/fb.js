@@ -1,13 +1,8 @@
 const expres = require("express");
-const passport = require("passport");
+const auth = require("../../services/auth");
 
 const router = expres.Router();
 
-router.get(
-  "/auth/fb",
-  passport.authenticate("facebook", {
-    scope: ["email"],
-  })
-);
+router.get("/auth/fb", auth.facebook.getCode);
 
 module.exports = router;
