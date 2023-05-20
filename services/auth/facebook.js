@@ -1,9 +1,7 @@
 const issueTokenPair = require("../../helpers/issueTokenPair");
 const { url } = require("../../configs/config");
-
 const superagent = require("superagent");
 const jwt = require("jsonwebtoken");
-const getUserByGoogleId = require("../../models/getUserByGoogleId");
 const registerNewUser = require("../../models/registerNewUser");
 const checkIsRegistered = require("../../helpers/checkIsRegistered");
 const { facebookKeys } = require("../../configs/credentials");

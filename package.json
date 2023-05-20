@@ -23,7 +23,6 @@
     "multer": "^1.4.5-lts.1",
     "node-email-validation": "^1.0.4",
     "node-pg-migrate": "^6.2.2",
-    "passport": "^0.6.0",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
