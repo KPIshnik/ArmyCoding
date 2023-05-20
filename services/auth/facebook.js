@@ -6,16 +6,22 @@ const registerNewUser = require("../../models/registerNewUser");
 const checkIsRegistered = require("../../helpers/checkIsRegistered");
 const { facebookKeys } = require("../../configs/credentials");
 const getUserByFacebookId = require("../../models/getUserByFacebookId");
+const getNonce = require("../../models/getNonce");
+const setNonce = require("../../models/setNonce");
+const { createid } = require("../../helpers/createid");
 
 class FacebookAuth {
   async getCode(req, res, next) {
     try {
+      const nonce = createid();
+      await setNonce(nonce);
       res.redirect(
         `https://www.facebook.com/v11.0/dialog/oauth?` +
           `client_id=${facebookKeys.FACEBOOK_APP_ID}&` +
           `response_type=code&` +
           `scope=openid&` +
-          `redirect_uri=${url}/auth/fb/cb&`
+          `redirect_uri=${url}/auth/fb/cb&` +
+          `nonce=${nonce}`
       );
     } catch (err) {
       next(err);
@@ -39,6 +45,9 @@ class FacebookAuth {
       const profile = idToken && jwt.decode(idToken);
 
       if (!profile) return res.sendStatus(401);
+
+      const nonce = await getNonce(profile.nonce);
+      if (!nonce) return res.status(400).json("nonce do not match");
 
       req.profile = {
         facebookid: profile.sub,

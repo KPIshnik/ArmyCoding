@@ -6,16 +6,22 @@ const jwt = require("jsonwebtoken");
 const getUserByGoogleId = require("../../models/getUserByGoogleId");
 const registerNewUser = require("../../models/registerNewUser");
 const checkIsRegistered = require("../../helpers/checkIsRegistered");
+const getNonce = require("../../models/getNonce");
+const { createid } = require("../../helpers/createid");
+const setNonce = require("../../models/setNonce");
 
 class GoogleAuth {
   async getCode(req, res, next) {
     try {
+      const nonce = createid();
+      await setNonce(nonce);
       res.redirect(
         `https://accounts.google.com/o/oauth2/v2/auth?` +
           `client_id=${googleKeys.googID}&` +
           `response_type=code&` +
           `scope=openid%20email%20profile&` +
-          `redirect_uri=${url}/auth/google/cb&`
+          `redirect_uri=${url}/auth/google/cb&` +
+          `nonce=${nonce}`
       );
     } catch (err) {
       next(err);
@@ -40,6 +46,10 @@ class GoogleAuth {
       const profile = idToken && jwt.decode(idToken);
 
       if (!profile) return res.sendStatus(401);
+      console.log(profile);
+
+      const nonce = await getNonce(profile.nonce);
+      if (!nonce) return res.status(400).json("nonce do not match");
 
       req.profile = {
         googleid: profile.sub,
