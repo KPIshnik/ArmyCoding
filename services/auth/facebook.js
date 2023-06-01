@@ -3,12 +3,14 @@ const { url } = require("../../configs/config");
 const superagent = require("superagent");
 const jwt = require("jsonwebtoken");
 const registerNewUser = require("../../models/registerNewUser");
-const checkIsRegistered = require("../../helpers/checkIsRegistered");
 const { facebookKeys } = require("../../configs/credentials");
 const getUserByFacebookId = require("../../models/getUserByFacebookId");
 const getNonce = require("../../models/getNonce");
 const setNonce = require("../../models/setNonce");
 const { createid } = require("../../helpers/createid");
+const setUserFacebookId = require("../../models/setUserFBid");
+const setUserEmail = require("../../models/setUserEmail");
+const getUserByEmail = require("../../models/getUserByEmail");
 
 class FacebookAuth {
   async getCode(req, res, next) {
@@ -30,6 +32,11 @@ class FacebookAuth {
 
   async getProfile(req, res, next) {
     try {
+      if (req.query.error_message)
+        return next(new Error(req.query.error_message));
+
+      if (!req.query.code) return res.sendStatus(401);
+
       const requestBody =
         `code=${req.query.code}` +
         `&client_id=${facebookKeys.FACEBOOK_APP_ID}` +
@@ -67,21 +74,29 @@ class FacebookAuth {
       let user = await getUserByFacebookId(profile.facebookid);
 
       if (!user) {
-        if (await checkIsRegistered(profile.email))
-          return res.status(400).json("this email already registered");
+        const registeredUser = await getUserByEmail(profile.email);
 
-        await registerNewUser(
-          profile.email,
-          null,
-          null,
-          null,
-          profile.facebookid,
-          "fb"
-        );
+        if (!registeredUser) {
+          await registerNewUser(
+            profile.email,
+            null,
+            null,
+            null,
+            profile.facebookid,
+            "fb"
+          );
+        } else {
+          await setUserFacebookId(registeredUser.id, profile.facebookid);
+        }
+
         user = await getUserByFacebookId(profile.facebookid);
 
         const tokens = await issueTokenPair(user);
         return res.status(200).json(tokens);
+      }
+
+      if (user.email != profile.email) {
+        await setUserEmail(user.id, profile.email);
       }
 
       delete user.password;

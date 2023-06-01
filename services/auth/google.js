@@ -5,10 +5,12 @@ const superagent = require("superagent");
 const jwt = require("jsonwebtoken");
 const getUserByGoogleId = require("../../models/getUserByGoogleId");
 const registerNewUser = require("../../models/registerNewUser");
-const checkIsRegistered = require("../../helpers/checkIsRegistered");
 const getNonce = require("../../models/getNonce");
 const { createid } = require("../../helpers/createid");
 const setNonce = require("../../models/setNonce");
+const getUserByEmail = require("../../models/getUserByEmail");
+const setUserGoogleid = require("../../models/setUserGoogleId");
+const setUserEmail = require("../../models/setUserEmail");
 
 class GoogleAuth {
   async getCode(req, res, next) {
@@ -30,6 +32,8 @@ class GoogleAuth {
 
   async getProfile(req, res, next) {
     try {
+      if (!req.query.code) return res.sendStatus(401);
+
       const requestBody =
         `code=${req.query.code}` +
         `&client_id=${googleKeys.googID}` +
@@ -46,7 +50,6 @@ class GoogleAuth {
       const profile = idToken && jwt.decode(idToken);
 
       if (!profile) return res.sendStatus(401);
-      console.log(profile);
 
       const nonce = await getNonce(profile.nonce);
       if (!nonce) return res.status(400).json("nonce do not match");
@@ -69,21 +72,29 @@ class GoogleAuth {
       let user = await getUserByGoogleId(profile.googleid);
 
       if (!user) {
-        if (await checkIsRegistered(profile.email))
-          return res.status(400).json("this email already registered");
+        const registeredUser = await getUserByEmail(profile.email);
 
-        await registerNewUser(
-          profile.email,
-          null,
-          null,
-          profile.googleid,
-          null,
-          "google"
-        );
+        if (!registeredUser) {
+          await registerNewUser(
+            profile.email,
+            null,
+            null,
+            profile.googleid,
+            null,
+            "google"
+          );
+        } else {
+          await setUserGoogleid(registeredUser.id, profile.googleid);
+        }
+
         user = await getUserByGoogleId(profile.googleid);
 
         const tokens = await issueTokenPair(user);
         return res.status(200).json(tokens);
+      }
+
+      if (user.email != profile.email) {
+        await setUserEmail(user.id, profile.email);
       }
 
       delete user.password;

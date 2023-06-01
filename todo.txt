@@ -1,18 +1,15 @@
 1. Redo auth with jwt + kill passport
-    -- nonce fb
-    -- validate fb
-    -- nonce g
-    -- validate g
     -- https://developers.facebook.com/docs/facebook-login/guides/test
 7. sawagger
-4. test for fb and google
 
-?
-6. rewrite send mail kill sandgrid
+
+5. test for fb and google
+6. rewrite send mail +  kill sandgrid
 7. use https
 8. Redo configs and credentials
-9. Рефакторинг.
+9. Refactoring.
 10. solve Promiss.all+jest problem
+11. validate fb, validate g JWT??
 
 
   

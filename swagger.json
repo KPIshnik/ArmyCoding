@@ -23,6 +23,20 @@
         }
       }
     },
+    "/Aloha": {
+      "get": {
+        "summary": "Starts huita",
+        "description": "huita in ptogtress",
+        "responses": {
+          "200": {
+            "description": "Aloha"
+          },
+          "401": {
+            "description": "Unauthorized. Fuvk off"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "summary": "login user by email",
